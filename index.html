@@ -107,8 +107,8 @@
 
   <section id="main-section">
     <div class="interactive-container" id="imgContainer">
-      <img id="img1" src="https://github.com/user-attachments/assets/03b27c21-a245-42b5-acb0-44c4406a3414" alt="이미지 1 (클릭하세요)">
-      <img id="img2" class="hidden" src="https://github.com/user-attachments/assets/6f0e0a87-30b8-45ef-9124-87e0cb0dafdf" alt="이미지 2">
+      <img id="img1" src="https://github.com/user-attachments/assets/1c1966c8-c045-42b0-b18d-f888856df5f6" alt="이미지 1 (클릭하세요)">
+      <img id="img2" class="hidden" src="https://github.com/user-attachments/assets/e96a4824-1f84-4d2a-9e85-b6046e299465" alt="이미지 2">
     </div>
 
     <div class="title-cover-section">
@@ -154,8 +154,8 @@
 
     // 이미지 1 클릭 시 이미지 2로 전환하는 기능
     imgContainer.addEventListener('click', function() {
-      if (!img1.https://github.com/user-attachments/assets/1c1966c8-c045-42b0-b18d-f888856df5f6('hidden')) {
-        img1.https://github.com/user-attachments/assets/e96a4824-1f84-4d2a-9e85-b6046e299465('hidden');
+      if (!img1.classList.contains('hidden')) {
+        img1.classList.add('hidden');
         img2.classList.remove('hidden');
       }
     });
