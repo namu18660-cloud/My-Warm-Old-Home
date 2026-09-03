@@ -1,1 +1,24 @@
+/* 게시글 상세 모달 내부 스타일 */
+.post-detail-header { margin-bottom: 10px; }
+.post-cat-badge { font-size: 11px; color: #2db400; font-weight: bold; }
+.post-detail-title { font-size: 16px; margin: 4px 0 8px 0; color: #222; }
+.post-detail-info { font-size: 11px; color: #888; }
+.post-divider { border: 0; border-top: 1px solid #eee; margin: 12px 0; }
+.post-detail-content { font-size: 13px; line-height: 1.6; color: #333; min-height: 100px; padding: 5px 0; }
 
+/* 댓글 영역 */
+.comments-section { background: #fafafa; border: 1px solid #eee; padding: 12px; border-radius: 4px; margin-top: 15px; }
+.comments-section h3 { font-size: 13px; margin-bottom: 10px; color: #1e7e34; }
+.comment-item { padding: 6px 0; border-bottom: 1px dashed #e0e0e0; font-size: 12px; }
+.comment-item:last-child { border-bottom: none; }
+.comment-meta { display: flex; justify-content: space-between; margin-bottom: 2px; }
+.comment-meta strong { color: #333; }
+.comment-date { font-size: 10px; color: #999; }
+.comment-text { color: #555; }
+
+/* 댓글 작성 창 */
+.comment-write-box { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+#comment-writer-input { width: 140px; padding: 4px 6px; border: 1px solid #ccc; font-size: 11px; border-radius: 2px; }
+#comment-text-input { width: 100%; padding: 6px; border: 1px solid #ccc; font-size: 12px; font-radius: 2px; resize: vertical; }
+.comment-write-box button { align-self: flex-end; background: #1e7e34; color: #fff; border: none; padding: 5px 12px; font-size: 11px; font-weight: bold; border-radius: 2px; cursor: pointer; }
+.comment-write-box button:hover { background: #155724; }
