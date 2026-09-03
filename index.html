@@ -3,162 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>작품 세계관 메인 페이지</title>
-  <style>
-    /* 기본 스타일 초기화 */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    html {
-      scroll-behavior: smooth; /* 사이드바 클릭 시 부드러운 스크롤 */
-      font-family: 'Apple SD Gothic Neo', sans-serif;
-      background-color: #121212;
-      color: #ffffff;
-    }
-
-    /* 우측 사이드바 스타일 */
-    .sidebar {
-      position: fixed;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 15px 10px;
-      border-radius: 20px;
-      backdrop-filter: blur(5px);
-    }
-    .sidebar a {
-      color: #aaa;
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.3s;
-    }
-    .sidebar a:hover {
-      color: #fff;
-    }
-
-    /* 섹션 공통 스타일 */
-    section {
-      min-height: 100vh;
-      padding: 80px 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 1px solid #333;
-    }
-
-    /* 메인 인터랙션 영역 */
-    .interactive-container {
-      text-align: center;
-      cursor: pointer;
-      margin-bottom: 50px;
-    }
-    .interactive-container img {
-      max-width: 80%;
-      max-height: 70vh;
-      border-radius: 10px;
-      transition: opacity 0.5s ease;
-    }
-    .hidden {
-      display: none;
-    }
-
-    /* 타이틀 및 표지 영역 */
-    .title-cover-section {
-      text-align: center;
-      margin-top: 40px;
-    }
-    .cover-image {
-      max-width: 400px;
-      width: 100%;
-      border-radius: 8px;
-      margin-top: 20px;
-    }
-
-    /* 콘텐츠 섹션 스타일 */
-    .content-box {
-      max-width: 800px;
-      width: 100%;
-      line-height: 1.8;
-    }
-    h2 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #e5a93b;
-    }
-  </style>
+  <title>한빛빌라 입주민 누리집 | 2020 주안4동</title>
+  <link rel="stylesheet" href="css/cafe-style.css">
 </head>
 <body>
 
-  <nav class="sidebar">
-    <a href="#main-section">메인</a>
-    <a href="#about">작품소개</a>
-    <a href="#worldview">세계관</a>
-    <a href="#characters">캐릭터</a>
-    <a href="#play">플레이설명</a>
-  </nav>
-
-  <section id="main-section">
-    <div class="interactive-container" id="imgContainer">
-      <img id="img1" src="https://github.com/user-attachments/assets/1c1966c8-c045-42b0-b18d-f888856df5f6" alt="이미지 1 (클릭하세요)">
-      <img id="img2" class="hidden" src="https://github.com/user-attachments/assets/e96a4824-1f84-4d2a-9e85-b6046e299465" alt="이미지 2">
+  <!-- 카페 상단 헤더 -->
+  <header class="cafe-header">
+    <div class="header-inner">
+      <h1 class="cafe-title">🪹 [인천/주안4동] 한빛빌라 누리집</h1>
+      <p class="cafe-sub">주안4동 한빛빌라 식구 전용 소통 공간</p>
     </div>
+  </header>
 
-    <div class="title-cover-section">
-      <h1>희망빌라 누리집</h1>
-      <p>와정 말 정 겹 다!.</p>
-      <p>를 공지 읽으 시 오.</p>
-      <img class="cover-image" src="https://via.placeholder.com/400x600?text=Cover+Image" alt="표지 이미지">
-    </div>
-  </section>
+  <!-- 메인 콘텐트 (2단 레이아웃) -->
+  <div class="cafe-container">
+    
+    <!-- 좌측 사이드바 (카페 정보 & 입주민 현황) -->
+    <aside class="cafe-sidebar">
+      
+      <!-- 카페 프로필 박스 -->
+      <div class="side-box cafe-info-box">
+        <h3>📍 거처 정보</h3>
+        <p class="info-text"><b>위치:</b> 인천 미추홀구 주안4동</p>
+        <p class="info-text"><b>건물:</b> 2007년 준공 2층 다가구주택</p>
+        <p class="info-text"><b>관리:</b> 온누리부동산 (오재현)</p>
+        <div class="security-badge">🔒 일반 주택가 보안 수칙 준수</div>
+      </div>
 
-  <section id="about">
-    <div class="content-box">
-      <h2></h2>
-      <p>"본 작품의 배경 지명은 실제를 바탕으로 하였으나, 등장 인물과 사건은 모두 창작된 픽션입니다."</p>
-    </div>
-  </section>
+      <!-- 거주 및 임시 대여 현황 -->
+      <div class="side-box resident-box">
+        <h3>🏘️ 세대별 거주 현황</h3>
+        <ul class="resident-list">
+          <li>
+            <span class="room">101호</span> 
+            <strong>정지아</strong> <span class="badge badge-hana">본가 정나</span>
+          </li>
+          <li>
+            <span class="room">101호</span> 
+            <strong>박상철</strong> <span class="badge badge-branch">퍼스트 Core</span>
+          </li>
+          <li>
+            <span class="room">102호</span> 
+            <strong>윤서우</strong> <span class="badge badge-hana">본가 정나</span>
+          </li>
+          <li>
+            <span class="room">201호</span> 
+            <strong>이태규</strong> <span class="badge badge-branch">퍼스트 분석</span>
+          </li>
+          <li class="user-row">
+            <span class="room">202호</span> 
+            <strong class="user-highlight">{{user}}</strong> 
+            <span class="badge badge-user">신규 입주</span>
+          </li>
+        </ul>
+        <p class="notice-micro">* 202호: 임시 거처 누전 수리 후 입주 완료</p>
+      </div>
 
-  <section id="worldview">
-    <div class="content-box">
-      <h2>세계관</h2>
-      <p>세계관의 배경, 주요 역사, 세력 구조 등을 설명합니다.</p>
-    </div>
-  </section>
+      <!-- 자주 들르는 식구들 -->
+      <div class="side-box frequent-box">
+        <h3>👥 자주 오가는 가지/본가</h3>
+        <ul class="tag-cloud">
+          <li>김서현 <small>(수뇌)</small></li>
+          <li>윤도현 <small>(실가)</small></li>
+          <li>오재현 <small>(온누리)</small></li>
+          <li>배성호 <small>(한울)</small></li>
+          <li>최현우 <small>(실가)</small></li>
+          <li>강민호 <small>(실나)</small></li>
+        </ul>
+      </div>
 
-  <section id="characters">
-    <div class="content-box">
-      <h2>캐릭터 소개</h2>
-      <p>등장인물들의 프로필, 이미지, 세부 설정을 배치합니다.</p>
-    </div>
-  </section>
+    </aside>
 
-  <section id="play">
-    <div class="content-box">
-      <h2>플레이 설명</h2>
-      <p>게임 규칙, 진행 방식, 컨트롤 방법 등을 안내합니다.</p>
-    </div>
-  </section>
+    <!-- 우측 게시판 메인 영역 -->
+    <main class="cafe-main-content">
 
-  <script>
-    const imgContainer = document.getElementById('imgContainer');
-    const img1 = document.getElementById('img1');
-    const img2 = document.getElementById('img2');
+      <!-- 카테고리 탭 메뉴 -->
+      <nav class="board-tabs">
+        <button class="tab-btn active" onclick="filterBoard('all')">전체글 보기</button>
+        <button class="tab-btn" onclick="filterBoard('notice')">[공지]</button>
+        <button class="tab-btn" onclick="filterBoard('share')">[나눔/생활]</button>
+        <button class="tab-btn" onclick="filterBoard('proposal')">[제안/공유]</button>
+        <button class="tab-btn" onclick="filterBoard('etc')">[기타/잡담]</button>
+      </nav>
 
-    // 이미지 1 클릭 시 이미지 2로 전환하는 기능
-    imgContainer.addEventListener('click', function() {
-      if (!img1.classList.contains('hidden')) {
-        img1.classList.add('hidden');
-        img2.classList.remove('hidden');
-      }
-    });
-  </script>
+      <!-- 게시판 테이블 (카페 게시판 스타일) -->
+      <div class="board-table-wrapper">
+        <table class="board-table">
+          <thead>
+            <tr>
+              <th class="th-num">번호</th>
+              <th class="th-title">제목</th>
+              <th class="th-writer">작성자</th>
+              <th class="th-date">작성일</th>
+            </tr>
+          </thead>
+          <tbody id="board-body">
+            
+            <!-- 공지사항 1 -->
+            <tr class="row-notice">
+              <td>공지</td>
+              <td class="title-cell">
+                <a href="#" onclick="openPost(1)">[공지] 202호 누전 수리 완료 및 공실 임시 대여 안내</a>
+                <span class="comment-count">[3]</span>
+              </td>
+              <td>오재현(관리)</td>
+              <td>09.01</td>
+            </tr>
+
+            <!-- 일반 게시글들 -->
+            <tr>
+              <td>4</td>
+              <td class="title-cell">
+                <a href="#" onclick="openPost(2)">[제안] 스포츠 데이터 분석 관련 서적 공유하실 분</a>
+                <span class="comment-count">[2]</span>
+              </td>
+              <td>이태규</td>
+              <td>09.04</td>
+            </tr>
+
+            <tr>
+              <td>3</td>
+              <td class="title-cell">
+                <a href="#" onclick="openPost(3)">[기타] 오늘 저녁에 족발 시키실 분 붙으셈</a>
+                <span class="comment-count">[4]</span>
+              </td>
+              <td>윤도현</td>
+              <td>09.03</td>
+            </tr>
+
+            <tr>
+              <td>2</td>
+              <td class="title-cell">
+                <a href="#" onclick="openPost(4)">[나눔] 원목 소형 협탁 필요하신 분 가져가세요</a>
+                <span class="comment-count">[3]</span>
+              </td>
+              <td>김서현</td>
+              <td>09.02</td>
+            </tr>
+
+            <tr>
+              <td>1</td>
+              <td class="title-cell">
+                <a href="#" onclick="openPost(5)">[기타] 202호 수리하면서 뺀 야전침대 주인 찾음</a>
+                <span class="comment-count">[2]</span>
+              </td>
+              <td>박상철</td>
+              <td>08.30</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 게시물 글쓰기 버튼 영역 -->
+      <div class="board-footer-tools">
+        <button class="write-btn" onclick="alert('입주민(유저) 글쓰기 기능 준비 중입니다.')">✏️ 게시글 작성</button>
+      </div>
+
+      <!-- 게시글 상세 열람 모달/뷰어 영역 -->
+      <div id="post-view-modal" class="post-modal hidden">
+        <div class="modal-content">
+          <button class="close-btn" onclick="closePost()">✕ 닫기</button>
+          <div id="modal-post-body">
+            <!-- JavaScript로 선택한 글 내용이 동적 로드됨 -->
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script src="js/cafe-main.js"></script>
 </body>
 </html>
