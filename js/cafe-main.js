@@ -198,6 +198,7 @@ let currentCategory = "all";
 
 // DOM 로드 후 초기화
 document.addEventListener("DOMContentLoaded", () => {
+  // 1. 테마 제어
   const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("user-theme") || "dark";
 
@@ -227,6 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // 2. 사이드바 제어
   const btnToggle = document.getElementById("btn-sidebar-toggle");
   const btnClose = document.getElementById("btn-sidebar-close");
   const overlay = document.getElementById("sidebar-overlay");
@@ -235,14 +237,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnClose) btnClose.addEventListener("click", closeSidebar);
   if (overlay) overlay.addEventListener("click", closeSidebar);
 
+  // 3. 사이드바 검색
   const sidebarSearchInput = document.querySelector(".sidebar-search input");
   const sidebarSearchBtn = document.querySelector(".sidebar-search button");
 
   if (sidebarSearchInput) {
     sidebarSearchInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        searchFromSidebar();
-      }
+      if (e.key === "Enter") searchFromSidebar();
     });
   }
 
@@ -250,6 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebarSearchBtn.addEventListener("click", searchFromSidebar);
   }
 
+  // 4. ESC 단축키 이벤트
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       closePost();
@@ -257,9 +259,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // 초기 게시판 렌더링
   renderBoard();
 });
 
+// 사이드바 열기/닫기
 function openSidebar() {
   const sidebar = document.getElementById("cafe-sidebar");
   const overlay = document.getElementById("sidebar-overlay");
@@ -293,6 +297,7 @@ function getCategoryName(category) {
 
 // XSS 방지 이스케이프 함수
 function escapeHtml(str) {
+  if (typeof str !== 'string') return str;
   return str.replace(/[&<>'"]/g, 
     tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[tag] || tag)
   );
@@ -345,7 +350,7 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
           </a>
         </td>
         <td class="col-writer">${escapeHtml(post.writer)}</td>
-        <td class="col-date">${post.date}</td>
+        <td class="col-date">${escapeHtml(post.date)}</td>
         <td class="col-views">${post.viewCount}</td>
       </tr>
     `;
@@ -357,9 +362,7 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
 
 // 카테고리 필터
 function filterBoard(category, event) {
-  if (event) {
-    event.preventDefault();
-  }
+  if (event) event.preventDefault();
 
   currentCategory = category;
 
@@ -386,7 +389,7 @@ function filterBoard(category, event) {
   closeSidebar();
 }
 
-// 사이드바 검색
+// 사이드바 검색 실행
 function searchFromSidebar() {
   const searchInput = document.querySelector(".sidebar-search input");
   if (!searchInput) return;
@@ -396,17 +399,47 @@ function searchFromSidebar() {
   closeSidebar();
 }
 
-// 상세 페이지 열기 (더미 구현 또는 모달 연동)
+// 상세 페이지 열기 (조회수 증가 및 모달 연동 확장)
 function openPost(event, postId) {
   if (event) event.preventDefault();
   const post = boardData[postId];
   if (!post) return;
-  
-  // 만약 상세 페이지를 보여주는 모달이나 영역이 있다면 여기서 처리
-  alert(`[${post.title}]\n\n${post.content}`);
+
+  // 조회수 증가
+  post.viewCount += 1;
+  renderBoard(currentCategory); // 목록 화면 조회수 업데이트 반영
+
+  // 상세 모달 레이어 제어 (HTML에 #post-modal 엘리먼트가 존재할 경우)
+  const modal = document.getElementById("post-modal");
+  if (modal) {
+    document.getElementById("modal-title").textContent = post.title;
+    document.getElementById("modal-writer").textContent = post.writer;
+    document.getElementById("modal-date").textContent = post.date;
+    document.getElementById("modal-views").textContent = post.viewCount;
+    document.getElementById("modal-content").innerText = post.content;
+
+    // 댓글 목록 렌더링
+    const commentsContainer = document.getElementById("modal-comments");
+    if (commentsContainer && post.comments) {
+      commentsContainer.innerHTML = post.comments.map(c => `
+        <div class="comment-item">
+          <strong>${escapeHtml(c.writer)}</strong> <small>(${escapeHtml(c.date)})</small>
+          <p>${escapeHtml(c.text)}</p>
+        </div>
+      `).join("");
+    }
+
+    modal.classList.add("active");
+  } else {
+    // 모달 DOM이 없을 때 기본 대체 동작
+    alert(`[${post.title}]\n작성자: ${post.writer} | 조회수: ${post.viewCount}\n\n${post.content}`);
+  }
 }
 
 // 상세 페이지 닫기
 function closePost() {
-  // 모달 닫기 로직이 있다면 여기에 작성
+  const modal = document.getElementById("post-modal");
+  if (modal) {
+    modal.classList.remove("active");
+  }
 }
