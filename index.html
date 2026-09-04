@@ -23,22 +23,21 @@
 </head>
 <body darkmode="off" data-darkmode="false">
 
-  <div class="cafe-wrapper">
+  <div class="container">
 
-    <header class="cafe-header-banner">
+    <header class="cafe-header">
       <div class="header-overlay">
         <h1 class="header-title">🪹 [인천/주안4동] 한빛빌라 누리집</h1>
         <p class="header-sub">주안4동 한빛빌라 식구 전용 소통 공간</p>
       </div>
 
       <!-- 슬라이드 토글 스위치 -->
-      <label class="theme-switch" for="theme-toggle">
-        <input type="checkbox" id="theme-toggle">
-        <span class="slider round">
-          <span class="icon sun">☀️</span>
-          <span class="icon moon">🌙</span>
-        </span>
-      </label>
+      <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="theme-toggle">
+          <input type="checkbox" id="theme-toggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
     </header>
 
     <!-- 모바일용 햄버거 메뉴 버튼 -->
@@ -49,12 +48,12 @@
     <!-- 사이드바 오버레이 -->
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <!-- 메인 컨테이너 -->
-    <div class="cafe-container">
+    <!-- 메인 레이아웃 (cafe-container -> cafe-layout으로 수정하여 CSS와 통일) -->
+    <div class="cafe-layout">
       
       <!-- 왼쪽 사이드바 -->
       <aside class="cafe-sidebar" id="cafe-sidebar">
-        <button id="btn-sidebar-close" class="btn-sidebar-close">✕ 닫기</button>
+        <button id="btn-sidebar-close" class="btn-sidebar-close">✕</button>
 
         <div class="side-card profile-card">
           <div class="profile-top">
@@ -87,17 +86,11 @@
         <nav class="side-card menu-card">
           <div class="menu-group">
             <div class="menu-title">★ 게시물 카테고리</div>
-          <!-- 수정 전/후 확인 -->
             <ul class="menu-tree">
-              <!-- 전체 게시글 -->
-              <li><a href="#" onclick="filterBoard('all', event)">📋 전체글보기 <span class="count-badge">5</span></a></li>
-              <!-- 공지사항 -->
+              <li><a href="#" onclick="filterBoard('all', event)">📋 전체글보기</a></li>
               <li><a href="#" onclick="filterBoard('notice', event)">📌 [공지] 관리 및 안전 안내</a></li>
-              <!-- 제안/건의 -->
               <li><a href="#" onclick="filterBoard('proposal', event)">💡 [제안] 자료 및 공유</a></li>
-              <!-- 나눔/거래 -->
-              <li><a href="#" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>              
-              <!-- 잡담/기타 -->
+              <li><a href="#" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>             
               <li><a href="#" onclick="filterBoard('etc', event)">💬 [기타] 잡담 및 모임</a></li>
             </ul>
           </div>
@@ -133,8 +126,8 @@
         </nav>
       </aside>
 
-      <!-- 메인 영역 -->
-      <main class="cafe-main-body">
+      <!-- 메인 영역 (cafe-main-body -> cafe-main-content로 수정하여 CSS와 통일) -->
+      <main class="cafe-main-content">
         <div class="main-top-banner">
           <div class="banner-box-inner">
             <h3>📍 한빛빌라 기본 거처 수칙</h3>
@@ -149,6 +142,10 @@
 
         <div class="board-header-bar">
           <h2 id="current-category-title">전체글보기</h2>
+          <!-- 카운트 표시 요소(total-count) 추가 -->
+          <div class="board-info-bar">
+            <span>총 <strong id="total-count">0</strong>개의 게시글</span>
+          </div>
           <div class="board-filter-tabs">
             <button class="btn-filter-tab active" onclick="filterBoard('all', event)">전체</button>
             <button class="btn-filter-tab" onclick="filterBoard('notice', event)">공지</button>
@@ -158,8 +155,8 @@
           </div>
         </div>
 
-        <div class="board-table-container">
-          <table class="cafe-board-table">
+        <div class="board-table-wrapper">
+          <table class="board-table">
             <thead>
               <tr>
                 <th class="col-cat">구분</th>
@@ -176,10 +173,10 @@
 
     </div>
 
-    <!-- 상세 모달 -->
+    <!-- 상세 모달 (close-btn -> btn-close-modal로 수정하여 CSS와 통일) -->
     <div id="post-view-modal" class="post-modal hidden">
       <div class="modal-content">
-        <button class="close-btn" onclick="closePost()">✕ 닫기</button>
+        <button class="btn-close-modal" onclick="closePost()">✕</button>
         <div id="modal-post-body"></div>
       </div>
     </div>
