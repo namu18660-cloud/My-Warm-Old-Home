@@ -1,232 +1,685 @@
-// 초기 게시글 샘플 데이터
-let posts = [
-  {
+/**
+ * 한빛빌라 입주민 누리집 - 메인 인터렉션 & 데이터 제어
+ */
+
+// =========================================================
+// 1. 게시글 및 댓글 데이터베이스
+// =========================================================
+const boardData = {
+  1: {
     id: 1,
-    category: "NOTICE",
-    categoryName: "공지",
-    title: "2020 레트로 카페 리뉴얼 안내 및 이용 수칙",
-    writer: "카페매니저",
-    date: "2026.03.01",
-    views: 452,
-    content: "안녕하세요, 카페 회원 여러분! 따뜻한 크림/아이보리 톤으로 게시판이 리뉴얼되었습니다. 자유롭게 소통해주세요."
+    category: "notice",
+    title: "[안내] 누리집 이용 수칙 및 카테고리 안내",
+    writer: "오재현(관리)",
+    date: "2012.03.15",
+    viewCount: 45,
+    content: `한빛빌라 누리집에 오신 것을 환영합니다.
+
+본 공간은 주안4동 한빛빌라 입주민 및 관련 식구 전용 소통 채널입니다.
+
+- 공지: 건물 관리 및 중요 변경사항
+- 제안: 공유 자료 및 건의사항
+- 나눔: 입주민 간 물품 나눔
+- 기타: 잡담 및 일상 소통
+
+타인에 대한 비방이나 불필요한 마찰은 자제해 주시기 바랍니다.`,
+    comments: [
+      { writer: "김서현", date: "08.25 14:10", text: "확인했습니다! 게시판 깔끔하네요." }
+    ]
   },
-  {
+
+  2: {
     id: 2,
-    category: "FREE",
-    categoryName: "자유",
-    title: "오늘 카페에서 들은 2020년 감성 플레이리스트 추천합니다",
-    writer: "커피매니아",
-    date: "2026.03.02",
-    views: 128,
-    content: "잔잔한 로파이(Lo-fi) 비트와 아쿠스틱 기타 선율이 어우러지는 곡들인데 들어보세요!"
+    category: "notice",
+    title: "[공지] 한빛빌라 거처 기본 생활 수칙 안내 (반드시 숙지 바랍니다)",
+    writer: "정지아",
+    date: "2013.07.11",
+    viewCount: 38,
+    content: `101호 정지아입니다.
+
+공동주택 특성상 기본 질서가 지켜지지 않으면 입주민 간 불필요한 마찰이 발생합니다.
+신규 입주 및 오가는 식구분들이 늘어남에 따라 기본 거처 수칙을 정리해 올리니 반드시 숙지해 주시기 바랍니다.
+
+1. 우편함 관리 및 장기 방치 금지
+- 우편물과 전단지는 3일 이상 쌓이지 않도록 주기적으로 수거하십시오. 
+- 명의 불분명 우편물이나 안내문은 무단 개봉하지 마시고 101호로 전달 바랍니다.
+
+2. 야간 세탁기 및 청소기 사용 자제
+- 22:00 이후 가전제품 사용에 따른 진동과 소음은 층간소음의 주원인입니다.
+- 야간 가전 사용은 엄격히 금하며, 불가피한 사정이 있을 경우 미리 양해를 구하십시오.
+
+3. 복도 및 계단 정숙
+- 공용 공간은 소리가 크게 울립니다. 복도 이동 시 고성방가 및 대화 자제 바랍니다.
+- 공용 계단에 개인 물품을 적재하여 통행을 방해하는 행위는 금지합니다.
+
+4. 외부 방문객 및 야간 체류 제한
+- 외부 방문객의 24시간 이상 장기 체류 및 야간 숙박은 사전에 동의를 구해야 합니다.
+- 입주민 외 출입자의 동선과 보안 관리를 위한 조치이니 협조 부탁드립니다.
+
+5. 지하 공실 및 옥상 출입 금지
+- 지하 관리 공간 및 옥상은 안전사고 예방을 위해 지정된 관리인 외 출입을 엄격히 금합니다.
+- 이상 소음이나 시설 점검이 필요한 경우 직접 확인하지 마시고 101호나 관리인(오재현)에게 즉시 알리십시오.
+
+기본 수칙을 준수하여 조용하고 안정된 주거 환경을 유지할 수 있도록 협조 바랍니다.
+수칙 위반 시 별도로 말씀드리겠습니다.`,
+    comments: [
+      { writer: "박상철", date: "09.02 13:00", text: "확인~ 고생했다!" },
+      { writer: "윤서우", date: "09.02 13:00", text: "확인했습니다." },
+      { writer: "이태규", date: "09.02 13:00", text: "확인." }
+    ]
   },
-  {
+
+  3: {
     id: 3,
-    category: "INFO",
-    categoryName: "정보",
-    title: "CSS 웹 폰트 성능 최적화 팁 공유",
-    writer: "웹디자이너",
-    date: "2026.03.03",
-    views: 89,
-    content: "font-display: swap 설정과 WOFF2 포맷 활용으로 로딩 속도를 대폭 개선할 수 있습니다."
+    category: "notice",
+    title: "[공지] 202호 공실 대여 안내",
+    writer: "오재현(관리)",
+    date: "2019.09.01",
+    viewCount: 24,
+    content: `주민 및 식구 여러분 안녕하십니까. 온누리부동산 오재현입니다.
+    
+우선, 온누리부동산 내부 전산 시스템 처리 과정에서 발생한 심각한 오류에 대해 심심한 사죄의 말씀 드립니다.  
+최근 202호의 내부 리모델링 작업을 마무리한 뒤 온누리부동산 측에서 해당 세대에 대한 '식구 임시 대여' 등록 절차를 진행하던 중, 전산 입력 상의 착오로 인해 해당 매물이 외부 부동산망에 전체 공개 매물로 오등록되는 사고가 발생했습니다.
+이 과정에서 정식 임대차 계약 신청 및 입주 수속이 전산상으로 승인되어 버리는 일이 일어났습니다.
+    
+건물주이신 정지아 님과 박상철 님께서 상황을 전달받으신 후 해당 계약건을 수용해 주시어, 202호는 예정과 달리 일반 신규 입주민을 정식으로 맞이하는 방향으로 결정되었습니다.
+이에 따라, 그동안 인천 현장 지원이나 대기 목적으로 202호를 임시 이용하시던 식구분들께서는 금일부터 당분간 다른 거처를 이용해 주시기 바랍니다.
+    
+202호는 현재 신규 입주민 맞이를 위한 최종 집기 정리 및 정돈 작업이 진행 중입니다.
+입주가 예정되어 있는 만큼, 건물 내 보안 및 사생활 보호 수칙은 이전보다 더욱 엄격하게 유지될 예정이니 식구 여러분의 적극적인 협조 부탁드립니다.
+    
+다시 한번 전산 관리 미흡으로 불편을 드려 죄송합니다.`,
+    comments: [
+      { writer: "문해주", date: "09.01 11:20", text: "임무시 다른 거처 관련해 추후 문의드리겠습니다." },
+      { writer: "김서현", date: "09.01 10:15", text: "리모델링 및 정산 비용은 원(元) 쪽 경비 계좌로 처리해 두었습니다. 수고많으셨습니다." },
+      { writer: "윤도현", date: "09.01 11:02", text: "아 202호 누워서 폰 보기 딱 좋았는데 아쉽네 ㅋㅋㅋ" },
+      { writer: "박상철", date: "09.01 11:20", text: "@윤도현 니네 숙소 두고 왜 남의 빌라에 와서 자꾸 자빠져 자냐?" }
+    ]
   },
-  {
+  4: {
     id: 4,
-    category: "QNA",
-    categoryName: "질문",
-    title: "모바일 오프캔버스 사이드바 구현할 때 주의점이 있나요?",
-    writer: "초보개발자",
-    date: "2026.03.04",
-    views: 64,
-    content: "z-index 레이어 관리와 가로 스크롤 방지를 위해 overflow-x: hidden 처리가 필수적입니다."
+    category: "proposal",
+    title: "[제안] 스포츠 데이터 분석 관련 서적 공유하실 분",
+    writer: "이태규",
+    date: "2019.09.04",
+    viewCount: 12,
+    content: `해외 축구/야구 데이터 통계 관련 서적 3권 보유중입니다.
+    
+원서 번역본이라 가볍게 읽기 좋습니다. 데이터 분석이나 리그 흐름 파악에 관심 있으신 분은 201호로 올라오시거나 연락 주십쇼. 대여 가능합니다.`,
+    comments: [
+      { writer: "박상철", date: "09.04 09:05", text: "그거 읽으면 이번 주 승무패 맞출 수 있냐? ㅋㅋㅋ" },
+      { writer: "이태규", date: "09.04 09:30", text: "@박상철 넌 감부터 잡아라." }
+    ]
+  },
+  5: {
+    id: 5,
+    category: "etc",
+    title: "오늘 저녁에 족발 시키실 분 붙으셈",
+    writer: "윤도현",
+    date: "2019.09.03",
+    viewCount: 18,
+    content: `족발 대자 시켜서 101호에서 먹을 건데 뿜빠이할 사람 붙으셈.
+야식 겸 저녁. 본가 쪽 사람도 환영함.
+오늘 퇴근길에 들를 사람 댓글 달아라.`,
+    comments: [
+      { writer: "이시환", date: "09.03 18:03", text: "아아아아왜맨날집말고거기가서처먹는데ㅔㅔㅔㅔ!!!!!!!!!" },
+      { writer: "윤도현", date: "09.03 18:03", text: "@윤도현 ㅋㅋ걍" },
+      { writer: "박상철", date: "09.03 18:12", text: "지아 퇴근하고 오면 한소리 들을 텐데 감당 가능하냐?" },
+      { writer: "정지아", date: "09.03 18:30", text: "족발 뼈 쓰레기봉투에 안 넣고 뼈째로 일반 쓰레기에 버리면 다 버린 사람 입에 집어넣습니다." },
+      { writer: "윤도현", date: "09.03 18:45", text: "@정지아 지아 누님 깔끔하게 정리하겠습니다 충성 ^^7" },
+      { writer: "김서현", date: "09.03 19:10", text: "나도 갈게! 콜라 큰 거 사 들고 간다~" }
+    ]
+  },
+  6: {
+    id: 6,
+    category: "share",
+    title: "원목 소형 협탁 나눔합니다!",
+    writer: "김서현",
+    date: "2019.09.02",
+    viewCount: 15,
+    content: `방 정리하다가 상태 아주 좋은 원목 협탁 하나 나왔어요!
+침대 옆에 두고 쓰기 딱 좋습니다.
+필요하신 분 댓글 남겨주시면 101호 앞으로 가져다드릴게요~ 😊`,
+    comments: [
+      { writer: "윤서우", date: "09.02 20:10", text: "사일런트 쿨러나 장비 올릴 정도 크기 되나요?" },
+      { writer: "김서현", date: "09.02 20:30", text: "@윤서우 쿨러 올리기엔 조금 작고 가로세로 40cm 정도 돼! 올려둘 수 있긴 한데 나중에 구경하러 가도 됨?" },
+      { writer: "윤서우", date: "09.02 20:45", text: "…아니에요. 걍 두세요." }
+    ]
+  },
+  7: {
+    id: 7,
+    category: "etc",
+    title: "[기타] 202호 수리하면서 뺀 야전침대 주인 찾음",
+    writer: "박상철",
+    date: "2019.08.30",
+    viewCount: 21,
+    content: `202호 내부 정리하면서 밖으로 뺀 3단 접이식 야전침대 누구 거냐?
+실가 애들 인천 현장 지원 나왔을 때 두고 간 것 같은데 101호 앞 복도에 치워뒀으니까 보시는 대로 가져가라. 걸리적거린다.`,
+    comments: [
+      { writer: "최현우(실가)", date: "08.30 14:20", text: "아 제가 지난달 지원 갔을 때 두고 간 겁니다. 저녁에 찾으러 갈게요!" },
+      { writer: "박상철", date: "08.30 15:00", text: "@최현우 오올 때 박카스 한 박스 사 와라." }
+    ]
+  },
+  8: {
+    id: 8,
+    category: "notice",
+    title: "[공지] 옥상 및 공용 계단 인터넷 배선 교체 작업 안내",
+    writer: "정지아",
+    date: "2019.09.08",
+    viewCount: 31,
+    content: `101호 정지아입니다.
+
+금일 14:00 ~ 17:00 사이 건물 내 공용 배선반 및 인터넷 신호 안정화 작업이 진행될 예정입니다.
+
+102호 윤서우 주민 및 201호 이태규 주민과 사전협의 후 직접 진행하는 점검 작업이며, 작업 시간 동안 잠시 인터넷 신호 끊김 현상이 발생할 수 있습니다. 
+
+복도에 작업 도구가 노출될 수 있으니 통행 시 주의 바라며, 외부 기사 방문은 없으니 안심하시기 바랍니다.
+
+문의사항은 101호나 102호로 전달해주십시오.`,
+    comments: [
+      { writer: "오재현(관리)", date: "09.08 10:12", text: "건물 관리에 신경 써주셔서 감사합니다. 필요 재료비 전산 청구 부탁드립니다." },
+      { writer: "윤도현", date: "09.08 11:30", text: "어쩐지 서우 아침부터 연장 가방 들고 돌아다니더라 ㅋㅋㅋ 수고해라!" },
+      { writer: "박상철", date: "09.08 12:05", text: "오 태규야 작업 끝나고 201호 내려가서 공유기 설정 좀 다시 봐줘라" },
+      { writer: "이태규", date: "09.08 12:40", text: "@박상철 아까 말했잖아. 아메리카노 사놓으면 감." }
+    ]
+  },
+
+  9: {
+    id: 9,
+    category: "proposal",
+    title: "[제안] 빌라 단체 구매 아이템 공유 (모니터 암 / 고전력 멀티탭)",
+    writer: "윤서우",
+    date: "2019.09.12",
+    viewCount: 19,
+    content: `장비 정리하면서 고하중 모니터 암 2개랑 과전류 차단 멀티탭(8구) 수량 맞춰서 묶음 주문하려고 합니다.
+
+배송비 절감 및 대량 구매 할인 적용 가능합니다.
+빌라 내 기기 환경 개선 필요하신 분은 오늘 저녁 8시 전까지 댓글 남겨주세요.
+
+단, 수량 확정 후 취소 불가합니다.`,
+    comments: [
+      { writer: "이태규", date: "09.12 14:00", text: "멀티탭 8구짜리 2개 승인. 201호로 청구해라." },
+      { writer: "김서현", date: "09.12 15:20", text: "서우야! 본가 사무실에도 멀티탭 3개 필요한데 혹시 같이 주문 가능할까? 경비로 올려줄게!" },
+      { writer: "윤서우", date: "09.12 15:45", text: "@김서현 가능합니다. 모델명 메신저로 보내드릴게요." },
+      { writer: "박상철", date: "09.12 16:10", text: "야 101호 안방 모니터 거치대도 들어가냐? 지아한테 물어보고 알려줌" },
+      { writer: "정지아", date: "09.12 16:25", text: "@정지아 필요 없습니다. 제 책상 규격에 안 맞습니다." }
+    ]
+  },
+
+  10: {
+    id: 10,
+    category: "share",
+    title: "방한용 문풍지 및 문풍 가스켓 나눔합니다",
+    writer: "오재현(관리)",
+    date: "2019.09.18",
+    viewCount: 16,
+    content: `온누리부동산 오재현입니다.
+
+월동 준비 겸 한빛빌라 및 주변 거처 보수용으로 단열재와 문풍지를 여유 있게 확보했습니다.
+현관문 하부 소음 차단 및 외풍 차단용 고무 가스켓 필요하신 가구는 말씀해 주시면 방문해서 직접 붙여드리겠습니다.
+
+복도 소음 감소 효과도 있으니 필요하시면 편하게 요청하세요.`,
+    comments: [
+      { writer: "정지아", date: "09.18 09:10", text: "101호 현관 하부용으로 하나 부탁드립니다. 감사합니다." },
+      { writer: "오재현(관리)", date: "09.18 09:40", text: "@정지아 네, 오늘 퇴근길에 들러서 깔끔하게 작업해 두겠습니다." },
+      { writer: "한수진(정가)", date: "09.18 11:05", text: "재현 아저씨 저희 숙소 방문도 소리 나는데 남아있으면 받아갈 수 있을까요?" },
+      { writer: "오재현(관리)", date: "09.18 11:30", text: "@한수진 네, 수진 씨. 수량 넉넉하니 정가 측 숙소분도 같이 챙겨두겠습니다." }
+    ]
+  },
+
+  11: {
+    id: 11,
+    category: "etc",
+    title: "101호 냉장고에 캔커피 사둔 거 누구냐",
+    writer: "박상철",
+    date: "2019.09.22",
+    viewCount: 27,
+    content: `101호 냉장고 첫 번째 칸에 레쓰비 한 박스 들어있던데 이거 도현이 너냐?
+마셔도 되는 건지 써놓지도 않고 던져두고 갔길래 일단 두 캔 마셨다. 
+
+임자 없으면 나랑 지아가 계속 마신다?`,
+    comments: [
+      { writer: "윤도현", date: "09.22 13:00", text: "ㅋㅋㅋㅋㅋㅋㅋㅋ 형님 그거 제 거 맞는데 드시라고 사다 놓은 겁니다!" },
+      { writer: "윤도현", date: "09.22 13:01", text: "대신 다음에 101호 갈 때 고기 사주셈" },
+      { writer: "정지아", date: "09.22 13:15", text: "남의 집 냉장고에 말도 없이 물건 두고 가지 마세요. 박스째 넣으면 다른 식재료 자리가 부족합니다." },
+      { writer: "박상철", date: "09.22 13:40", text: "혼날 줄 알았다 ㅋㅋㅋ 수고해라" },
+      { writer: "윤도현", date: "09.22 14:02", text: "@정지아 죄송합니다 누님 다음엔 꺼내서 예쁘게 정리해둘게요..." }
+    ]
+  },
+
+  12: {
+    id: 12,
+    category: "share",
+    title: "서류 보관용 스틸 파일박스 필요하신 분 (정리품)",
+    writer: "김서현",
+    date: "2019.09.27",
+    viewCount: 14,
+    content: `서류함 교체하면서 상태 깨끗한 A4 스틸 파일박스(블랙) 5개 정도 남았습니다!
+
+잠금장치도 정상 작동하고 문서 수납하기 엄청 튼튼해요. 
+기록 보관이나 개인 서류 정리에 유용합니다. 
+
+필요하신 분 댓글 남겨주시면 전달해 드릴게요. 
+없으면 101호나 흥신소 쪽으로 넘기겠습니다~`,
+    comments: [
+      { writer: "정지아", date: "09.27 17:05", text: "2개 수령하겠습니다. 101호 서재 보관용으로 적합해 보입니다." },
+      { writer: "이태규", date: "09.27 17:30", text: "흥신소에 3개 다 가져다주십쇼. 사건 파일 분류할 때 쓰겠습니다." },
+      { writer: "김서현", date: "09.27 18:00", text: "네! 지아 언니 2개, 태규 씨 3개 배정 완료~ 내일 퇴근길에 전달할게!" }
+    ]
+  },
+
+  13: {
+    id: 13,
+    category: "etc",
+    title: "아 해주형 진짜 잔소리 존나 심하네 ㅋㅋㅋ",
+    writer: "윤도현",
+    date: "2019.10.02",
+    viewCount: 35,
+    content: `현장 나가기 전에 커피 한 잔 마셨다고 30분 동안 설교 들음.
+사람이 좀 낙천적으로 살아야지 맨날 각 잡고 사니까 머리가 빠지지 형 ㅋㅋㅋ
+
+이 글 보면 101호로 내려와라 아메리카노 하나 사줌.`,
+    comments: [
+      { writer: "문해주", date: "10.02 19:03", text: "커피가문제가아니라작업시간10분전에도착해서커피쳐빨고있는게문제라고몇번을말해야듣겠니?" },
+      { writer: "윤도현", date: "10.02 19:05", text: "@문해주 ㅋㅋㅋㅋㅋㅋㅋ 잡히면 ㅈ된다~ㅠㅠ" },
+      { writer: "박상철", date: "10.02 19:20", text: "고생이 많다... 내가 쟤 꿀밤 한 대 때려줄게" },
+      { writer: "정지아", date: "10.02 19:40", text: "게시판 내 비속어 사용 자제하십시오." }
+    ]
   }
-];
+};
 
-let currentFilter = "ALL";
+// 현재 선택된 카테고리 상태 관리
+let currentCategory = "all";
 
-// DOM 엘리먼트 참조
-const body = document.body;
-const themeToggle = document.getElementById("themeToggle");
-const btnSidebarOpen = document.getElementById("btnSidebarOpen");
-const btnSidebarClose = document.getElementById("btnSidebarClose");
-const cafeSidebar = document.getElementById("cafeSidebar");
-const sidebarOverlay = document.getElementById("sidebarOverlay");
-const boardTbody = document.getElementById("boardTbody");
-const filterTabs = document.querySelectorAll(".btn-filter-tab");
-const menuLinks = document.querySelectorAll(".menu-link");
-const currentBoardTitle = document.getElementById("currentBoardTitle");
-const postModal = document.getElementById("postModal");
-const btnCloseModal = document.getElementById("btnCloseModal");
-const modalBody = document.getElementById("modalBody");
-const btnOpenWriteModal = document.getElementById("btnOpenWriteModal");
+// =========================================================
+// 2. DOM 로드 후 초기화
+// =========================================================
+document.addEventListener("DOMContentLoaded", () => {
+  // 다크모드 설정
+  const themeToggle = document.getElementById("theme-toggle");
+  const savedTheme = localStorage.getItem("user-theme") || "dark";
 
-// 1. 다크/라이트 테마 전환
-themeToggle.addEventListener("change", (e) => {
-  if (e.target.checked) {
-    body.classList.add("light-theme");
-  } else {
-    body.classList.remove("light-theme");
+  function applyTheme(theme) {
+    if (theme === "light") {
+      document.body.classList.add("light-theme");
+      document.documentElement.classList.add("light-theme");
+      document.documentElement.setAttribute("data-darkmode", "false");
+      document.body.setAttribute("darkmode", "off");
+      if (themeToggle) themeToggle.checked = true;
+    } else {
+      document.body.classList.remove("light-theme");
+      document.documentElement.classList.remove("light-theme");
+      document.documentElement.removeAttribute("data-darkmode");
+      document.body.removeAttribute("darkmode");
+      if (themeToggle) themeToggle.checked = false;
+    }
   }
+
+  applyTheme(savedTheme);
+
+  if (themeToggle) {
+    themeToggle.addEventListener("change", () => {
+      const nextTheme = themeToggle.checked ? "light" : "dark";
+      applyTheme(nextTheme);
+      localStorage.setItem("user-theme", nextTheme);
+    });
+  }
+
+  // 모바일 사이드바 토글
+  const btnToggle = document.getElementById("btn-sidebar-toggle");
+  const btnClose = document.getElementById("btn-sidebar-close");
+  const overlay = document.getElementById("sidebar-overlay");
+
+  if (btnToggle) btnToggle.addEventListener("click", openSidebar);
+  if (btnClose) btnClose.addEventListener("click", () => closeSidebar(true));
+  if (overlay) overlay.addEventListener("click", () => closeSidebar(true));
+
+  // 사이드바 검색창 엔터키 및 클릭 이벤트 바인딩
+  const sidebarSearchInput = document.querySelector(".sidebar-search input");
+  const sidebarSearchBtn = document.querySelector(".sidebar-search button");
+
+  if (sidebarSearchInput) {
+    sidebarSearchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        searchFromSidebar();
+      }
+    });
+  }
+
+  if (sidebarSearchBtn) {
+    sidebarSearchBtn.addEventListener("click", searchFromSidebar);
+  }
+
+  // ESC 키로 모든 모달/사이드바/세계관 닫기
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closePost(true);
+      closeSidebar(true);
+      closeWorldIntro(true);
+    }
+  });
+
+  renderBoard();
 });
 
-// 2. 모바일 사이드바 제어
+// =========================================================
+// 3. 사이드바 열기/닫기 제어
+// =========================================================
 function openSidebar() {
-  cafeSidebar.classList.add("active");
-  sidebarOverlay.classList.add("active");
+  const sidebar = document.getElementById("cafe-sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+  if (sidebar && overlay) {
+    sidebar.classList.add("active");
+    overlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+    
+    history.pushState({ sidebarOpen: true }, "");
+  }
 }
 
-function closeSidebar() {
-  cafeSidebar.classList.remove("active");
-  sidebarOverlay.classList.remove("active");
+function closeSidebar(triggerHistoryBack = true) {
+  const sidebar = document.getElementById("cafe-sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+  if (sidebar && sidebar.classList.contains("active")) {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+    document.body.style.overflow = "";
+
+    if (triggerHistoryBack && history.state && history.state.sidebarOpen) {
+      history.back();
+    }
+  }
 }
 
-btnSidebarOpen?.addEventListener("click", openSidebar);
-btnSidebarClose?.addEventListener("click", closeSidebar);
-sidebarOverlay?.addEventListener("click", closeSidebar);
+// =========================================================
+// 4. 세계관 소개 섹션 제어
+// =========================================================
+function openWorldIntro() {
+  const worldSection = document.getElementById("world-intro-section");
+  if (worldSection) {
+    worldSection.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    history.pushState({ worldOpen: true }, "");
+  }
+}
 
-// 3. 게시글 목록 렌더링
-function renderPosts() {
-  boardTbody.innerHTML = "";
+function closeWorldIntro(triggerHistoryBack = true) {
+  const worldSection = document.getElementById("world-intro-section");
+  if (worldSection && !worldSection.classList.contains("hidden")) {
+    worldSection.classList.add("hidden");
+    document.body.style.overflow = "";
 
-  const filteredPosts = currentFilter === "ALL" 
-    ? posts 
-    : posts.filter(post => post.category === currentFilter);
+    if (triggerHistoryBack && history.state && history.state.worldOpen) {
+      history.back();
+    }
+  }
+}
 
-  if (filteredPosts.length === 0) {
-    boardTbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 30px; color: var(--text-sub);">등록된 게시글이 없습니다.</td></tr>`;
+// =========================================================
+// 5. 게시판 자동 렌더링 & 검색
+// =========================================================
+function renderBoard(categoryFilter = "all", searchQuery = "") {
+  const boardBody = document.getElementById("board-body");
+  const totalCountEl = document.getElementById("total-count");
+  if (!boardBody) return;
+
+  const posts = Object.values(boardData).sort((a, b) => {
+    const aIsNotice = a.category === "notice";
+    const bIsNotice = b.category === "notice";
+
+    if (aIsNotice && !bIsNotice) return -1;
+    if (!aIsNotice && bIsNotice) return 1;
+    return b.id - a.id;
+  });
+
+  let renderedCount = 0;
+  const query = searchQuery.trim().toLowerCase();
+
+  const html = posts.map(post => {
+    // 1) 카테고리 필터링
+    if (categoryFilter !== "all" && post.category !== categoryFilter) {
+      return "";
+    }
+
+    // 2) 검색어 필터링
+    if (query !== "") {
+      const matchTitle = post.title.toLowerCase().includes(query);
+      const matchContent = post.content.toLowerCase().includes(query);
+      const matchWriter = post.writer.toLowerCase().includes(query);
+      if (!matchTitle && !matchContent && !matchWriter) {
+        return "";
+      }
+    }
+
+    renderedCount++;
+    const isNotice = post.category === "notice";
+    const rowClass = isNotice ? 'class="row-notice"' : '';
+    const catBadge = isNotice 
+      ? '<span class="tag-notice">공지</span>' 
+      : getCategoryName(post.category);
+
+    return `
+      <tr ${rowClass} data-id="${post.id}">
+        <td class="col-cat">${catBadge}</td>
+        <td class="col-title">
+          <a href="#" onclick="openPost(event, ${post.id})">
+            ${escapeHtml(post.title)}
+          </a>
+        </td>
+        <td class="col-writer">${escapeHtml(post.writer)}</td>
+        <td class="col-date">${post.date}</td>
+        <td class="col-views">${post.viewCount}</td>
+      </tr>
+    `;
+  }).join("");
+
+  boardBody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding: 40px 0; color: var(--text-sub);">검색 결과가 없습니다.</td></tr>`;
+  if (totalCountEl) totalCountEl.textContent = renderedCount;
+}
+
+// =========================================================
+// 6. 카테고리 필터링 & 메인/사이드바 동기화
+// =========================================================
+function filterBoard(category, event) {
+  if (event) {
+    event.preventDefault();
+  }
+
+  currentCategory = category;
+
+  // 메인 탭 버튼 동기화
+  const filterButtons = document.querySelectorAll(".btn-filter-tab");
+  filterButtons.forEach(btn => {
+    btn.classList.remove("active");
+    if (btn.getAttribute("onclick") && btn.getAttribute("onclick").includes(`'${category}'`)) {
+      btn.classList.add("active");
+    }
+  });
+
+  // 사이드바 메뉴 활성화 동기화
+  const sidebarLinks = document.querySelectorAll(".menu-tree a");
+  sidebarLinks.forEach(link => {
+    if (link.getAttribute("onclick") && link.getAttribute("onclick").includes(`'${category}'`)) {
+      link.style.fontWeight = "bold";
+      link.style.color = "var(--accent-color)";
+    } else {
+      link.style.fontWeight = "normal";
+      link.style.color = "";
+    }
+  });
+
+  renderBoard(category);
+  closeSidebar(true);
+}
+
+// =========================================================
+// 7. 사이드바 검색 기능
+// =========================================================
+function searchFromSidebar() {
+  const searchInput = document.querySelector(".sidebar-search input");
+  if (!searchInput) return;
+
+  const query = searchInput.value;
+  renderBoard(currentCategory, query);
+  closeSidebar(true);
+}
+
+// =========================================================
+// 8. 게시글 모달 및 댓글 제어
+// =========================================================
+function openPost(event, postId) {
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  const post = boardData[postId];
+  if (!post) return;
+
+  post.viewCount += 1;
+  const viewCell = document.querySelector(`#board-body tr[data-id="${postId}"] .col-views`);
+  if (viewCell) viewCell.textContent = post.viewCount;
+
+  const modal = document.getElementById("post-view-modal");
+  const modalBody = document.getElementById("modal-post-body");
+
+  if (!modal || !modalBody) return;
+
+  let commentsHtml = post.comments.map(c => `
+    <div class="comment-item">
+      <div class="comment-meta">
+        <strong>${escapeHtml(c.writer)}</strong>
+        <span class="comment-date">${c.date}</span>
+      </div>
+      <div class="comment-text">${escapeHtml(c.text)}</div>
+    </div>
+  `).join("");
+
+  modalBody.innerHTML = `
+    <div class="post-detail-header">
+      <span class="post-cat-badge">[${getCategoryName(post.category)}]</span>
+      <h2 class="post-detail-title">${escapeHtml(post.title)}</h2>
+      <div class="post-detail-info">
+        <span>작성자: <strong>${escapeHtml(post.writer)}</strong></span>
+        <span>•</span>
+        <span>작성일: ${post.date}</span>
+        <span>•</span>
+        <span>조회: ${post.viewCount}</span>
+      </div>
+    </div>
+    <hr class="post-divider">
+    <div class="post-detail-content">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
+    <hr class="post-divider">
+    <div class="comments-section">
+      <h3>💬 댓글 (${post.comments.length})</h3>
+      <div class="comments-list" id="comments-list-${post.id}">
+        ${commentsHtml}
+      </div>
+      <div class="comment-write-box">
+        <input type="text" id="comment-writer-input" placeholder="작성자 이름" value="202호 입주민">
+        <textarea id="comment-text-input" placeholder="댓글을 남겨보세요..." rows="2"></textarea>
+        <button type="button" onclick="addComment(${post.id})">댓글 등록</button>
+      </div>
+    </div>
+  `;
+
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+
+  history.pushState({ modalOpen: true }, "");
+}
+
+function closePost(triggerHistoryBack = true) {
+  const modal = document.getElementById("post-view-modal");
+  if (modal && !modal.classList.contains("hidden")) {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+
+    if (triggerHistoryBack && history.state && history.state.modalOpen) {
+      history.back();
+    }
+  }
+}
+
+// 댓글 추가 기능
+function addComment(postId) {
+  const writerInput = document.getElementById("comment-writer-input");
+  const textInput = document.getElementById("comment-text-input");
+
+  if (!writerInput || !textInput) return;
+
+  const writer = writerInput.value.trim();
+  const text = textInput.value.trim();
+
+  if (!writer || !text) {
+    alert("작성자와 댓글 내용을 모두 입력해주세요.");
     return;
   }
 
-  filteredPosts.forEach(post => {
-    const tr = document.createElement("tr");
-    tr.style.cursor = "pointer";
-    tr.innerHTML = `
-      <td class="col-cat">${post.categoryName}</td>
-      <td class="col-title">${post.title}</td>
-      <td class="col-writer">${post.writer}</td>
-      <td class="col-date">${post.date}</td>
-      <td class="col-views">${post.views}</td>
-    `;
-    
-    tr.addEventListener("click", () => openDetailModal(post.id));
-    boardTbody.appendChild(tr);
-  });
+  const today = new Date();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const hours = String(today.getHours()).padStart(2, '0');
+  const minutes = String(today.getMinutes()).padStart(2, '0');
+  const dateStr = `${month}.${day} ${hours}:${minutes}`;
+
+  const newComment = { writer, date: dateStr, text };
+  boardData[postId].comments.push(newComment);
+
+  // 모달 재호출로 댓글 목록 즉시 갱신
+  openPost(null, postId);
 }
 
-// 4. 필터 탭 클릭 이벤트
-filterTabs.forEach(tab => {
-  tab.addEventListener("click", () => {
-    filterTabs.forEach(t => t.classList.remove("active"));
-    tab.classList.add("active");
+// =========================================================
+// 9. 통합 뒤로가기(popstate) & 바깥 클릭 이벤트 제어
+// =========================================================
+window.addEventListener("popstate", () => {
+  const modal = document.getElementById("post-view-modal");
+  const sidebar = document.getElementById("cafe-sidebar");
+  const worldSection = document.getElementById("world-intro-section");
 
-    currentFilter = tab.dataset.filter;
-    renderPosts();
-  });
-});
+  // 1. 게시글 모달이 열려있으면 닫기
+  if (modal && !modal.classList.contains("hidden")) {
+    closePost(false);
+  }
 
-// 5. 사이드바 메뉴 클릭 이벤트
-menuLinks.forEach(link => {
-  link.addEventListener("click", (e) => {
-    e.preventDefault();
-    menuLinks.forEach(l => l.classList.remove("active"));
-    link.classList.add("active");
+  // 2. 모바일 사이드바가 열려있으면 닫기
+  if (sidebar && sidebar.classList.contains("active")) {
+    closeSidebar(false);
+  }
 
-    const category = link.dataset.category;
-    currentFilter = category;
-
-    // 상단 탭 연동
-    filterTabs.forEach(t => {
-      if (t.dataset.filter === category) {
-        t.classList.add("active");
-      } else {
-        t.classList.remove("active");
-      }
-    });
-
-    currentBoardTitle.textContent = link.textContent;
-    renderPosts();
-    closeSidebar();
-  });
-});
-
-// 6. 상세보기 모달
-function openDetailModal(postId) {
-  const post = posts.find(p => p.id === postId);
-  if (!post) return;
-
-  post.views += 1;
-  renderPosts();
-
-  modalBody.innerHTML = `
-    <div style="font-size: 0.8rem; color: var(--accent-color); font-weight: bold; margin-bottom: 6px;">[${post.categoryName}]</div>
-    <h2 style="margin: 0 0 10px 0; font-size: 1.2rem;">${post.title}</h2>
-    <div style="font-size: 0.8rem; color: var(--text-sub); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-bottom: 16px;">
-      작성자: ${post.writer} | 작성일: ${post.date} | 조회수: ${post.views}
-    </div>
-    <div style="font-size: 0.95rem; line-height: 1.6; min-height: 100px;">
-      ${post.content.replace(/\n/g, '<br>')}
-    </div>
-  `;
-
-  postModal.classList.remove("hidden");
-}
-
-// 7. 글쓰기 모달
-btnOpenWriteModal.addEventListener("click", () => {
-  modalBody.innerHTML = `
-    <h2 style="margin: 0 0 16px 0; font-size: 1.1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">카페 글쓰기</h2>
-    <form id="writeForm" style="display: flex; flex-direction: column; gap: 12px;">
-      <select id="writeCategory" style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
-        <option value="FREE">자유게시판</option>
-        <option value="INFO">정보공유</option>
-        <option value="QNA">질문/답변</option>
-      </select>
-      <input type="text" id="writeTitle" placeholder="제목을 입력하세요" required style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main);">
-      <textarea id="writeContent" rows="6" placeholder="내용을 작성하세요" required style="padding: 8px; border-radius: 4px; border: 1px solid var(--border-color); background: var(--bg-main); color: var(--text-main); font-family: inherit; resize: vertical;"></textarea>
-      <button type="submit" class="btn-write-main" style="margin-top: 8px;">작성 완료</button>
-    </form>
-  `;
-
-  postModal.classList.remove("hidden");
-
-  const writeForm = document.getElementById("writeForm");
-  writeForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const category = document.getElementById("writeCategory").value;
-    const title = document.getElementById("writeTitle").value;
-    const content = document.getElementById("writeContent").value;
-
-    const categoryMap = { FREE: "자유", INFO: "정보", QNA: "질문" };
-    const today = new Date();
-    const dateStr = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
-
-    const newPost = {
-      id: posts.length + 1,
-      category: category,
-      categoryName: categoryMap[category],
-      title: title,
-      writer: "카페회원",
-      date: dateStr,
-      views: 0,
-      content: content
-    };
-
-    posts.unshift(newPost);
-    renderPosts();
-    postModal.classList.add("hidden");
-  });
-});
-
-// 8. 모달 닫기
-btnCloseModal.addEventListener("click", () => {
-  postModal.classList.add("hidden");
-});
-
-postModal.addEventListener("click", (e) => {
-  if (e.target === postModal) {
-    postModal.classList.add("hidden");
+  // 3. 세계관 섹션이 열려있으면 닫기
+  if (worldSection && !worldSection.classList.contains("hidden")) {
+    closeWorldIntro(false);
   }
 });
 
-// 초기화
-renderPosts();
+// 게시글 모달 바깥 배경 클릭 시 닫기
+window.onclick = function(event) {
+  const modal = document.getElementById("post-view-modal");
+  if (event.target === modal) {
+    closePost(true);
+  }
+};
+
+// =========================================================
+// 10. 유틸리티 함수
+// =========================================================
+function getCategoryName(cat) {
+  const names = {
+    notice: "공지",
+    proposal: "제안",
+    share: "나눔",
+    etc: "기타"
+  };
+  return names[cat] || "일반";
+}
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
