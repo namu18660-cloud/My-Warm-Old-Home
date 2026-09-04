@@ -54,7 +54,7 @@ const boardData = {
 기본 수칙을 준수하여 조용하고 안정된 주거 환경을 유지할 수 있도록 협조 바랍니다.
 수칙 위반 시 별도로 말씀드리겠습니다.`,
     comments: [
-      { writer: "박상철", date: "09.02 13:00", text: "확인~ 고생했다!" }, // <-- 쉼표 수정 완료
+      { writer: "박상철", date: "09.02 13:00", text: "확인~ 고생했다!" },
       { writer: "윤서우", date: "09.02 13:00", text: "확인했습니다." },
       { writer: "이태규", date: "09.02 13:00", text: "확인." }
     ]
@@ -98,7 +98,7 @@ const boardData = {
     content: `족발 대자 시켜서 101호에서 먹을 건데 뿜빠이할 사람 붙으셈.\n야식 겸 저녁. 본가 쪽 사람도 환영함.\n\n오늘 퇴근길에 들를 사람 댓글 달아라.`,
     comments: [
       { writer: "이시환", date: "09.03 18:03", text: "아아아아왜맨날집말고거기가서처먹는데ㅔㅔㅔㅔ!!!!!!!!!" },
-      { writer: "윤도현", date: "09.03 18:03", text: "@이시환 ㅋㅋ걍" },
+      { writer: "윤도현", date: "09.03 18:03", text: "@윤도현 ㅋㅋ걍" },
       { writer: "박상철", date: "09.03 18:12", text: "지아 퇴근하고 오면 한소리 들을 텐데 감당 가능하냐?" },
       { writer: "정지아", date: "09.03 18:30", text: "족발 뼈 쓰레기봉투에 안 넣고 뼈째로 일반 쓰레기에 버리면 다 버린 사람 입에 집어넣습니다." },
       { writer: "윤도현", date: "09.03 18:45", text: "@정지아 지아 누님 깔끔하게 정리하겠습니다 충성 ^^7" },
@@ -134,10 +134,14 @@ const boardData = {
   }
 };
 
+// 현재 선택된 카테고리 상태 관리
+let currentCategory = "all";
+
 // =========================================================
 // 2. DOM 로드 후 초기화
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
+  // 다크모드 설정
   const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("user-theme") || "dark";
 
@@ -167,30 +171,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // 모바일 사이드바 토글
   const sidebar = document.getElementById("cafe-sidebar");
   const btnToggle = document.getElementById("btn-sidebar-toggle");
   const btnClose = document.getElementById("btn-sidebar-close");
   const overlay = document.getElementById("sidebar-overlay");
 
-  function openSidebar() {
-    if (sidebar && overlay) {
-      sidebar.classList.add("active");
-      overlay.classList.add("active");
-      document.body.style.overflow = "hidden";
-    }
-  }
-
-  function closeSidebar() {
-    if (sidebar && overlay) {
-      sidebar.classList.remove("active");
-      overlay.classList.remove("active");
-      document.body.style.overflow = "";
-    }
-  }
-
   if (btnToggle) btnToggle.addEventListener("click", openSidebar);
   if (btnClose) btnClose.addEventListener("click", closeSidebar);
   if (overlay) overlay.addEventListener("click", closeSidebar);
+
+  // 사이드바 검색창 엔터키 이벤트 바인딩
+  const sidebarSearchInput = document.querySelector(".sidebar-search input");
+  const sidebarSearchBtn = document.querySelector(".sidebar-search button");
+
+  if (sidebarSearchInput) {
+    sidebarSearchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        searchFromSidebar();
+      }
+    });
+  }
+
+  if (sidebarSearchBtn) {
+    sidebarSearchBtn.addEventListener("click", searchFromSidebar);
+  }
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
@@ -202,10 +207,31 @@ document.addEventListener("DOMContentLoaded", () => {
   renderBoard();
 });
 
+// 사이드바 열기/닫기 유틸리티
+function openSidebar() {
+  const sidebar = document.getElementById("cafe-sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+  if (sidebar && overlay) {
+    sidebar.classList.add("active");
+    overlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById("cafe-sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+  if (sidebar && overlay) {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+}
+
 // =========================================================
-// 3. 게시판 자동 렌더링
+// 3. 게시판 자동 렌더링 & 검색
 // =========================================================
-function renderBoard(categoryFilter = "all") {
+function renderBoard(categoryFilter = "all", searchQuery = "") {
   const boardBody = document.getElementById("board-body");
   const totalCountEl = document.getElementById("total-count");
   if (!boardBody) return;
@@ -220,10 +246,22 @@ function renderBoard(categoryFilter = "all") {
   });
 
   let renderedCount = 0;
+  const query = searchQuery.trim().toLowerCase();
 
   const html = posts.map(post => {
+    // 1) 카테고리 필터링
     if (categoryFilter !== "all" && post.category !== categoryFilter) {
       return "";
+    }
+
+    // 2) 검색어 필터링 (제목, 내용, 작성자 대상)
+    if (query !== "") {
+      const matchTitle = post.title.toLowerCase().includes(query);
+      const matchContent = post.content.toLowerCase().includes(query);
+      const matchWriter = post.writer.toLowerCase().includes(query);
+      if (!matchTitle && !matchContent && !matchWriter) {
+        return "";
+      }
     }
 
     renderedCount++;
@@ -249,30 +287,66 @@ function renderBoard(categoryFilter = "all") {
     `;
   }).join("");
 
-  boardBody.innerHTML = html;
+  boardBody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding: 40px 0; color: var(--text-sub);">검색 결과가 없습니다.</td></tr>`;
   if (totalCountEl) totalCountEl.textContent = renderedCount;
 }
 
 // =========================================================
-// 4. 카테고리 필터링
+// 4. 카테고리 필터링 & 메인/사이드바 동기화
 // =========================================================
 function filterBoard(category, event) {
   if (event) {
     event.preventDefault();
   }
 
-  const buttons = document.querySelectorAll(".btn-filter-tab");
-  buttons.forEach(btn => btn.classList.remove("active"));
+  currentCategory = category;
 
-  if (event && event.target && event.target.classList.contains("btn-filter-tab")) {
-    event.target.classList.add("active");
-  }
+  // 1) 메인 탭 버튼 동기화
+  const filterButtons = document.querySelectorAll(".btn-filter-tab");
+  filterButtons.forEach(btn => {
+    btn.classList.remove("active");
+    // onclick 속성의 파라미터 값과 일치 여부 확인
+    if (btn.getAttribute("onclick") && btn.getAttribute("onclick").includes(`'${category}'`)) {
+      btn.classList.add("active");
+    }
+  });
 
+  // 2) 사이드바 메뉴 활성화 클래스 동기화 (선택사항)
+  const sidebarLinks = document.querySelectorAll(".menu-tree a");
+  sidebarLinks.forEach(link => {
+    if (link.getAttribute("onclick") && link.getAttribute("onclick").includes(`'${category}'`)) {
+      link.style.fontWeight = "bold";
+      link.style.color = "var(--accent-color)";
+    } else {
+      link.style.fontWeight = "normal";
+      link.style.color = "";
+    }
+  });
+
+  // 3) 게시판 다시 렌더링
   renderBoard(category);
+
+  // 4) 모바일 환경인 경우 사이드바 닫기
+  closeSidebar();
 }
 
 // =========================================================
-// 5. 게시글 모달 및 댓글
+// 5. 사이드바 검색 기능
+// =========================================================
+function searchFromSidebar() {
+  const searchInput = document.querySelector(".sidebar-search input");
+  if (!searchInput) return;
+
+  const query = searchInput.value;
+  // 현재 카테고리 유지한 채 검색 진행
+  renderBoard(currentCategory, query);
+
+  // 모바일 사이드바 닫기
+  closeSidebar();
+}
+
+// =========================================================
+// 6. 게시글 모달 및 댓글
 // =========================================================
 function openPost(event, postId) {
   if (event) {
@@ -367,7 +441,7 @@ function addComment(postId) {
 }
 
 // =========================================================
-// 6. 유틸리티 함수
+// 7. 유틸리티 함수
 // =========================================================
 function getCategoryName(cat) {
   const names = {
