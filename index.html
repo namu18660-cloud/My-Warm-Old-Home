@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<!-- ✨ 웨일 다크모드 강제 반전 차단 속성(data-darkmode="false") 추가 -->
 <html lang="ko" data-darkmode="false">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- ✨ OS 및 크롬/웨일 강제 색상 반전 차단 태그 -->
   <meta name="color-scheme" content="light dark">
   <meta name="supported-color-schemes" content="light dark">
   
   <title>한빛빌라 누리집 | 2020 주안4동</title>
   <link rel="stylesheet" href="css/cafe-style.css">
 
-  <!-- 1. 페이지 로딩 시 깜빡임(Flicker) 방지 및 웨일 속성 사전 적용 스크립트 -->
+  <!-- 로딩 시 깜빡임(Flicker) 방지 스크립트 -->
   <script>
     (function() {
       const savedTheme = localStorage.getItem('user-theme') || 'dark';
@@ -23,7 +21,6 @@
     })();
   </script>
 </head>
-<!-- ✨ body에도 darkmode="off" 속성 추가 -->
 <body darkmode="off" data-darkmode="false">
 
   <div class="cafe-wrapper">
@@ -44,72 +41,22 @@
       </label>
     </header>
 
-    <!-- 2. 토글 스위치 이벤트 및 테마 변경 스크립트 -->
-    <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const themeToggle = document.getElementById('theme-toggle');
-    const savedTheme = localStorage.getItem('user-theme') || 'dark';
-
-    // 저장된 테마 상태에 맞춰 body 클래스 및 스위치 체크 상태 초기화
-    if (savedTheme === 'light') {
-      document.body.classList.add('light-theme');
-      document.documentElement.classList.add('light-theme');
-      document.documentElement.setAttribute('data-darkmode', 'false');
-      document.body.setAttribute('darkmode', 'off');
-      if (themeToggle) themeToggle.checked = true;
-    } else {
-      document.body.classList.remove('light-theme');
-      document.documentElement.classList.remove('light-theme');
-      document.documentElement.removeAttribute('data-darkmode');
-      document.body.removeAttribute('darkmode');
-      if (themeToggle) themeToggle.checked = false;
-    }
-
-    // 스위치 조작 시 테마 토글 및 웨일 속성 동적 제어
-    if (themeToggle) {
-      themeToggle.addEventListener('change', () => {
-        if (themeToggle.checked) {
-          // 라이트모드 켜짐
-          document.body.classList.add('light-theme');
-          document.documentElement.classList.add('light-theme');
-          document.documentElement.setAttribute('data-darkmode', 'false');
-          document.body.setAttribute('darkmode', 'off');
-          localStorage.setItem('user-theme', 'light');
-        } else {
-          // 다크모드 켜짐
-          document.body.classList.remove('light-theme');
-          document.documentElement.classList.remove('light-theme');
-          document.documentElement.removeAttribute('data-darkmode');
-          document.body.removeAttribute('darkmode');
-          localStorage.setItem('user-theme', 'dark');
-        }
-      });
-    }
-  });
-</script>
-    <!-- 헤더(cafe-header-banner) 끝나는 부분 바로 아래 -->
-<!-- 헤더(cafe-header-banner) 끝나는 부분 바로 아래 -->
-
-    <!-- 1. 모바일용 햄버거 메뉴 버튼 -->
+    <!-- 모바일용 햄버거 메뉴 버튼 -->
     <div class="mobile-menu-bar">
       <button id="btn-sidebar-toggle" class="btn-sidebar-toggle">☰ 메뉴</button>
     </div>
 
-    <!-- 2. 사이드바 열렸을 때 배경 어둡게 처리하는 오버레이 -->
+    <!-- 사이드바 오버레이 -->
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <!-- 3. 메인 컨테이너 시작 -->
+    <!-- 메인 컨테이너 -->
     <div class="cafe-container">
       
-      <!-- 4. 왼쪽 사이드바 전체 시작 -->
+      <!-- 왼쪽 사이드바 -->
       <aside class="cafe-sidebar" id="cafe-sidebar">
-
-        <!-- 모바일용 닫기 버튼 -->
         <button id="btn-sidebar-close" class="btn-sidebar-close">✕ 닫기</button>
 
-        <!-- 사이드바 카드 1: 프로필 및 검색 -->
         <div class="side-card profile-card">
-          <!-- 프로필 상단 영역 -->
           <div class="profile-top">
             <div class="profile-avatar">🏠</div>
             <div class="profile-info">
@@ -119,7 +66,6 @@
             </div>
           </div>
 
-          <!-- 상세 정보 영역 -->
           <div class="stat-item">
             <span class="stat-label">👥 등록식구</span>
             <span class="stat-val">비공개🔒</span>
@@ -129,7 +75,6 @@
             <span class="stat-label">🗺️ 미추홀구 인하로318번길 27-12</span>
           </div>
 
-          <!-- 버튼 및 검색 영역 -->
           <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">게시물 작성</button>
           <button class="btn-chat-main" onclick="alert('내부 연락망 채널로 연결됩니다.')">세대별 연락망</button>
 
@@ -139,16 +84,15 @@
           </div>
         </div>
 
-        <!-- 사이드바 카드 2: 메뉴 카테고리 -->
         <nav class="side-card menu-card">
           <div class="menu-group">
             <div class="menu-title">★ 게시물 카테고리</div>
             <ul class="menu-list">
-              <li><a href="#" onclick="filterBoard('all')">📋 전체글보기 <span class="count-badge">5</span></a></li>
-              <li><a href="#" onclick="filterBoard('notice')">📌 [공지] 관리 및 안전 안내</a></li>
-              <li><a href="#" onclick="filterBoard('share')">🎁 [나눔] 물품 및 지원</a></li>
-              <li><a href="#" onclick="filterBoard('proposal')">💡 [제안] 자료 및 공유</a></li>
-              <li><a href="#" onclick="filterBoard('etc')">💬 [기타] 잡담 및 모임</a></li>
+              <li><a href="#" onclick="filterBoard('all', event)">📋 전체글보기 <span class="count-badge">5</span></a></li>
+              <li><a href="#" onclick="filterBoard('notice', event)">📌 [공지] 관리 및 안전 안내</a></li>
+              <li><a href="#" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>
+              <li><a href="#" onclick="filterBoard('proposal', event)">💡 [제안] 자료 및 공유</a></li>
+              <li><a href="#" onclick="filterBoard('etc', event)">💬 [기타] 잡담 및 모임</a></li>
             </ul>
           </div>
 
@@ -181,15 +125,10 @@
             </ul>
           </div>
         </nav>
-
       </aside>
-      <!-- 사이드바 전체 종료 (모든 메뉴 카드가 끝난 뒤 여기서 한 번만 닫아줍니다) -->
 
-      <!-- 메인 콘텐츠 영역 (cafe-main-body) 시작 위치... -->
-
-      <!-- 오른쪽 메인 영역 -->
+      <!-- 메인 영역 -->
       <main class="cafe-main-body">
-
         <div class="main-top-banner">
           <div class="banner-box-inner">
             <h3>📍 한빛빌라 기본 거처 수칙</h3>
@@ -203,12 +142,12 @@
         </div>
 
         <div class="board-header-bar">
-          <h2>전체글보기</h2>
+          <h2 id="current-category-title">전체글보기</h2>
           <div class="board-tools">
-            <span class="total-post-count">총 <strong>5</strong>개의 글</span>
-            <button class="btn-filter-tab active" onclick="filterBoard('all')">전체</button>
-            <button class="btn-filter-tab" onclick="filterBoard('notice')">공지</button>
-            <button class="btn-filter-tab" onclick="filterBoard('etc')">잡담</button>
+            <span class="total-post-count">총 <strong id="total-count">5</strong>개의 글</span>
+            <button class="btn-filter-tab active" onclick="filterBoard('all', event)">전체</button>
+            <button class="btn-filter-tab" onclick="filterBoard('notice', event)">공지</button>
+            <button class="btn-filter-tab" onclick="filterBoard('etc', event)">잡담</button>
           </div>
         </div>
 
@@ -216,98 +155,21 @@
           <table class="cafe-board-table">
             <thead>
               <tr>
-                <th class="col-cat">카테고리</th>
+                <th class="col-cat">구분</th>
                 <th class="col-title">제목</th>
                 <th class="col-writer">작성자</th>
                 <th class="col-date">작성일</th>
                 <th class="col-views">조회</th>
               </tr>
             </thead>
-            <tbody id="board-body">
-
-              <!-- 공지 1: data-category="notice" 추가 -->
-              <tr class="row-notice">
-                <td class="col-cat"><span class="tag-notice">공지</span></td>
-                <td class="col-title">
-                  <a href="#" onclick="openPost(event, 1)">[공지] 202호 공실 대여 안내</a>
-                  <span class="comment-num">[3]</span>
-                  <span class="icon-new">N</span>
-                </td>
-                <td class="col-writer">오재현(관리)</td>
-                <td class="col-date">09.01.</td>
-                <td class="col-views">24</td>
-              </tr>
-
-              <!-- 공지 2: data-category="notice" 추가 -->
-              <tr class="row-notice" data-category="notice">
-                <td class="col-cat"><span class="tag-notice">공지</span></td>
-                <td class="col-title">
-                  <a href="#" onclick="openPost(1)">[공지 필독] 한빛빌라 기본 거처 수칙 상세</a>
-                  <span class="comment-num">[3]</span>
-                  <span class="icon-new">N</span>
-                </td>
-                <td class="col-writer">정지아</td>
-                <td class="col-date">09.01.</td>
-                <td class="col-views">24</td>
-              </tr>
-
-              <!-- 제안: data-category="proposal" 추가 -->
-              <tr data-category="proposal">
-                <td class="col-cat"><span class="tag-normal">제안</span></td>
-                <td class="col-title">
-                  <a href="#" onclick="openPost(2)">[제안] 스포츠 데이터 분석 관련 서적 공유하실 분</a>
-                  <span class="comment-num">[2]</span>
-                </td>
-                <td class="col-writer">이태규</td>
-                <td class="col-date">09.04.</td>
-                <td class="col-views">12</td>
-              </tr>
-
-              <!-- 기타: data-category="etc" 추가 -->
-              <tr data-category="etc">
-                <td class="col-cat"><span class="tag-normal">기타</span></td>
-                <td class="col-title">
-                  <a href="#" onclick="openPost(3)">오늘 저녁에 족발 시키실 분 붙으셈</a>
-                  <span class="comment-num">[4]</span>
-                  <span class="icon-new">N</span>
-                </td>
-                <td class="col-writer">윤도현</td>
-                <td class="col-date">09.03.</td>
-                <td class="col-views">18</td>
-              </tr>
-
-              <!-- 나눔: data-category="share" 추가 -->
-              <tr data-category="share">
-                <td class="col-cat"><span class="tag-normal">나눔</span></td>
-                <td class="col-title">
-                  <a href="#" onclick="openPost(4)">원목 소형 협탁 나눔합니다!</a>
-                  <span class="comment-num">[3]</span>
-                </td>
-                <td class="col-writer">김서현</td>
-                <td class="col-date">09.02.</td>
-                <td class="col-views">15</td>
-              </tr>
-
-              <!-- 기타: data-category="etc" 추가 -->
-              <tr data-category="etc">
-                <td class="col-cat"><span class="tag-normal">기타</span></td>
-                <td class="col-title">
-                  <a href="#" onclick="openPost(5)">[기타] 202호 수리하면서 뺀 야전침대 주인 찾음</a>
-                  <span class="comment-num">[2]</span>
-                </td>
-                <td class="col-writer">박상철</td>
-                <td class="col-date">08.30.</td>
-                <td class="col-views">21</td>
-              </tr>
-
-            </tbody>
+            <tbody id="board-body"></tbody>
           </table>
         </div>
-
       </main>
 
     </div>
 
+    <!-- 상세 모달 -->
     <div id="post-view-modal" class="post-modal hidden">
       <div class="modal-content">
         <button class="close-btn" onclick="closePost()">✕ 닫기</button>
