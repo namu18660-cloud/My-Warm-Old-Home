@@ -1,3 +1,5 @@
+CSS:
+
 /* =========================================================
    1. 2020 카페 레트로 감성 컬러 팔레트
    ========================================================= */
@@ -425,267 +427,45 @@ input:checked + .slider:before {
 .col-date { width: 90px; color: var(--text-sub); font-size: 0.8rem; }
 .col-views { width: 60px; text-align: center; color: var(--text-sub); font-size: 0.8rem; }
 
-/* 공지사항 행 전용 스타일 */
-.row-notice {
-  background-color: var(--notice-bg);
-  font-weight: 600;
-}
-
-.tag-notice {
-  background-color: var(--accent-color);
-  color: #ffffff;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 0.75rem;
-}
-
 /* =========================================================
-   7. 게시글 풀스크린 모달 (신규 고도화)
+   7. 모달
    ========================================================= */
-.post-detail-modal {
+.post-modal {
   position: fixed;
   top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: var(--bg-main);
-  z-index: 2000;
+  width: 100vw; height: 100vh;
+  background-color: var(--modal-overlay);
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: opacity 0.25s ease;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
 }
 
-.post-detail-modal.hidden {
+.post-modal.hidden {
   display: none;
 }
 
-/* 상단 툴바 */
-.modal-top-bar {
-  height: 54px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  border-bottom: 1px solid var(--border-color);
+.modal-content {
   background-color: var(--bg-card);
-  flex-shrink: 0;
-}
-
-.btn-back-modal {
-  background: transparent;
-  border: none;
-  color: var(--text-main);
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.modal-top-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.btn-action-icon {
-  background: transparent;
-  border: none;
-  color: var(--text-main);
-  font-size: 1.1rem;
-  cursor: pointer;
-}
-
-/* 컨테이너 (스크롤 가능 영역) */
-.post-detail-container {
-  flex: 1;
-  overflow-y: auto;
-  max-width: 800px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
   width: 100%;
-  margin: 0 auto;
-  padding: 24px 16px 80px 16px;
-}
-
-/* 본문 아티클 */
-.article-wrapper {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 24px;
-  margin-bottom: 20px;
-}
-
-.article-category {
-  font-size: 0.85rem;
-  color: var(--accent-color);
-  font-weight: bold;
-}
-
-.article-title {
-  margin: 8px 0 16px 0;
-  font-size: 1.35rem;
-  line-height: 1.4;
-  word-break: keep-all;
-}
-
-.article-profile {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.author-avatar {
-  font-size: 2.2rem;
-}
-
-.author-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.author-nickname {
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.article-info-list {
-  font-size: 0.8rem;
-  color: var(--text-sub);
-  display: flex;
-  gap: 6px;
-}
-
-.article-body {
-  padding: 20px 0;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--text-main);
-  word-break: break-all;
-}
-
-.article-body p {
-  margin: 0;
-}
-
-/* 공감 반응 버튼 */
-.article-reaction-bar {
-  display: flex;
-  justify-content: center;
-  padding-top: 16px;
-  border-top: 1px solid var(--border-color);
-}
-
-.btn-like-post {
-  background-color: var(--bg-hover);
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 0.88rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-like-post.active {
-  background-color: var(--notice-bg);
-  border-color: var(--accent-color);
-  color: var(--accent-color);
-  font-weight: bold;
-}
-
-/* 댓글 섹션 */
-.comments-section {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
   padding: 20px;
 }
 
-.comments-title {
-  margin: 0 0 16px 0;
-  font-size: 1rem;
-}
-
-.comments-title span {
-  color: var(--accent-color);
-}
-
-.comment-input-box {
-  background-color: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 20px;
-}
-
-.comment-input-box textarea {
-  width: 100%;
-  height: 60px;
+.btn-close-modal {
+  position: absolute;
+  top: 12px; right: 12px;
   background: transparent;
   border: none;
-  outline: none;
-  resize: none;
-  color: var(--text-main);
-  font-size: 0.88rem;
-}
-
-.comment-submit-bar {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.btn-submit-comment {
-  background-color: var(--accent-color);
-  color: #ffffff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 4px;
-  font-size: 0.82rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.comment-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.comment-item {
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.comment-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.comment-header {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-
-.comment-author {
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.comment-date {
-  font-size: 0.75rem;
   color: var(--text-sub);
-}
-
-.comment-text {
-  margin: 0;
-  font-size: 0.88rem;
-  line-height: 1.4;
-  color: var(--text-main);
-  word-break: break-all;
+  font-size: 1.4rem;
+  cursor: pointer;
 }
 
 /* =========================================================
@@ -835,14 +615,5 @@ input:checked + .slider:before {
 
   .board-table .col-views::before {
     content: "조회 ";
-  }
-
-  /* 모바일 모달 여백 조절 */
-  .post-detail-container {
-    padding: 12px 12px 60px 12px;
-  }
-
-  .article-wrapper {
-    padding: 16px;
   }
 }
