@@ -102,11 +102,13 @@ body {
 .header-title { font-size: 22px; color: #ffffff; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .header-sub { font-size: 12px; color: #d1c5b8; margin-top: 4px; }
 
-/* 4. PC용 모바일 요소 숨김 */
-.mobile-menu-bar,
-.btn-sidebar-close,
-.sidebar-overlay {
-  display: none !important;
+/* 4. PC용 모바일 요소 숨김 (화면 폭이 769px 이상일 때만 숨김 처리) */
+@media screen and (min-width: 769px) {
+  .mobile-menu-bar,
+  .btn-sidebar-close,
+  .sidebar-overlay {
+    display: none !important;
+  }
 }
 
 /* 5. 메인 레이아웃 */
