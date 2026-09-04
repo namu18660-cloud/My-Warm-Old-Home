@@ -5,10 +5,10 @@
 
 // 1. 샘플 게시글 및 댓글 데이터베이스
 const boardData = {
-      0: {
+  1: {
     id: 1,
     category: "notice",
-    title: "[공]202호 공실 대여 안내",
+    title: "[공지] 202호 공실 대여 안내",
     writer: "오재현(관리)",
     date: "2019.09.01",
     viewCount: 24,
@@ -29,39 +29,11 @@ const boardData = {
 
 다시 한번 전산 관리 미흡으로 불편을 드려 죄송합니다.`,
     comments: [
-      { writer: "문해주", date: "09.01 11:20", text: "임무시 다른 거처 관련해 추후 문의드리겠습니다." }
+      { writer: "문해주", date: "09.01 11:20", text: "임무시 다른 거처 관련해 추후 문의드리겠습니다." },
       { writer: "김서현", date: "09.01 10:15", text: "리모델링 및 정산 비용은 원(元) 쪽 경비 계좌로 처리해 두었습니다. 수고많으셨습니다." },
       { writer: "윤도현", date: "09.01 11:02", text: "아 202호 누워서 폰 보기 딱 좋았는데 아쉽네 ㅋㅋㅋ" },
       { writer: "박상철", date: "09.01 11:20", text: "@윤도현 니네 숙소 두고 왜 남의 빌라에 와서 자꾸 자빠져 자냐?" }
     ]
-
-    1: {
-    id: 1,
-    category: "notice",
-    title: "[공지 필독] 한빛빌라 기본 거처 수칙 상세",
-    writer: "정지아",
-    date: "2007.03.20",
-    viewCount: 58,
-    content: `입주시 거처수칙 상세. 준수 바랍니다.
-
-분리수거 및 쓰레기 배출 날짜 준수: 생활 쓰레기는 지정된 요일(화/목/일) 밤 8시 이후 1층 수거함에 배출해 주세요. 단, 파쇄된 종이류 및 문서 쓰레기는 1층 공용 수거함 배출을 금하며 반드시 각 세대 내에서 자체 처리(소각/입수)해야 합니다.
-
-우편함 관리 및 장기 방치 금지: 우편함에 우편물이나 전단지가 3일 이상 쌓이지 않도록 주기적으로 확인해 주세요. 발신인이 표기되지 않은 붉은색 직인의 봉투는 개봉하지 마시고 즉시 관리인(101호)에게 전달 바랍니다.
-
-야간 세탁기 및 청소기 사용 자제: 공동주택 층간소음 예방을 위해 밤 10시 이후 세탁기 및 청소기 돌리기는 금지합니다.
-
-복도 및 계단 정숙: 계단실 및 복도는 소리가 크게 울립니다. late-night 시간대 복도 이동 시 정숙해 주시고, 복도 창문 밖으로 특정 신호(후래쉬 점등, 연기 등)를 보내는 행위는 금지합니다.
-
-외부 방문객 및 야간 체류 제한: 입주민의 안전을 위해 세대 내 외부 방문객의 24시간 이상 체류를 금합니다. 배달 기사 및 택배 기사 외에 '101호 정지아'의 승인을 받지 않은 타 지역 방문객의 야간 출입은 경비 목적으로 제한될 수 있습니다.
-
-지하 공실 및 옥상 출입 금지: 안전사고 예방 및 시설 관리를 위해 지정된 관리인 외 지하 및 옥상 출입을 엄격히 금합니다. 지하에서 지속적인 기계음이나 타격음이 들리더라도 개인적인 확인 조치는 자제하시고 관리인에게 알리십시오.`,
-    comments: [
-      { writer: "문해주", date: "09.01 11:20", text: "임무시 다른 거처 관련해 추후 문의드리겠습니다." }
-      { writer: "김서현", date: "09.01 10:15", text: "리모델링 및 정산 비용은 원(元) 쪽 경비 계좌로 처리해 두었습니다. 수고많으셨습니다." },
-      { writer: "윤도현", date: "09.01 11:02", text: "아 202호 누워서 폰 보기 딱 좋았는데 아쉽네 ㅋㅋㅋ" },
-      { writer: "박상철", date: "09.01 11:20", text: "@윤도현 니네 숙소 두고 왜 남의 빌라에 와서 자꾸 자빠져 자냐?" }
-    ]
-        
   },
   2: {
     id: 2,
@@ -131,7 +103,9 @@ const boardData = {
 };
 
 // 2. 게시글 상세 열람 (모달 열기)
-function openPost(postId) {
+function openPost(event, postId) {
+  if (event) event.preventDefault(); // 링크 이동 방지
+  
   const post = boardData[postId];
   if (!post) return;
 
@@ -185,7 +159,7 @@ function openPost(postId) {
 // 3. 모달 닫기
 function closePost() {
   const modal = document.getElementById("post-view-modal");
-  modal.classList.add("hidden");
+  if (modal) modal.classList.add("hidden");
 }
 
 // 4. 댓글 추가 기능
@@ -214,16 +188,17 @@ function addComment(postId) {
   boardData[postId].comments.push(newComment);
 
   // 화면 갱신
-  openPost(postId);
+  openPost(null, postId);
 }
 
 // 5. 카테고리 탭 필터링
 function filterBoard(category) {
-  const buttons = document.querySelectorAll(".tab-btn");
+  const buttons = document.querySelectorAll(".btn-filter-tab");
   buttons.forEach(btn => btn.classList.remove("active"));
 
-  // 클릭한 버튼 활성화
-  event.target.classList.add("active");
+  if (event && event.target) {
+    event.target.classList.add("active");
+  }
 
   const rows = document.querySelectorAll("#board-body tr");
   rows.forEach(row => {
@@ -231,7 +206,7 @@ function filterBoard(category) {
       row.style.display = "";
     } else {
       const onclickAttr = row.querySelector("a")?.getAttribute("onclick") || "";
-      const match = onclickAttr.match(/openPost\((\d+)\)/);
+      const match = onclickAttr.match(/openPost\((?:event,\s*)?(\d+)\)/);
       if (match) {
         const postId = match[1];
         if (boardData[postId] && boardData[postId].category === category) {
