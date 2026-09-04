@@ -123,14 +123,17 @@ button {
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #333333;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 26px;
   border: 1px solid var(--border-color);
 }
 
-.slider:before {
+.slider::before {
   position: absolute;
   content: "🌙";
   font-size: 12px;
@@ -142,7 +145,7 @@ button {
   left: 2px;
   bottom: 2px;
   background-color: #222222;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 50%;
 }
 
@@ -150,7 +153,7 @@ input:checked + .slider {
   background-color: var(--accent-color);
 }
 
-input:checked + .slider:before {
+input:checked + .slider::before {
   content: "☀️";
   transform: translateX(22px);
   background-color: #ffffff;
