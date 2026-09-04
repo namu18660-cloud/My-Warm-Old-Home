@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /* =========================================================
    1. 2020 카페 레트로 감성 컬러 팔레트
    ========================================================= */
@@ -121,14 +123,17 @@ button {
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #333333;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 26px;
   border: 1px solid var(--border-color);
 }
 
-.slider:before {
+.slider::before {
   position: absolute;
   content: "🌙";
   font-size: 12px;
@@ -140,7 +145,7 @@ button {
   left: 2px;
   bottom: 2px;
   background-color: #222222;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 50%;
 }
 
@@ -148,7 +153,7 @@ input:checked + .slider {
   background-color: var(--accent-color);
 }
 
-input:checked + .slider:before {
+input:checked + .slider::before {
   content: "☀️";
   transform: translateX(22px);
   background-color: #ffffff;
@@ -614,4 +619,114 @@ input:checked + .slider:before {
   .board-table .col-views::before {
     content: "조회 ";
   }
+}
+
+/* =========================================================
+   세계관 소개 풀스크린 섹션
+   ========================================================= */
+.world-section {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: var(--bg-main);
+  z-index: 10000;
+  overflow-y: auto;
+  opacity: 1;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.world-section.hidden {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.world-container {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 30px 20px 60px 20px;
+}
+
+.btn-close-world {
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-sub);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-bottom: 20px;
+}
+
+.world-header {
+  text-align: center;
+  padding: 20px 0 30px 0;
+  border-bottom: 2px solid var(--border-thick);
+}
+
+.world-badge {
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.world-header h1 {
+  font-size: 1.8rem;
+  margin: 8px 0;
+  color: var(--text-main);
+}
+
+.world-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+}
+
+.world-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.world-card {
+  background-color: var(--bg-card);
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.world-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 10px;
+  color: var(--text-main);
+}
+
+.world-card p, .world-card li {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+.world-card li {
+  margin-bottom: 6px;
+  list-style: none;
+}
+
+.world-card.highlight {
+  border: 1px solid var(--accent-color);
+  background-color: var(--notice-bg);
+  text-align: center;
+}
+
+.btn-join-submit {
+  margin-top: 14px;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
 }
