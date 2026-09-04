@@ -292,25 +292,19 @@ const boardData = {
 let currentCategory = "all";
 
 // =========================================================
-// 2. DOM 로드 후 초기화
+// 2. DOM 로드 후 안전한 초기화
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // 다크모드 설정
+  // 다크모드
   const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("user-theme") || "dark";
 
   function applyTheme(theme) {
     if (theme === "light") {
       document.body.classList.add("light-theme");
-      document.documentElement.classList.add("light-theme");
-      document.documentElement.setAttribute("data-darkmode", "false");
-      document.body.setAttribute("darkmode", "off");
       if (themeToggle) themeToggle.checked = true;
     } else {
       document.body.classList.remove("light-theme");
-      document.documentElement.classList.remove("light-theme");
-      document.documentElement.removeAttribute("data-darkmode");
-      document.body.removeAttribute("darkmode");
       if (themeToggle) themeToggle.checked = false;
     }
   }
@@ -325,37 +319,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 모바일 사이드바 토글
+  // 사이드바 버튼
   const btnToggle = document.getElementById("btn-sidebar-toggle");
   const btnClose = document.getElementById("btn-sidebar-close");
   const overlay = document.getElementById("sidebar-overlay");
 
   if (btnToggle) btnToggle.addEventListener("click", openSidebar);
-  if (btnClose) btnClose.addEventListener("click", () => closeSidebar(true));
-  if (overlay) overlay.addEventListener("click", () => closeSidebar(true));
+  if (btnClose) btnClose.addEventListener("click", () => closeSidebar(false));
+  if (overlay) overlay.addEventListener("click", () => closeSidebar(false));
 
-  // 사이드바 검색창 엔터키 및 클릭 이벤트 바인딩
+  // 검색창 엔터키
   const sidebarSearchInput = document.querySelector(".sidebar-search input");
-  const sidebarSearchBtn = document.querySelector(".sidebar-search button");
-
   if (sidebarSearchInput) {
     sidebarSearchInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        searchFromSidebar();
-      }
+      if (e.key === "Enter") searchFromSidebar();
     });
   }
 
-  if (sidebarSearchBtn) {
-    sidebarSearchBtn.addEventListener("click", searchFromSidebar);
-  }
-
-  // ESC 키로 모든 모달/사이드바/세계관 닫기
+  // ESC 키
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      closePost(true);
-      closeSidebar(true);
-      closeWorldIntro(true);
+      closePost(false);
+      closeSidebar(false);
+      closeWorldIntro(false);
     }
   });
 
@@ -363,7 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================================
-// 3. 사이드바 열기/닫기 제어
+// 3. UI 및 모달 제어 함수
 // =========================================================
 function openSidebar() {
   const sidebar = document.getElementById("cafe-sidebar");
@@ -371,100 +357,53 @@ function openSidebar() {
   if (sidebar && overlay) {
     sidebar.classList.add("active");
     overlay.classList.add("active");
-    document.body.style.overflow = "hidden";
-    
-    history.pushState({ sidebarOpen: true }, "");
   }
 }
 
-function closeSidebar(triggerHistoryBack = true) {
+function closeSidebar() {
   const sidebar = document.getElementById("cafe-sidebar");
   const overlay = document.getElementById("sidebar-overlay");
-  if (sidebar && sidebar.classList.contains("active")) {
+  if (sidebar && overlay) {
     sidebar.classList.remove("active");
     overlay.classList.remove("active");
-    document.body.style.overflow = "";
-
-    if (triggerHistoryBack && history.state && history.state.sidebarOpen) {
-      history.back();
-    }
   }
 }
 
-// =========================================================
-// 4. 세계관 소개 섹션 제어
-// =========================================================
 function openWorldIntro() {
   const worldSection = document.getElementById("world-intro-section");
-  if (worldSection) {
-    worldSection.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-    history.pushState({ worldOpen: true }, "");
-  }
+  if (worldSection) worldSection.classList.remove("hidden");
 }
 
-function closeWorldIntro(triggerHistoryBack = true) {
+function closeWorldIntro() {
   const worldSection = document.getElementById("world-intro-section");
-  if (worldSection && !worldSection.classList.contains("hidden")) {
-    worldSection.classList.add("hidden");
-    document.body.style.overflow = "";
-
-    if (triggerHistoryBack && history.state && history.state.worldOpen) {
-      history.back();
-    }
-  }
+  if (worldSection) worldSection.classList.add("hidden");
 }
 
-// =========================================================
-// 5. 게시판 자동 렌더링 & 검색
-// =========================================================
 function renderBoard(categoryFilter = "all", searchQuery = "") {
   const boardBody = document.getElementById("board-body");
   const totalCountEl = document.getElementById("total-count");
   if (!boardBody) return;
 
-  const posts = Object.values(boardData).sort((a, b) => {
-    const aIsNotice = a.category === "notice";
-    const bIsNotice = b.category === "notice";
-
-    if (aIsNotice && !bIsNotice) return -1;
-    if (!aIsNotice && bIsNotice) return 1;
-    return b.id - a.id;
-  });
-
+  const posts = Object.values(boardData).sort((a, b) => b.id - a.id);
   let renderedCount = 0;
   const query = searchQuery.trim().toLowerCase();
 
   const html = posts.map(post => {
-    // 1) 카테고리 필터링
-    if (categoryFilter !== "all" && post.category !== categoryFilter) {
-      return "";
-    }
-
-    // 2) 검색어 필터링
+    if (categoryFilter !== "all" && post.category !== categoryFilter) return "";
     if (query !== "") {
       const matchTitle = post.title.toLowerCase().includes(query);
-      const matchContent = post.content.toLowerCase().includes(query);
       const matchWriter = post.writer.toLowerCase().includes(query);
-      if (!matchTitle && !matchContent && !matchWriter) {
-        return "";
-      }
+      if (!matchTitle && !matchWriter) return "";
     }
 
     renderedCount++;
-    const isNotice = post.category === "notice";
-    const rowClass = isNotice ? 'class="row-notice"' : '';
-    const catBadge = isNotice 
-      ? '<span class="tag-notice">공지</span>' 
-      : getCategoryName(post.category);
+    const catBadge = getCategoryName(post.category);
 
     return `
-      <tr ${rowClass} data-id="${post.id}">
+      <tr>
         <td class="col-cat">${catBadge}</td>
         <td class="col-title">
-          <a href="#" onclick="openPost(event, ${post.id})">
-            ${escapeHtml(post.title)}
-          </a>
+          <a href="#" onclick="openPost(event, ${post.id})">${escapeHtml(post.title)}</a>
         </td>
         <td class="col-writer">${escapeHtml(post.writer)}</td>
         <td class="col-date">${post.date}</td>
@@ -473,213 +412,98 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
     `;
   }).join("");
 
-  boardBody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding: 40px 0; color: var(--text-sub);">검색 결과가 없습니다.</td></tr>`;
+  boardBody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding: 30px;">게시물이 없습니다.</td></tr>`;
   if (totalCountEl) totalCountEl.textContent = renderedCount;
 }
 
-// =========================================================
-// 6. 카테고리 필터링 & 메인/사이드바 동기화
-// =========================================================
 function filterBoard(category, event) {
-  if (event) {
-    event.preventDefault();
-  }
-
+  if (event && event.preventDefault) event.preventDefault();
   currentCategory = category;
 
-  // 메인 탭 버튼 동기화
-  const filterButtons = document.querySelectorAll(".btn-filter-tab");
-  filterButtons.forEach(btn => {
+  document.querySelectorAll(".btn-filter-tab").forEach(btn => {
     btn.classList.remove("active");
-    if (btn.getAttribute("onclick") && btn.getAttribute("onclick").includes(`'${category}'`)) {
-      btn.classList.add("active");
-    }
-  });
-
-  // 사이드바 메뉴 활성화 동기화
-  const sidebarLinks = document.querySelectorAll(".menu-tree a");
-  sidebarLinks.forEach(link => {
-    if (link.getAttribute("onclick") && link.getAttribute("onclick").includes(`'${category}'`)) {
-      link.style.fontWeight = "bold";
-      link.style.color = "var(--accent-color)";
-    } else {
-      link.style.fontWeight = "normal";
-      link.style.color = "";
-    }
+    if (btn.getAttribute("onclick")?.includes(`'${category}'`)) btn.classList.add("active");
   });
 
   renderBoard(category);
-  closeSidebar(true);
+  closeSidebar();
 }
 
-// =========================================================
-// 7. 사이드바 검색 기능
-// =========================================================
 function searchFromSidebar() {
   const searchInput = document.querySelector(".sidebar-search input");
-  if (!searchInput) return;
-
-  const query = searchInput.value;
-  renderBoard(currentCategory, query);
-  closeSidebar(true);
+  if (searchInput) renderBoard(currentCategory, searchInput.value);
+  closeSidebar();
 }
 
-// =========================================================
-// 8. 게시글 모달 및 댓글 제어
-// =========================================================
 function openPost(event, postId) {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
+  if (event && event.preventDefault) event.preventDefault();
 
   const post = boardData[postId];
   if (!post) return;
 
   post.viewCount += 1;
-  const viewCell = document.querySelector(`#board-body tr[data-id="${postId}"] .col-views`);
-  if (viewCell) viewCell.textContent = post.viewCount;
+  renderBoard(currentCategory);
 
   const modal = document.getElementById("post-view-modal");
   const modalBody = document.getElementById("modal-post-body");
-
   if (!modal || !modalBody) return;
 
   let commentsHtml = post.comments.map(c => `
-    <div class="comment-item">
-      <div class="comment-meta">
-        <strong>${escapeHtml(c.writer)}</strong>
-        <span class="comment-date">${c.date}</span>
-      </div>
-      <div class="comment-text">${escapeHtml(c.text)}</div>
+    <div class="comment-item" style="border-top:1px solid var(--border-color); padding:8px 0;">
+      <strong>${escapeHtml(c.writer)}</strong> <small style="color:var(--text-sub);">${c.date}</small>
+      <div>${escapeHtml(c.text)}</div>
     </div>
   `).join("");
 
   modalBody.innerHTML = `
-    <div class="post-detail-header">
-      <span class="post-cat-badge">[${getCategoryName(post.category)}]</span>
-      <h2 class="post-detail-title">${escapeHtml(post.title)}</h2>
-      <div class="post-detail-info">
-        <span>작성자: <strong>${escapeHtml(post.writer)}</strong></span>
-        <span>•</span>
-        <span>작성일: ${post.date}</span>
-        <span>•</span>
-        <span>조회: ${post.viewCount}</span>
-      </div>
-    </div>
-    <hr class="post-divider">
-    <div class="post-detail-content">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
-    <hr class="post-divider">
-    <div class="comments-section">
-      <h3>💬 댓글 (${post.comments.length})</h3>
-      <div class="comments-list" id="comments-list-${post.id}">
-        ${commentsHtml}
-      </div>
-      <div class="comment-write-box">
-        <input type="text" id="comment-writer-input" placeholder="작성자 이름" value="202호 입주민">
-        <textarea id="comment-text-input" placeholder="댓글을 남겨보세요..." rows="2"></textarea>
-        <button type="button" onclick="addComment(${post.id})">댓글 등록</button>
-      </div>
+    <h2>${escapeHtml(post.title)}</h2>
+    <p><small>작성자: ${escapeHtml(post.writer)} | 작성일: ${post.date} | 조회: ${post.viewCount}</small></p>
+    <hr>
+    <div style="padding:15px 0;">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
+    <hr>
+    <h3>댓글 (${post.comments.length})</h3>
+    <div>${commentsHtml}</div>
+    <div style="margin-top:15px; display:flex; gap:6px;">
+      <input type="text" id="comment-writer-input" placeholder="이름" value="202호 입주민" style="width:100px;">
+      <input type="text" id="comment-text-input" placeholder="댓글 내용" style="flex:1;">
+      <button type="button" onclick="addComment(${post.id})">등록</button>
     </div>
   `;
 
   modal.classList.remove("hidden");
-  document.body.style.overflow = "hidden";
-
-  history.pushState({ modalOpen: true }, "");
 }
 
-function closePost(triggerHistoryBack = true) {
+function closePost() {
   const modal = document.getElementById("post-view-modal");
-  if (modal && !modal.classList.contains("hidden")) {
-    modal.classList.add("hidden");
-    document.body.style.overflow = "";
-
-    if (triggerHistoryBack && history.state && history.state.modalOpen) {
-      history.back();
-    }
-  }
+  if (modal) modal.classList.add("hidden");
 }
 
-// 댓글 추가 기능
 function addComment(postId) {
   const writerInput = document.getElementById("comment-writer-input");
   const textInput = document.getElementById("comment-text-input");
 
-  if (!writerInput || !textInput) return;
-
-  const writer = writerInput.value.trim();
-  const text = textInput.value.trim();
-
-  if (!writer || !text) {
-    alert("작성자와 댓글 내용을 모두 입력해주세요.");
+  if (!writerInput || !textInput || !writerInput.value || !textInput.value) {
+    alert("작성자와 내용을 입력해 주세요.");
     return;
   }
 
   const today = new Date();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const hours = String(today.getHours()).padStart(2, '0');
-  const minutes = String(today.getMinutes()).padStart(2, '0');
-  const dateStr = `${month}.${day} ${hours}:${minutes}`;
+  const dateStr = `${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')} ${String(today.getHours()).padStart(2, '0')}:${String(today.getMinutes()).padStart(2, '0')}`;
 
-  const newComment = { writer, date: dateStr, text };
-  boardData[postId].comments.push(newComment);
+  boardData[postId].comments.push({
+    writer: writerInput.value,
+    date: dateStr,
+    text: textInput.value
+  });
 
-  // 모달 재호출로 댓글 목록 즉시 갱신
   openPost(null, postId);
 }
 
-// =========================================================
-// 9. 통합 뒤로가기(popstate) & 바깥 클릭 이벤트 제어
-// =========================================================
-window.addEventListener("popstate", () => {
-  const modal = document.getElementById("post-view-modal");
-  const sidebar = document.getElementById("cafe-sidebar");
-  const worldSection = document.getElementById("world-intro-section");
-
-  // 1. 게시글 모달이 열려있으면 닫기
-  if (modal && !modal.classList.contains("hidden")) {
-    closePost(false);
-  }
-
-  // 2. 모바일 사이드바가 열려있으면 닫기
-  if (sidebar && sidebar.classList.contains("active")) {
-    closeSidebar(false);
-  }
-
-  // 3. 세계관 섹션이 열려있으면 닫기
-  if (worldSection && !worldSection.classList.contains("hidden")) {
-    closeWorldIntro(false);
-  }
-});
-
-// 게시글 모달 바깥 배경 클릭 시 닫기
-window.onclick = function(event) {
-  const modal = document.getElementById("post-view-modal");
-  if (event.target === modal) {
-    closePost(true);
-  }
-};
-
-// =========================================================
-// 10. 유틸리티 함수
-// =========================================================
 function getCategoryName(cat) {
-  const names = {
-    notice: "공지",
-    proposal: "제안",
-    share: "나눔",
-    etc: "기타"
-  };
+  const names = { notice: "공지", proposal: "제안", share: "나눔", etc: "기타" };
   return names[cat] || "일반";
 }
 
 function escapeHtml(text) {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
