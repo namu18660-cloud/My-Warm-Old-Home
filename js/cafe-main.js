@@ -1,9 +1,11 @@
 /**
- * 한빛빌라 입주민 누리집 - 메인 인터렉션 & 게시글/댓글 데이터
+ * 한빛빌라 입주민 누리집 - 메인 인터렉션 & 게시글/댓글 데이터 & 테마/사이드바 제어
  * 2020년 주안4동 한빛빌라 101호/102호/201호/202호 및 하나 본가/가지 식구들 데이터
  */
 
+// =========================================================
 // 1. 샘플 게시글 및 댓글 데이터베이스
+// =========================================================
 const boardData = {
   1: {
     id: 1,
@@ -102,17 +104,82 @@ const boardData = {
   }
 };
 
-// 2. 게시글 상세 열람 (모달 열기)
+// =========================================================
+// 2. DOM 로드 후 실행 - 테마 설정 & 모바일 사이드바 초기화
+// =========================================================
+document.addEventListener("DOMContentLoaded", () => {
+  /* --- [A] 다크/라이트 테마 토글 (웨일/OS 다크모드 차단) --- */
+  const themeToggle = document.getElementById("theme-toggle");
+  const savedTheme = localStorage.getItem("user-theme") || "dark";
+
+  // 테마 적용 함수
+  function applyTheme(theme) {
+    if (theme === "light") {
+      document.body.classList.add("light-theme");
+      document.documentElement.classList.add("light-theme");
+      document.documentElement.setAttribute("data-darkmode", "false");
+      document.body.setAttribute("darkmode", "off");
+      if (themeToggle) themeToggle.checked = true;
+    } else {
+      document.body.classList.remove("light-theme");
+      document.documentElement.classList.remove("light-theme");
+      document.documentElement.removeAttribute("data-darkmode");
+      document.body.removeAttribute("darkmode");
+      if (themeToggle) themeToggle.checked = false;
+    }
+  }
+
+  // 초기 테마 설정
+  applyTheme(savedTheme);
+
+  // 스위치 조작 이벤트 등록
+  if (themeToggle) {
+    themeToggle.addEventListener("change", () => {
+      const nextTheme = themeToggle.checked ? "light" : "dark";
+      applyTheme(nextTheme);
+      localStorage.setItem("user-theme", nextTheme);
+    });
+  }
+
+  /* --- [B] 모바일 슬라이드 사이드바 제어 --- */
+  const sidebar = document.getElementById("cafe-sidebar");
+  const btnToggle = document.getElementById("btn-sidebar-toggle");
+  const btnClose = document.getElementById("btn-sidebar-close");
+  const overlay = document.getElementById("sidebar-overlay");
+
+  function openSidebar() {
+    if (sidebar && overlay) {
+      sidebar.classList.add("active");
+      overlay.classList.add("active");
+      document.body.style.overflow = "hidden"; // 모바일 배경 스크롤 차단
+    }
+  }
+
+  function closeSidebar() {
+    if (sidebar && overlay) {
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+      document.body.style.overflow = ""; // 스크롤 해제
+    }
+  }
+
+  if (btnToggle) btnToggle.addEventListener("click", openSidebar);
+  if (btnClose) btnClose.addEventListener("click", closeSidebar);
+  if (overlay) overlay.addEventListener("click", closeSidebar);
+});
+
+// =========================================================
+// 3. 게시글 상세 열람 (모달 열기)
+// =========================================================
 function openPost(event, postId) {
-  if (event) event.preventDefault(); // 링크 이동 방지
-  
+  if (event) event.preventDefault();
+
   const post = boardData[postId];
   if (!post) return;
 
   const modal = document.getElementById("post-view-modal");
   const modalBody = document.getElementById("modal-post-body");
 
-  // 댓글 목록 HTML 생성
   let commentsHtml = post.comments.map(c => `
     <div class="comment-item">
       <div class="comment-meta">
@@ -123,7 +190,6 @@ function openPost(event, postId) {
     </div>
   `).join("");
 
-  // 모달 내부 구조 구성
   modalBody.innerHTML = `
     <div class="post-detail-header">
       <span class="post-cat-badge">[${getCategoryName(post.category)}]</span>
@@ -144,7 +210,6 @@ function openPost(event, postId) {
       <div class="comments-list" id="comments-list-${post.id}">
         ${commentsHtml}
       </div>
-      <!-- 댓글 작성 폼 -->
       <div class="comment-write-box">
         <input type="text" id="comment-writer-input" placeholder="이름 (예: 202호 입주민)" value="202호 입주민">
         <textarea id="comment-text-input" placeholder="댓글을 입력하세요..." rows="2"></textarea>
@@ -153,22 +218,26 @@ function openPost(event, postId) {
     </div>
   `;
 
-  modal.classList.remove("hidden");
+  if (modal) modal.classList.remove("hidden");
 }
 
-// 3. 모달 닫기
+// =========================================================
+// 4. 모달 닫기
+// =========================================================
 function closePost() {
   const modal = document.getElementById("post-view-modal");
   if (modal) modal.classList.add("hidden");
 }
 
-// 4. 댓글 추가 기능
+// =========================================================
+// 5. 댓글 추가 기능
+// =========================================================
 function addComment(postId) {
   const writerInput = document.getElementById("comment-writer-input");
   const textInput = document.getElementById("comment-text-input");
 
-  const writer = writerInput.value.trim() || "202호 입주민";
-  const text = textInput.value.trim();
+  const writer = writerInput ? writerInput.value.trim() : "202호 입주민";
+  const text = textInput ? textInput.value.trim() : "";
 
   if (!text) {
     alert("댓글 내용을 입력해 주세요.");
@@ -182,22 +251,21 @@ function addComment(postId) {
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const dateStr = `${month}.${day} ${hours}:${minutes}`;
 
-  const newComment = { writer, date: dateStr, text };
-  
-  // 데이터에 추가
-  boardData[postId].comments.push(newComment);
+  const newComment = { writer: writer || "202호 입주민", date: dateStr, text };
 
-  // 화면 갱신
+  boardData[postId].comments.push(newComment);
   openPost(null, postId);
 }
 
-// 5. 카테고리 탭 필터링
+// =========================================================
+// 6. 카테고리 탭 필터링
+// =========================================================
 function filterBoard(category) {
   const buttons = document.querySelectorAll(".btn-filter-tab");
   buttons.forEach(btn => btn.classList.remove("active"));
 
-  if (event && event.target) {
-    event.target.classList.add("active");
+  if (window.event && window.event.target) {
+    window.event.target.classList.add("active");
   }
 
   const rows = document.querySelectorAll("#board-body tr");
@@ -219,7 +287,9 @@ function filterBoard(category) {
   });
 }
 
-// 유틸리티 함수
+// =========================================================
+// 7. 유틸리티 함수 및 모달 바깥 영역 클릭 이벤트
+// =========================================================
 function getCategoryName(cat) {
   const names = {
     notice: "공지",
@@ -239,7 +309,6 @@ function escapeHtml(text) {
     .replace(/'/g, "&#039;");
 }
 
-// 모달 외부 클릭 시 닫기
 window.onclick = function(event) {
   const modal = document.getElementById("post-view-modal");
   if (event.target === modal) {
