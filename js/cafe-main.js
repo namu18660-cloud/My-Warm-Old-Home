@@ -7,7 +7,7 @@
 // =========================================================
 const boardData = {
   1: {
-    id: 0,
+    id: 1,
     category: "notice",
     title: "[안내] 누리집 이용 수칙 및 카테고리 안내",
     writer: "오재현(관리)",
@@ -20,7 +20,7 @@ const boardData = {
   },
 
   2: {
-    id: 6,
+    id: 2,
     category: "notice",
     title: "[공지] 한빛빌라 거처 기본 생활 수칙 안내 (반드시 숙지 바랍니다)",
     writer: "정지아",
@@ -61,7 +61,7 @@ const boardData = {
   },
   
   3: {
-    id: 1,
+    id: 3,
     category: "notice",
     title: "[공지] 202호 공실 대여 안내",
     writer: "오재현(관리)",
@@ -76,7 +76,7 @@ const boardData = {
     ]
   },
   4: {
-    id: 2,
+    id: 4,
     category: "proposal",
     title: "[제안] 스포츠 데이터 분석 관련 서적 공유하실 분",
     writer: "이태규",
@@ -89,7 +89,7 @@ const boardData = {
     ]
   },
   5: {
-    id: 3,
+    id: 5,
     category: "etc",
     title: "오늘 저녁에 족발 시키실 분 붙으셈",
     writer: "윤도현(실가)",
@@ -106,7 +106,7 @@ const boardData = {
     ]
   },
   6: {
-    id: 4,
+    id: 6,
     category: "share",
     title: "원목 소형 협탁 나눔합니다!",
     writer: "김서현(수뇌)",
@@ -120,7 +120,7 @@ const boardData = {
     ]
   },
   7: {
-    id: 5,
+    id: 7,
     category: "etc",
     title: "[기타] 202호 수리하면서 뺀 야전침대 주인 찾음",
     writer: "박상철",
