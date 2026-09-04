@@ -193,15 +193,19 @@ document.addEventListener("DOMContentLoaded", () => {
 // 3. 게시글 상세 열람 (모달 열기)
 // =========================================================
 function openPost(event, postId) {
+  // 이벤트 기본 동작(링크 이동) 및 전파 차단
   if (event) {
     event.preventDefault();
     event.stopPropagation();
   }
 
   const post = boardData[postId];
-  if (!post) return;
+  if (!post) {
+    console.error("해당 ID의 게시글 데이터를 찾을 수 없습니다:", postId);
+    return;
+  }
 
-  // 조회수 증가 및 화면 표기 업데이트
+  // 조회수 증가 및 UI 반영
   post.viewCount += 1;
   const viewCell = document.querySelector(`#board-body tr[data-id="${postId}"] .col-views`);
   if (viewCell) viewCell.textContent = post.viewCount;
