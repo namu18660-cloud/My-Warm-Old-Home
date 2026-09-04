@@ -10,7 +10,6 @@
   <title>한빛빌라 누리집 | 2020 주안4동</title>
   <link rel="stylesheet" href="css/cafe-style.css">
 
-  <!-- 로딩 시 깜빡임(Flicker) 방지 스크립트 -->
   <script>
     (function() {
       const savedTheme = localStorage.getItem('user-theme') || 'dark';
@@ -25,14 +24,12 @@
 
   <div class="container">
 
-    <!-- 상단 배너 -->
     <header class="cafe-header">
       <div class="header-overlay">
         <h1 class="header-title">🪹 [인천/주안4동] 한빛빌라 누리집</h1>
         <p class="header-sub">주안4동 한빛빌라 식구 전용 소통 공간</p>
       </div>
 
-      <!-- 다크모드 토글 스위치 -->
       <div class="theme-switch-wrapper">
         <label class="theme-switch" for="theme-toggle">
           <input type="checkbox" id="theme-toggle">
@@ -41,29 +38,24 @@
       </div>
     </header>
 
-    <!-- 모바일용 햄버거 메뉴 버튼 -->
     <div class="mobile-menu-bar">
       <button id="btn-sidebar-toggle" class="btn-sidebar-toggle">☰ 메뉴</button>
     </div>
 
-    <!-- 사이드바 오버레이 -->
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <!-- 메인 레이아웃 -->
     <div class="cafe-layout">
       
-      <!-- 왼쪽 사이드바 -->
       <aside class="cafe-sidebar" id="cafe-sidebar">
         <button id="btn-sidebar-close" class="btn-sidebar-close">✕</button>
 
-        <!-- 프로필 카드 -->
         <div class="side-card profile-card">
           <div class="profile-top">
             <div class="profile-avatar">🏠</div>
             <div class="profile-info">
               <strong class="manager-name">오재현 <span class="badge-mgr">관리자</span></strong>
               <span class="cafe-date">2012.03.15 개설</span>
-              <a href="#" class="cafe-intro-link" onclick="openWorldIntro(); return false;">거처 안내 보기</a>
+              <a href="#" class="cafe-intro-link">거처 안내 보기</a>
             </div>
           </div>
 
@@ -77,9 +69,7 @@
           </div>
 
           <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">✏️ 게시물 작성</button>
-          
-          <!-- ★ 가입하기 버튼 이벤트 연결 완료 ★ -->
-          <button class="btn-chat-main" onclick="openWorldIntro()">💬 가입하기</button>
+          <button class="btn-chat-main" onclick="alert('내부 연락망 채널로 연결됩니다.')">💬 가입하기</button>
 
           <div class="sidebar-search">
             <input type="text" placeholder="게시글 검색..." />
@@ -87,7 +77,6 @@
           </div>
         </div>
 
-        <!-- 메뉴 카드 -->
         <nav class="side-card menu-card">
           <div class="menu-group">
             <div class="menu-title">★ 게시물 카테고리</div>
@@ -131,7 +120,6 @@
         </nav>
       </aside>
 
-      <!-- 메인 영역 -->
       <main class="cafe-main-content">
         <div class="main-top-banner">
           <div class="banner-box-inner">
@@ -178,52 +166,63 @@
       </main>
 
     </div>
+  </div>
 
-    <!-- 상세 모달 -->
-    <div id="post-view-modal" class="post-modal hidden">
-      <div class="modal-content">
-        <button class="btn-close-modal" onclick="closePost()">✕</button>
-        <div id="modal-post-body"></div>
+  <div id="postDetailModal" class="post-detail-modal hidden">
+    <div class="modal-top-bar">
+      <button class="btn-back-modal" onclick="closePostModal()">
+        ← 목록으로
+      </button>
+      <div class="modal-top-actions">
+        <button class="btn-action-icon" onclick="alert('링크가 복사되었습니다.')" title="공유">🔗</button>
+        <button class="btn-action-icon" title="더보기">⋮</button>
       </div>
     </div>
 
-  </div> <!-- .container 끝 -->
+    <div class="post-detail-container">
+      <article class="article-wrapper">
+        <header class="article-header">
+          <span class="article-category" id="modal-category">카테고리</span>
+          <h1 class="article-title" id="modal-title">게시글 제목</h1>
+          <div class="article-profile">
+            <div class="author-avatar" id="modal-avatar">🏡</div>
+            <div class="author-meta">
+              <span class="author-nickname" id="modal-writer">작성자</span>
+              <div class="article-info-list">
+                <span id="modal-date">2026.00.00</span>
+                <span>•</span>
+                <span>조회 <span id="modal-views">0</span></span>
+              </div>
+            </div>
+          </div>
+        </header>
 
-  <!-- ★ 세계관 소개 풀스크린 섹션 (body 내부 올바른 위치로 이동) ★ -->
-  <div id="world-intro-section" class="world-section hidden">
-    <div class="world-container">
-      <button type="button" class="btn-close-world" onclick="closeWorldIntro()">← 돌아가기</button>
-      
-      <header class="world-header">
-        <span class="world-badge">주안4동 한빛빌라</span>
-        <h1>정겨운 나의 집</h1>
-        <p class="world-subtitle">사람 냄새 나는 이곳, 우리의 이야기</p>
-      </header>
+        <section class="article-body" id="modal-content">
+          </section>
 
-      <div class="world-body">
-        <div class="world-card">
-          <h3>🏘️ 공간 소개</h3>
-          <p>인천 주안4동에 위치한 소박한 빌라. 조금은 수상하고 사연 많은 입주민들이 모여 사는 따뜻한 소통 공간입니다.</p>
+        <div class="article-reaction-bar">
+          <button class="btn-like-post" onclick="toggleLike(this)">
+            💚 공감 <span id="modal-like-count">0</span>
+          </button>
+        </div>
+      </article>
+
+      <section class="comments-section">
+        <h3 class="comments-title">댓글 <span id="modal-comment-count">0</span></h3>
+        
+        <div class="comment-input-box">
+          <textarea id="comment-input-text" placeholder="따뜻한 댓글을 남겨주세요."></textarea>
+          <div class="comment-submit-bar">
+            <button class="btn-submit-comment" onclick="submitComment()">등록</button>
+          </div>
         </div>
 
-        <div class="world-card">
-          <h3>👥 주요 입주민</h3>
-          <ul>
-            <li><strong>101호 정지아:</strong> 한빛빌라의 실질적 관리자 및 규율 담당</li>
-            <li><strong>202호 오재현:</strong> 온누리부동산 대표 및 총괄 관리인</li>
-            <li><strong>실가/수뇌 식구들:</strong> 각자의 사연을 품고 오가는 식구들</li>
-          </ul>
-        </div>
-
-        <div class="world-card highlight">
-          <h3>🔑 입주 신청 안내</h3>
-          <p>기본 생활 수칙을 숙지하신 후, 주민 간 매너를 지켜주실 분만 입주(회원가입)가 가능합니다.</p>
-          <button type="button" class="btn-join-submit" onclick="alert('가입 신청이 완료되었습니다.')">입주 동의 및 가입하기</button>
-        </div>
-      </div>
+        <div class="comment-list" id="modal-comment-list">
+          </div>
+      </section>
     </div>
   </div>
 
-  <script src="js/cafe-main.js"></script>
+  <script src="js/cafe-script.js"></script>
 </body>
 </html>
