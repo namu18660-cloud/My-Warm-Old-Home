@@ -271,20 +271,19 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
       ? '<span class="tag-notice">공지</span>' 
       : getCategoryName(post.category);
 
-    return `
+     return `
       <tr ${rowClass} data-id="${post.id}">
-        <td class="col-cat">${catBadge}</td>
-        <td class="col-title">
-          <a href="#" onclick="openPost(event, ${post.id})">
-            ${escapeHtml(post.title)}
-            <span class="count-badge">[${post.comments.length}]</span>
-          </a>
-        </td>
-        <td class="col-writer">${escapeHtml(post.writer)}</td>
-        <td class="col-date">${post.date}</td>
-        <td class="col-views">${post.viewCount}</td>
-      </tr>
-    `;
+      <td class="col-cat">${catBadge}</td>
+      <td class="col-title">
+        <a href="#" onclick="openPost(event, ${post.id})">
+          ${escapeHtml(post.title)}
+        </a>
+      </td>
+      <td class="col-writer">${escapeHtml(post.writer)}</td>
+      <td class="col-date">${post.date}</td>
+      <td class="col-views">${post.viewCount}</td>
+    </tr>
+  `;
   }).join("");
 
   boardBody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding: 40px 0; color: var(--text-sub);">검색 결과가 없습니다.</td></tr>`;
