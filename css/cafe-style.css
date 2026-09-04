@@ -6,7 +6,7 @@
 
 /* [공통] 브라우저 자체 강제 다크모드 색상 반전 무력화 */
 :root, html, body {
-  color-scheme: only light; /* 브라우저의 강제 반전 방지 지정 */
+  color-scheme: only light;
 }
 
 /* [Light Theme - 기본값] */
@@ -64,35 +64,6 @@ body:not(.light-theme) {
   --shadow-modal: rgba(0, 0, 0, 0.75) !important;
 }
 
-/* [Dark Theme - 스위치 토글 시 적용] */
-body:not(.light-theme) {
-  color-scheme: dark; /* 다크모드 토글 시 브라우저 강제 라이트 방지 해제 */
-
-  --bg-main: #1e1e1e;
-  --bg-card: #252526;
-  --bg-banner: linear-gradient(135deg, #2d3436, #000000);
-  --bg-sub-banner: #2d2d2d;
-  
-  --border-color: #333333;
-  --border-light: #2d2d2d;
-  --border-input: #444444;
-  
-  --text-main: #d4d4d4;
-  --text-title: #ffffff;
-  --text-sub: #aaa3a0;
-  --text-muted: #777777;
-  
-  --primary-accent: #00b894;
-  --primary-hover: #009475;
-  
-  --point-red: #d63031;
-  --point-red-hover: #ff7675;
-  --badge-red: #e74c3c;
-  --notice-bg: #2c2523;
-  
-  --shadow-modal: rgba(0, 0, 0, 0.75);
-}
-
 /* 2. Base Styles */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -131,7 +102,7 @@ body {
 .header-title { font-size: 22px; color: #ffffff; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .header-sub { font-size: 12px; color: #d1c5b8; margin-top: 4px; }
 
-/* 4. PC용 모바일 요소 숨김 (기본값) */
+/* 4. PC용 모바일 요소 숨김 */
 .mobile-menu-bar,
 .btn-sidebar-close,
 .sidebar-overlay {
@@ -144,7 +115,6 @@ body {
   gap: 16px;
 }
 
-/* 사이드바 기본 (PC) */
 .cafe-sidebar {
   width: 210px;
   flex-shrink: 0;
@@ -175,7 +145,6 @@ body {
 .stat-item { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub); margin: 3px 0; }
 .stat-val { color: var(--text-title); font-weight: 600; }
 
-/* 게시물 작성 버튼 */
 .btn-write-main {
   width: 100%;
   background: var(--point-red) !important;
@@ -234,7 +203,6 @@ body {
 .main-top-banner h3 { font-size: 13px; color: var(--primary-accent); margin-bottom: 4px; }
 .main-top-banner p { font-size: 11px; color: var(--text-sub); margin: 2px 0; }
 
-/* 게시판 테이블 */
 .board-header-bar {
   display: flex;
   justify-content: space-between;
@@ -255,16 +223,10 @@ body {
 .col-writer { width: 110px; }
 .col-date { width: 75px; text-align: center; color: var(--text-muted); font-size: 11px; }
 .col-views { width: 50px; text-align: center; color: var(--text-muted); font-size: 11px; }
-.col-title a { color: var(--text-title); text-decoration: none; font-weight: 500; }
+.col-title a { color: var(--text-title); text-decoration: none; font-weight: 500; cursor: pointer; }
 
-/* 공지사항(Notice) 전용 스타일 지정 */
-tr.row-notice {
-  background-color: var(--notice-bg) !important;
-}
-
-tr.row-notice .col-title a {
-  font-weight: bold !important;
-}
+tr.row-notice { background-color: var(--notice-bg) !important; }
+tr.row-notice .col-title a { font-weight: bold !important; }
 
 .tag-notice {
   background-color: var(--badge-red) !important;
@@ -287,8 +249,9 @@ tr.row-notice .col-title a {
   display: inline-block;
 }
 
-/* 7. 모달 스타일 */
+/* 7. 모달 스타일 보완 (숨김 처리 핵심 보장) */
 .hidden { display: none !important; }
+
 .post-modal {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -296,6 +259,7 @@ tr.row-notice .col-title a {
   display: flex; justify-content: center; align-items: center;
   z-index: 10000;
 }
+
 .modal-content {
   background: var(--bg-card);
   width: 650px;
@@ -325,7 +289,6 @@ input:checked + .slider:before { transform: translateX(22px); }
   .header-title { font-size: 16px; }
   .header-sub { font-size: 10px; }
 
-  /* 햄버거 메뉴바 노출 */
   .mobile-menu-bar {
     display: flex !important;
     justify-content: flex-start;
@@ -345,7 +308,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     font-size: 12px;
   }
 
-  /* 사이드바 수직 은닉 */
   .cafe-container { flex-direction: column; }
 
   .cafe-sidebar {
@@ -366,7 +328,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     left: 0 !important;
   }
 
-  /* 닫기 버튼 */
   .btn-sidebar-close {
     display: block !important;
     width: 100%;
@@ -380,7 +341,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     font-weight: bold;
   }
 
-  /* 오버레이 */
   .sidebar-overlay.active {
     display: block !important;
     position: fixed;
@@ -392,7 +352,6 @@ input:checked + .slider:before { transform: translateX(22px); }
     z-index: 9998;
   }
 
-  /* 게시판 테이블 모바일 최적화 */
   .col-writer, .col-views { display: none; }
   .col-cat { width: 55px; }
   .col-date { width: 60px; }
