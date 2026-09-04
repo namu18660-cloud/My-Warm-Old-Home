@@ -56,7 +56,7 @@ const boardData = {
     comments: [
       { writer: "박상철", date: "09.02 13:00", text: "확인~ 고생했다!" },
       { writer: "윤서우", date: "09.02 13:00", text: "확인했습니다." },
-      { writer: "이태규", date: "09.02 13:00", text: "확인." },
+      { writer: "이태규", date: "09.02 13:00", text: "확인." }
     ]
   },
   
