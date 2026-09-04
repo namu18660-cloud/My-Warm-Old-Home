@@ -24,7 +24,7 @@ const boardData = {
     category: "notice",
     title: "[공지] 한빛빌라 거처 기본 생활 수칙 안내 (반드시 숙지 바랍니다)",
     writer: "정지아",
-    date: "2019.09.02",
+    date: "2013.07.11",
     viewCount: 38,
     content: `101호 정지아입니다.
 
