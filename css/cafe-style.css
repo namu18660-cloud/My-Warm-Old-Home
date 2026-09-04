@@ -76,6 +76,12 @@ button {
   font-size: 1.6rem;
 }
 
+.header-sub {
+  margin: 4px 0 0 0;
+  color: var(--text-sub);
+  font-size: 0.9rem;
+}
+
 /* 다크모드 토글 스위치 */
 .theme-switch-wrapper {
   display: flex;
@@ -135,17 +141,83 @@ input:checked + .slider:before {
    3. 사이드바 & 오버레이
    ========================================================= */
 
-/* PC 기본 사이드바 레이아웃 */
 .cafe-sidebar {
-  width: 240px;
+  width: 260px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.side-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 20px;
-  box-sizing: border-box;
-  height: fit-content;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 16px;
+}
+
+.profile-top {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.profile-avatar {
+  font-size: 2rem;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.manager-name {
+  font-size: 0.95rem;
+}
+
+.badge-mgr {
+  font-size: 0.75rem;
+  background-color: var(--accent-color);
+  color: #fff;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.cafe-date {
+  font-size: 0.8rem;
+  color: var(--text-sub);
+}
+
+.cafe-intro-link {
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  margin-top: 2px;
+}
+
+.stat-item {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  margin-bottom: 8px;
+}
+
+.btn-write-main,
+.btn-chat-main {
+  width: 100%;
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 0.88rem;
+}
+
+.btn-write-main:hover,
+.btn-chat-main:hover {
+  background-color: var(--bg-hover);
 }
 
 /* 사이드바 검색창 */
@@ -153,7 +225,7 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 20px;
+  margin-top: 12px;
   background-color: var(--bg-main);
   border: 1px solid var(--border-color);
   border-radius: 8px;
@@ -187,28 +259,42 @@ input:checked + .slider:before {
   color: var(--accent-color);
 }
 
-/* 사이드바 메뉴 트리 */
-.menu-tree {
+/* 메뉴 그룹 및 트리스티일 */
+.menu-group {
+  margin-bottom: 16px;
+}
+
+.menu-group:last-child {
+  margin-bottom: 0;
+}
+
+.menu-title {
+  font-size: 0.82rem;
+  font-weight: bold;
+  color: var(--text-sub);
+  margin-bottom: 8px;
+}
+
+.menu-tree, .menu-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.menu-tree li {
-  margin-bottom: 6px;
+.menu-tree li, .menu-list li {
+  margin-bottom: 4px;
 }
 
-.menu-tree a {
+.menu-tree a, .menu-list a {
   display: block;
-  padding: 10px 12px;
+  padding: 6px 8px;
   color: var(--text-main);
-  text-decoration: none;
   border-radius: 6px;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.menu-tree a:hover {
+.menu-tree a:hover, .menu-list a:hover {
   background-color: var(--bg-hover);
   color: var(--accent-color);
 }
@@ -241,7 +327,6 @@ input:checked + .slider:before {
   transition: opacity 0.3s ease;
 }
 
-/* 모바일 메뉴 열기 토글 버튼 */
 .mobile-menu-bar {
   display: none;
   margin-bottom: 16px;
@@ -265,10 +350,39 @@ input:checked + .slider:before {
   min-width: 0;
 }
 
+.main-top-banner {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+
+.main-top-banner h3 {
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+  color: var(--accent-color);
+}
+
+.banner-box-inner p {
+  margin: 4px 0;
+  font-size: 0.88rem;
+  color: var(--text-sub);
+}
+
+.board-header-bar {
+  margin-bottom: 16px;
+}
+
+.board-header-bar h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+}
+
 .board-filter-tabs {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-top: 12px;
   flex-wrap: wrap;
 }
 
@@ -276,10 +390,10 @@ input:checked + .slider:before {
   background-color: var(--bg-card);
   color: var(--text-sub);
   border: 1px solid var(--border-color);
-  padding: 8px 16px;
+  padding: 6px 14px;
   border-radius: 20px;
   cursor: pointer;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   transition: all 0.2s ease;
 }
 
@@ -296,12 +410,9 @@ input:checked + .slider:before {
 }
 
 .board-info-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   font-size: 0.85rem;
   color: var(--text-sub);
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 /* 테이블 스타일 */
@@ -322,13 +433,13 @@ input:checked + .slider:before {
 .board-table th {
   background-color: var(--bg-hover);
   color: var(--text-sub);
-  padding: 14px 12px;
+  padding: 12px;
   font-weight: 500;
   border-bottom: 1px solid var(--border-color);
 }
 
 .board-table td {
-  padding: 14px 12px;
+  padding: 12px;
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -487,11 +598,10 @@ input:checked + .slider:before {
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 0.88rem;
 }
 
 /* =========================================================
-   6. 반응형 미디어 쿼리 (768px 이하 모바일)
+   6. 반응형 (모바일)
    ========================================================= */
 @media screen and (max-width: 768px) {
   .mobile-menu-bar {
@@ -507,15 +617,13 @@ input:checked + .slider:before {
     top: 0;
     left: 0;
     width: 280px;
-    height: 100%;
+    height: 100vh;
+    background-color: var(--bg-card);
     z-index: 999;
-    border-radius: 0;
-    border: none;
-    border-right: 1px solid var(--border-color);
-    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.3);
-    transform: translateX(-100%);
+    padding: 20px;
     overflow-y: auto;
-    padding-top: 50px;
+    transform: translateX(-100%);
+    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.3);
   }
 
   .cafe-sidebar.active {
@@ -529,12 +637,5 @@ input:checked + .slider:before {
 
   .col-writer, .col-date, .col-views {
     display: none;
-  }
-}
-
-@media screen and (min-width: 769px) {
-  .sidebar-overlay,
-  .btn-sidebar-close {
-    display: none !important;
   }
 }
