@@ -79,19 +79,25 @@
           <button class="btn-chat-main" onclick="alert('내부 연락망 채널로 연결됩니다.')">가입하기</button>
 
           <div class="sidebar-search">
-            <input type="text" placeholder="게시물 제목">
-            <button class="btn-search">검색</button>
+            <input type="text" placeholder="게시글 검색..." />
+            <button type="button" onclick="searchFromSidebar()">🔍</button>
           </div>
         </div>
 
         <nav class="side-card menu-card">
           <div class="menu-group">
             <div class="menu-title">★ 게시물 카테고리</div>
-            <ul class="menu-list">
+          <!-- 수정 전/후 확인 -->
+            <ul class="menu-tree">
+              <!-- 전체 게시글 -->
               <li><a href="#" onclick="filterBoard('all', event)">📋 전체글보기 <span class="count-badge">5</span></a></li>
+              <!-- 공지사항 -->
               <li><a href="#" onclick="filterBoard('notice', event)">📌 [공지] 관리 및 안전 안내</a></li>
-              <li><a href="#" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>
+              <!-- 제안/건의 -->
               <li><a href="#" onclick="filterBoard('proposal', event)">💡 [제안] 자료 및 공유</a></li>
+              <!-- 나눔/거래 -->
+              <li><a href="#" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>              
+              <!-- 잡담/기타 -->
               <li><a href="#" onclick="filterBoard('etc', event)">💬 [기타] 잡담 및 모임</a></li>
             </ul>
           </div>
@@ -143,10 +149,11 @@
 
         <div class="board-header-bar">
           <h2 id="current-category-title">전체글보기</h2>
-          <div class="board-tools">
-            <span class="total-post-count">총 <strong id="total-count">5</strong>개의 글</span>
+          <div class="board-filter-tabs">
             <button class="btn-filter-tab active" onclick="filterBoard('all', event)">전체</button>
             <button class="btn-filter-tab" onclick="filterBoard('notice', event)">공지</button>
+            <button class="btn-filter-tab" onclick="filterBoard('proposal', event)">제안</button>
+            <button class="btn-filter-tab" onclick="filterBoard('share', event)">나눔</button>
             <button class="btn-filter-tab" onclick="filterBoard('etc', event)">잡담</button>
           </div>
         </div>
