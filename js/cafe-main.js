@@ -202,7 +202,7 @@ const boardData = {
       { writer: "김서현", date: "09.12 15:20", text: "서우야! 본가 사무실에도 멀티탭 3개 필요한데 혹시 같이 주문 가능할까? 경비로 올려줄게!" },
       { writer: "윤서우", date: "09.12 15:45", text: "@김서현 가능합니다. 모델명 메신저로 보내드릴게요." },
       { writer: "박상철", date: "09.12 16:10", text: "야 101호 안방 모니터 거치대도 들어가냐? 지아한테 물어보고 알려줌" },
-      { writer: "정지아", date: "09.12 16:25", text: "@박상철 필요 없습니다. 제 책상 규격에 안 맞습니다." }
+      { writer: "정지아", date: "09.12 16:25", text: "@정지아 필요 없습니다. 제 책상 규격에 안 맞습니다." }
     ]
   },
 
@@ -326,16 +326,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 모바일 사이드바 토글
-  const sidebar = document.getElementById("cafe-sidebar");
   const btnToggle = document.getElementById("btn-sidebar-toggle");
   const btnClose = document.getElementById("btn-sidebar-close");
   const overlay = document.getElementById("sidebar-overlay");
 
   if (btnToggle) btnToggle.addEventListener("click", openSidebar);
-  if (btnClose) btnClose.addEventListener("click", closeSidebar);
-  if (overlay) overlay.addEventListener("click", closeSidebar);
+  if (btnClose) btnClose.addEventListener("click", () => closeSidebar(true));
+  if (overlay) overlay.addEventListener("click", () => closeSidebar(true));
 
-  // 사이드바 검색창 엔터키 이벤트 바인딩
+  // 사이드바 검색창 엔터키 및 클릭 이벤트 바인딩
   const sidebarSearchInput = document.querySelector(".sidebar-search input");
   const sidebarSearchBtn = document.querySelector(".sidebar-search button");
 
@@ -351,17 +350,21 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebarSearchBtn.addEventListener("click", searchFromSidebar);
   }
 
+  // ESC 키로 모든 모달/사이드바/세계관 닫기
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      closePost();
-      closeSidebar();
+      closePost(true);
+      closeSidebar(true);
+      closeWorldIntro(true);
     }
   });
 
   renderBoard();
 });
 
-// 사이드바 열기/닫기 유틸리티
+// =========================================================
+// 3. 사이드바 열기/닫기 제어
+// =========================================================
 function openSidebar() {
   const sidebar = document.getElementById("cafe-sidebar");
   const overlay = document.getElementById("sidebar-overlay");
@@ -369,21 +372,51 @@ function openSidebar() {
     sidebar.classList.add("active");
     overlay.classList.add("active");
     document.body.style.overflow = "hidden";
+    
+    history.pushState({ sidebarOpen: true }, "");
   }
 }
 
-function closeSidebar() {
+function closeSidebar(triggerHistoryBack = true) {
   const sidebar = document.getElementById("cafe-sidebar");
   const overlay = document.getElementById("sidebar-overlay");
-  if (sidebar && overlay) {
+  if (sidebar && sidebar.classList.contains("active")) {
     sidebar.classList.remove("active");
     overlay.classList.remove("active");
     document.body.style.overflow = "";
+
+    if (triggerHistoryBack && history.state && history.state.sidebarOpen) {
+      history.back();
+    }
   }
 }
 
 // =========================================================
-// 3. 게시판 자동 렌더링 & 검색
+// 4. 세계관 소개 섹션 제어
+// =========================================================
+function openWorldIntro() {
+  const worldSection = document.getElementById("world-intro-section");
+  if (worldSection) {
+    worldSection.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    history.pushState({ worldOpen: true }, "");
+  }
+}
+
+function closeWorldIntro(triggerHistoryBack = true) {
+  const worldSection = document.getElementById("world-intro-section");
+  if (worldSection && !worldSection.classList.contains("hidden")) {
+    worldSection.classList.add("hidden");
+    document.body.style.overflow = "";
+
+    if (triggerHistoryBack && history.state && history.state.worldOpen) {
+      history.back();
+    }
+  }
+}
+
+// =========================================================
+// 5. 게시판 자동 렌더링 & 검색
 // =========================================================
 function renderBoard(categoryFilter = "all", searchQuery = "") {
   const boardBody = document.getElementById("board-body");
@@ -408,7 +441,7 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
       return "";
     }
 
-    // 2) 검색어 필터링 (제목, 내용, 작성자 대상)
+    // 2) 검색어 필터링
     if (query !== "") {
       const matchTitle = post.title.toLowerCase().includes(query);
       const matchContent = post.content.toLowerCase().includes(query);
@@ -425,19 +458,19 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
       ? '<span class="tag-notice">공지</span>' 
       : getCategoryName(post.category);
 
-     return `
+    return `
       <tr ${rowClass} data-id="${post.id}">
-      <td class="col-cat">${catBadge}</td>
-      <td class="col-title">
-        <a href="#" onclick="openPost(event, ${post.id})">
-          ${escapeHtml(post.title)}
-        </a>
-      </td>
-      <td class="col-writer">${escapeHtml(post.writer)}</td>
-      <td class="col-date">${post.date}</td>
-      <td class="col-views">${post.viewCount}</td>
-    </tr>
-  `;
+        <td class="col-cat">${catBadge}</td>
+        <td class="col-title">
+          <a href="#" onclick="openPost(event, ${post.id})">
+            ${escapeHtml(post.title)}
+          </a>
+        </td>
+        <td class="col-writer">${escapeHtml(post.writer)}</td>
+        <td class="col-date">${post.date}</td>
+        <td class="col-views">${post.viewCount}</td>
+      </tr>
+    `;
   }).join("");
 
   boardBody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding: 40px 0; color: var(--text-sub);">검색 결과가 없습니다.</td></tr>`;
@@ -445,7 +478,7 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
 }
 
 // =========================================================
-// 4. 카테고리 필터링 & 메인/사이드바 동기화
+// 6. 카테고리 필터링 & 메인/사이드바 동기화
 // =========================================================
 function filterBoard(category, event) {
   if (event) {
@@ -454,17 +487,16 @@ function filterBoard(category, event) {
 
   currentCategory = category;
 
-  // 1) 메인 탭 버튼 동기화
+  // 메인 탭 버튼 동기화
   const filterButtons = document.querySelectorAll(".btn-filter-tab");
   filterButtons.forEach(btn => {
     btn.classList.remove("active");
-    // onclick 속성의 파라미터 값과 일치 여부 확인
     if (btn.getAttribute("onclick") && btn.getAttribute("onclick").includes(`'${category}'`)) {
       btn.classList.add("active");
     }
   });
 
-  // 2) 사이드바 메뉴 활성화 클래스 동기화 (선택사항)
+  // 사이드바 메뉴 활성화 동기화
   const sidebarLinks = document.querySelectorAll(".menu-tree a");
   sidebarLinks.forEach(link => {
     if (link.getAttribute("onclick") && link.getAttribute("onclick").includes(`'${category}'`)) {
@@ -476,56 +508,25 @@ function filterBoard(category, event) {
     }
   });
 
-  // 3) 게시판 다시 렌더링
   renderBoard(category);
-
-  // 4) 모바일 환경인 경우 사이드바 닫기
-  closeSidebar();
+  closeSidebar(true);
 }
 
 // =========================================================
-// 5. 사이드바 검색 기능
+// 7. 사이드바 검색 기능
 // =========================================================
 function searchFromSidebar() {
   const searchInput = document.querySelector(".sidebar-search input");
   if (!searchInput) return;
 
   const query = searchInput.value;
-  // 현재 카테고리 유지한 채 검색 진행
   renderBoard(currentCategory, query);
-
-  // 모바일 사이드바 닫기
-  closeSidebar();
+  closeSidebar(true);
 }
 
 // =========================================================
-// 6. 게시글 모달 및 댓글
+// 8. 게시글 모달 및 댓글 제어
 // =========================================================
-// =========================================================
-// 모바일 뒤로가기(popstate) 제어 및 모달 관련 JS
-// =========================================================
-
-// 뒤로가기 이벤트 처리 (모달이나 사이드바가 열려있으면 창만 닫기)
-window.addEventListener("popstate", (e) => {
-  const modal = document.getElementById("post-view-modal");
-  const sidebar = document.getElementById("cafe-sidebar");
-
-  let closedAnything = false;
-
-  // 1. 모달이 열려있으면 닫기
-  if (modal && !modal.classList.contains("hidden")) {
-    closePost(false); // popstate에 의한 닫기이므로 history.back() 호출 안 함
-    closedAnything = true;
-  }
-
-  // 2. 사이드바가 열려있으면 닫기
-  if (sidebar && sidebar.classList.contains("active")) {
-    closeSidebar(false);
-    closedAnything = true;
-  }
-});
-
-// 게시글 모달 열기
 function openPost(event, postId) {
   if (event) {
     event.preventDefault();
@@ -567,7 +568,7 @@ function openPost(event, postId) {
       </div>
     </div>
     <hr class="post-divider">
-    <div class="post-detail-content">${escapeHtml(post.content)}</div>
+    <div class="post-detail-content">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
     <hr class="post-divider">
     <div class="comments-section">
       <h3>💬 댓글 (${post.comments.length})</h3>
@@ -583,55 +584,86 @@ function openPost(event, postId) {
   `;
 
   modal.classList.remove("hidden");
-  document.body.style.overflow = "hidden"; // 스크롤 방지
+  document.body.style.overflow = "hidden";
 
-  // 뒤로가기 제어를 위해 브라우저 내역에 가상 상태 추가
   history.pushState({ modalOpen: true }, "");
 }
 
-// 게시글 모달 닫기
 function closePost(triggerHistoryBack = true) {
   const modal = document.getElementById("post-view-modal");
   if (modal && !modal.classList.contains("hidden")) {
     modal.classList.add("hidden");
     document.body.style.overflow = "";
 
-    // X버튼이나 배경 클릭으로 닫았을 때 히스토리 스택 정리
     if (triggerHistoryBack && history.state && history.state.modalOpen) {
       history.back();
     }
   }
 }
 
-// 사이드바 열기/닫기 모바일 대응 수정
-function openSidebar() {
-  const sidebar = document.getElementById("cafe-sidebar");
-  const overlay = document.getElementById("sidebar-overlay");
-  if (sidebar && overlay) {
-    sidebar.classList.add("active");
-    overlay.classList.add("active");
-    document.body.style.overflow = "hidden";
-    
-    history.pushState({ sidebarOpen: true }, "");
-  }
-}
+// 댓글 추가 기능
+function addComment(postId) {
+  const writerInput = document.getElementById("comment-writer-input");
+  const textInput = document.getElementById("comment-text-input");
 
-function closeSidebar(triggerHistoryBack = true) {
-  const sidebar = document.getElementById("cafe-sidebar");
-  const overlay = document.getElementById("sidebar-overlay");
-  if (sidebar && overlay) {
-    sidebar.classList.remove("active");
-    overlay.classList.remove("active");
-    document.body.style.overflow = "";
+  if (!writerInput || !textInput) return;
 
-    if (triggerHistoryBack && history.state && history.state.sidebarOpen) {
-      history.back();
-    }
+  const writer = writerInput.value.trim();
+  const text = textInput.value.trim();
+
+  if (!writer || !text) {
+    alert("작성자와 댓글 내용을 모두 입력해주세요.");
+    return;
   }
+
+  const today = new Date();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const hours = String(today.getHours()).padStart(2, '0');
+  const minutes = String(today.getMinutes()).padStart(2, '0');
+  const dateStr = `${month}.${day} ${hours}:${minutes}`;
+
+  const newComment = { writer, date: dateStr, text };
+  boardData[postId].comments.push(newComment);
+
+  // 모달 재호출로 댓글 목록 즉시 갱신
+  openPost(null, postId);
 }
 
 // =========================================================
-// 7. 유틸리티 함수
+// 9. 통합 뒤로가기(popstate) & 바깥 클릭 이벤트 제어
+// =========================================================
+window.addEventListener("popstate", () => {
+  const modal = document.getElementById("post-view-modal");
+  const sidebar = document.getElementById("cafe-sidebar");
+  const worldSection = document.getElementById("world-intro-section");
+
+  // 1. 게시글 모달이 열려있으면 닫기
+  if (modal && !modal.classList.contains("hidden")) {
+    closePost(false);
+  }
+
+  // 2. 모바일 사이드바가 열려있으면 닫기
+  if (sidebar && sidebar.classList.contains("active")) {
+    closeSidebar(false);
+  }
+
+  // 3. 세계관 섹션이 열려있으면 닫기
+  if (worldSection && !worldSection.classList.contains("hidden")) {
+    closeWorldIntro(false);
+  }
+});
+
+// 게시글 모달 바깥 배경 클릭 시 닫기
+window.onclick = function(event) {
+  const modal = document.getElementById("post-view-modal");
+  if (event.target === modal) {
+    closePost(true);
+  }
+};
+
+// =========================================================
+// 10. 유틸리티 함수
 // =========================================================
 function getCategoryName(cat) {
   const names = {
@@ -651,10 +683,3 @@ function escapeHtml(text) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
-window.onclick = function(event) {
-  const modal = document.getElementById("post-view-modal");
-  if (event.target === modal) {
-    closePost();
-  }
-};
