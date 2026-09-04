@@ -730,3 +730,34 @@ input:checked + .slider::before {
   font-weight: bold;
   cursor: pointer;
 }
+
+/* =========================================================
+   세계관 슬라이드 페이지 전환 스타일
+   ========================================================= */
+
+/* 1. 화면 전체를 감싸는 슬라이더 컨테이너 */
+.app-viewport {
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden; /* 가로 스크롤바 숨김 */
+  position: relative;
+}
+
+/* 2. 슬라이드가 이동하는 트랙 */
+.app-slider {
+  display: flex;
+  width: 200vw; /* 메인(100vw) + 세계관(100vw) */
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); /* 부드러운 슬라이드 애니메이션 */
+}
+
+/* 3. 각 화면(메인 / 세계관) */
+.page-view {
+  width: 100vw;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+/* 세계관 화면이 켜졌을 때 트랙을 왼쪽으로 이동 */
+.app-viewport.show-world .app-slider {
+  transform: translateX(-100vw);
+}
