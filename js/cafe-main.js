@@ -347,6 +347,31 @@ function searchFromSidebar() {
 // =========================================================
 // 6. 게시글 모달 및 댓글
 // =========================================================
+// =========================================================
+// 모바일 뒤로가기(popstate) 제어 및 모달 관련 JS
+// =========================================================
+
+// 뒤로가기 이벤트 처리 (모달이나 사이드바가 열려있으면 창만 닫기)
+window.addEventListener("popstate", (e) => {
+  const modal = document.getElementById("post-view-modal");
+  const sidebar = document.getElementById("cafe-sidebar");
+
+  let closedAnything = false;
+
+  // 1. 모달이 열려있으면 닫기
+  if (modal && !modal.classList.contains("hidden")) {
+    closePost(false); // popstate에 의한 닫기이므로 history.back() 호출 안 함
+    closedAnything = true;
+  }
+
+  // 2. 사이드바가 열려있으면 닫기
+  if (sidebar && sidebar.classList.contains("active")) {
+    closeSidebar(false);
+    closedAnything = true;
+  }
+});
+
+// 게시글 모달 열기
 function openPost(event, postId) {
   if (event) {
     event.preventDefault();
@@ -380,15 +405,15 @@ function openPost(event, postId) {
       <span class="post-cat-badge">[${getCategoryName(post.category)}]</span>
       <h2 class="post-detail-title">${escapeHtml(post.title)}</h2>
       <div class="post-detail-info">
-        <span>작성자: <strong>${escapeHtml(post.writer)}</strong></span> | 
-        <span>작성일: ${post.date}</span> | 
+        <span>작성자: <strong>${escapeHtml(post.writer)}</strong></span>
+        <span>•</span>
+        <span>작성일: ${post.date}</span>
+        <span>•</span>
         <span>조회: ${post.viewCount}</span>
       </div>
     </div>
     <hr class="post-divider">
-    <div class="post-detail-content">
-      ${escapeHtml(post.content).replace(/\n/g, '<br>')}
-    </div>
+    <div class="post-detail-content">${escapeHtml(post.content)}</div>
     <hr class="post-divider">
     <div class="comments-section">
       <h3>💬 댓글 (${post.comments.length})</h3>
@@ -396,47 +421,59 @@ function openPost(event, postId) {
         ${commentsHtml}
       </div>
       <div class="comment-write-box">
-        <input type="text" id="comment-writer-input" placeholder="이름 (예: 202호 입주민)" value="202호 입주민">
-        <textarea id="comment-text-input" placeholder="댓글을 입력하세요..." rows="2"></textarea>
+        <input type="text" id="comment-writer-input" placeholder="작성자 이름" value="202호 입주민">
+        <textarea id="comment-text-input" placeholder="댓글을 남겨보세요..." rows="2"></textarea>
         <button type="button" onclick="addComment(${post.id})">댓글 등록</button>
       </div>
     </div>
   `;
 
   modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden"; // 스크롤 방지
+
+  // 뒤로가기 제어를 위해 브라우저 내역에 가상 상태 추가
+  history.pushState({ modalOpen: true }, "");
 }
 
-function closePost() {
+// 게시글 모달 닫기
+function closePost(triggerHistoryBack = true) {
   const modal = document.getElementById("post-view-modal");
-  if (modal) modal.classList.add("hidden");
+  if (modal && !modal.classList.contains("hidden")) {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+
+    // X버튼이나 배경 클릭으로 닫았을 때 히스토리 스택 정리
+    if (triggerHistoryBack && history.state && history.state.modalOpen) {
+      history.back();
+    }
+  }
 }
 
-function addComment(postId) {
-  const writerInput = document.getElementById("comment-writer-input");
-  const textInput = document.getElementById("comment-text-input");
-
-  const writer = writerInput ? writerInput.value.trim() : "202호 입주민";
-  const text = textInput ? textInput.value.trim() : "";
-
-  if (!text) {
-    alert("댓글 내용을 입력해 주세요.");
-    return;
+// 사이드바 열기/닫기 모바일 대응 수정
+function openSidebar() {
+  const sidebar = document.getElementById("cafe-sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+  if (sidebar && overlay) {
+    sidebar.classList.add("active");
+    overlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+    
+    history.pushState({ sidebarOpen: true }, "");
   }
+}
 
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const dateStr = `${month}.${day} ${hours}:${minutes}`;
+function closeSidebar(triggerHistoryBack = true) {
+  const sidebar = document.getElementById("cafe-sidebar");
+  const overlay = document.getElementById("sidebar-overlay");
+  if (sidebar && overlay) {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+    document.body.style.overflow = "";
 
-  boardData[postId].comments.push({
-    writer: writer || "202호 입주민",
-    date: dateStr,
-    text
-  });
-
-  openPost(null, postId);
+    if (triggerHistoryBack && history.state && history.state.sidebarOpen) {
+      history.back();
+    }
+  }
 }
 
 // =========================================================
