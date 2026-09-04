@@ -4,39 +4,16 @@
 
 /* 1. 디자인 시스템 (CSS Variables) */
 /* 웨일 및 모바일 브라우저의 강제 색상 반전 방지 */
-:root {
-   /* 브라우저 강제 다크모드 반전 방지 */
-  color-scheme: light;
-   
-/* [Dark Theme - 선택 시 적용] */
-  --bg-main: #1e1e1e;
-  --bg-card: #252526;
-  --bg-banner: linear-gradient(135deg, #2d3436, #000000);
-  --bg-sub-banner: #2d2d2d;
-  
-  --border-color: #333333;
-  --border-light: #2d2d2d;
-  --border-input: #444444;
-  
-  --text-main: #d4d4d4;
-  --text-title: #ffffff;
-  --text-sub: #aaa3a0;
-  --text-muted: #777777;
-  
-  --primary-accent: #00b894;
-  --primary-hover: #009475;
-  
-  /* 다크모드용 붉은색 포인트 */
-  --point-red: #d63031;
-  --point-red-hover: #ff7675;
-  --badge-red: #e74c3c;
-  --notice-bg: #2c2523;
-  
-  --shadow-modal: rgba(0, 0, 0, 0.75);
-}
+/* =========================================================
+   한빛빌라 입주민 누리집 - Multi-Theme & Fixed Mobile CSS
+   ========================================================= */
 
-/* [Light Theme - 기본값 설정] */
-body, body.light-theme {
+/* 1. 디자인 시스템 (CSS Variables) */
+
+/* [Light Theme - 기본값] */
+:root, body, body.light-theme {
+  color-scheme: light; /* 라이트모드 설정 */
+
   --bg-main: #f5f0eb;
   --bg-card: #fdfbf7;
   --bg-banner: linear-gradient(135deg, #4a3b32, #2b211b);
@@ -54,13 +31,41 @@ body, body.light-theme {
   --primary-accent: #2e7d32;
   --primary-hover: #1b5e20;
   
-  /* 라이트모드용 붉은색 포인트 */
   --point-red: #c0392b;
   --point-red-hover: #e74c3c;
   --badge-red: #d32f2f;
-  --notice-bg: #fce8e6; /* 공지사항 전용 옅은 붉은빛 배경 */
+  --notice-bg: #fce8e6;
   
   --shadow-modal: rgba(43, 33, 27, 0.4);
+}
+
+/* [Dark Theme - 스위치 토글 시 적용] */
+body:not(.light-theme) {
+  color-scheme: dark; /* 다크모드 토글 시 브라우저 강제 라이트 방지 해제 */
+
+  --bg-main: #1e1e1e;
+  --bg-card: #252526;
+  --bg-banner: linear-gradient(135deg, #2d3436, #000000);
+  --bg-sub-banner: #2d2d2d;
+  
+  --border-color: #333333;
+  --border-light: #2d2d2d;
+  --border-input: #444444;
+  
+  --text-main: #d4d4d4;
+  --text-title: #ffffff;
+  --text-sub: #aaa3a0;
+  --text-muted: #777777;
+  
+  --primary-accent: #00b894;
+  --primary-hover: #009475;
+  
+  --point-red: #d63031;
+  --point-red-hover: #ff7675;
+  --badge-red: #e74c3c;
+  --notice-bg: #2c2523;
+  
+  --shadow-modal: rgba(0, 0, 0, 0.75);
 }
 
 /* 2. Base Styles */
