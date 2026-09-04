@@ -369,14 +369,26 @@ function closeSidebar() {
   }
 }
 
+// 세계관 페이지로 슬라이드 이동
 function openWorldIntro() {
-  const worldSection = document.getElementById("world-intro-section");
-  if (worldSection) worldSection.classList.remove("hidden");
+  const viewport = document.getElementById("app-viewport");
+  if (viewport) {
+    viewport.classList.add("show-world");
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // 상단으로 스크롤 reset
+    history.pushState({ page: "world" }, "", "#world"); // 브라우저 뒤로가기 버튼 지원
+  }
 }
 
-function closeWorldIntro() {
-  const worldSection = document.getElementById("world-intro-section");
-  if (worldSection) worldSection.classList.add("hidden");
+// 메인 페이지로 슬라이드 복귀
+function closeWorldIntro(useHistory = true) {
+  const viewport = document.getElementById("app-viewport");
+  if (viewport) {
+    viewport.classList.remove("show-world");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  if (useHistory && location.hash === "#world") {
+    history.back();
+  }
 }
 
 function renderBoard(categoryFilter = "all", searchQuery = "") {
