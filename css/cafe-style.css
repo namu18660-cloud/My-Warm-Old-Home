@@ -4,10 +4,13 @@
 
 /* 1. 디자인 시스템 (CSS Variables) */
 
+/* [공통] 브라우저 자체 강제 다크모드 색상 반전 무력화 */
+:root, html, body {
+  color-scheme: only light; /* 브라우저의 강제 반전 방지 지정 */
+}
+
 /* [Light Theme - 기본값] */
 :root, body, body.light-theme {
-  color-scheme: light; /* 라이트모드 설정 */
-
   --bg-main: #f5f0eb;
   --bg-card: #fdfbf7;
   --bg-banner: linear-gradient(135deg, #4a3b32, #2b211b);
@@ -31,6 +34,34 @@
   --notice-bg: #fce8e6;
   
   --shadow-modal: rgba(43, 33, 27, 0.4);
+}
+
+/* [Dark Theme - 다크모드 명시 지정] */
+body.dark-theme,
+body:not(.light-theme) {
+  --bg-main: #1e1e1e !important;
+  --bg-card: #252526 !important;
+  --bg-banner: linear-gradient(135deg, #2d3436, #000000) !important;
+  --bg-sub-banner: #2d2d2d !important;
+  
+  --border-color: #333333 !important;
+  --border-light: #2d2d2d !important;
+  --border-input: #444444 !important;
+  
+  --text-main: #d4d4d4 !important;
+  --text-title: #ffffff !important;
+  --text-sub: #aaa3a0 !important;
+  --text-muted: #777777 !important;
+  
+  --primary-accent: #00b894 !important;
+  --primary-hover: #009475 !important;
+  
+  --point-red: #d63031 !important;
+  --point-red-hover: #ff7675 !important;
+  --badge-red: #e74c3c !important;
+  --notice-bg: #2c2523 !important;
+  
+  --shadow-modal: rgba(0, 0, 0, 0.75) !important;
 }
 
 /* [Dark Theme - 스위치 토글 시 적용] */
