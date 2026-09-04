@@ -1,721 +1,162 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-darkmode="false">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>한빛빌라 입주민 누리집</title>
-  <style>
-    /* =========================================================
-       1. 카페 레트로 감성 컬러 팔레트 (전역 변수 설정)
-       ========================================================= */
-    :root {
-      --bg-main: #181a1d;            /* 묵직한 차콜 */
-      --bg-card: #22252a;            /* 카드 배경 */
-      --bg-hover: rgba(255, 255, 255, 0.05);
-      --text-main: #e2e4e8;          /* 소프트 화이트 */
-      --text-sub: #9096a2;           /* 차분한 회색 */
-      --border-color: #32363e;       /* 테두리 선 */
-      --border-thick: #424752;       /* 섹션 구분 굵은 선 */
-      --accent-color: #2e8b57;       /* 클래식 세이지/딥 그린 */
-      --accent-hover: #3cb371;
-      --notice-bg: rgba(46, 139, 87, 0.12);
-      --modal-overlay: rgba(0, 0, 0, 0.7);
-    }
-
-    body.light-theme {
-      --bg-main: #f5f4f0;            /* 연아이보리/소프트 크림 */
-      --bg-card: #ffffff;            /* 카드 흰색 */
-      --bg-hover: rgba(0, 0, 0, 0.04);
-      --text-main: #2b2b2b;          /* 소프트 딥그레이 */
-      --text-sub: #6e7278;           /* 중성 회색 */
-      --border-color: #e3e1d9;       /* 베이지 빛 회색 선 */
-      --border-thick: #d1cecf;       /* 굵은 선 */
-      --accent-color: #1f6b3a;       /* 딥 그린 */
-      --accent-hover: #144926;
-      --notice-bg: #edf6f0;          /* 연두빛 공지 배경 */
-      --modal-overlay: rgba(0, 0, 0, 0.4);
-    }
-
-    /* =========================================================
-       2. 글로벌 레이아웃 및 뷰포트
-       ========================================================= */
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      width: 100%;
-      max-width: 100%;
-      overflow-x: hidden;
-      background-color: #181a1d;
-    }
-
-    body {
-      width: 100%;
-      max-width: 100%;
-      overflow-x: hidden;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button {
-      font-family: inherit;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 20px 16px 100px 16px;
-    }
-
-    /* =========================================================
-       3. 상단 배너
-       ========================================================= */
-    .cafe-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 12px;
-      padding: 16px 0;
-      border-bottom: 2px solid var(--border-thick);
-      margin-bottom: 20px;
-    }
-
-    .header-overlay {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .header-title {
-      margin: 0;
-      font-size: clamp(1.1rem, 4vw, 1.4rem);
-      word-break: keep-all;
-      line-height: 1.3;
-    }
-
-    .header-sub {
-      margin: 4px 0 0 0;
-      color: var(--text-sub);
-      font-size: 0.85rem;
-      word-break: keep-all;
-    }
-
-    .theme-switch-wrapper {
-      flex-shrink: 0;
-      margin-bottom: 2px;
-    }
-
-    .theme-switch {
-      position: relative;
-      display: inline-block;
-      width: 48px;
-      height: 26px;
-    }
-
-    .theme-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: #333333;
-      transition: .3s;
-      border-radius: 26px;
-      border: 1px solid var(--border-color);
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "🌙";
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 20px;
-      width: 20px;
-      left: 2px;
-      bottom: 2px;
-      background-color: #222222;
-      transition: .3s;
-      border-radius: 50%;
-    }
-
-    input:checked + .slider {
-      background-color: var(--accent-color);
-    }
-
-    input:checked + .slider:before {
-      content: "☀️";
-      transform: translateX(22px);
-      background-color: #ffffff;
-    }
-
-    /* =========================================================
-       4. 레이아웃 & 사이드바
-       ========================================================= */
-    .cafe-layout {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    .cafe-sidebar {
-      width: 260px;
-      flex-shrink: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .side-card {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 16px;
-    }
-
-    .profile-top {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .profile-avatar {
-      font-size: 2rem;
-    }
-
-    .profile-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .manager-name {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .badge-mgr {
-      font-size: 0.7rem;
-      background-color: var(--accent-color);
-      color: #fff;
-      padding: 2px 5px;
-      border-radius: 4px;
-    }
-
-    .cafe-date, .cafe-intro-link {
-      font-size: 0.8rem;
-    }
-
-    .stat-item {
-      font-size: 0.82rem;
-      color: var(--text-sub);
-      margin-bottom: 6px;
-      word-break: break-all;
-    }
-
-    .btn-write-main {
-      width: 100%;
-      padding: 9px;
-      margin-top: 8px;
-      border-radius: 4px;
-      border: none;
-      background-color: var(--accent-color);
-      color: #ffffff;
-      font-weight: bold;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    .btn-chat-main {
-      width: 100%;
-      padding: 8px;
-      margin-top: 6px;
-      border-radius: 4px;
-      border: 1px solid var(--border-color);
-      background-color: transparent;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-
-    .sidebar-search {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 12px;
-      background-color: var(--bg-main);
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      padding: 2px 8px;
-    }
-
-    .sidebar-search input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text-main);
-      font-size: 0.85rem;
-      padding: 6px 0;
-    }
-
-    .sidebar-search button {
-      background: transparent;
-      border: none;
-      color: var(--text-sub);
-      cursor: pointer;
-    }
-
-    /* =========================================================
-       5. 메뉴 그룹
-       ========================================================= */
-    .menu-group {
-      padding-bottom: 14px;
-      margin-bottom: 14px;
-      border-bottom: 2px solid var(--border-thick);
-    }
-
-    .menu-group:last-child {
-      padding-bottom: 0;
-      margin-bottom: 0;
-      border-bottom: none;
-    }
-
-    .menu-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-sub);
-      padding-bottom: 6px;
-      margin-bottom: 8px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .menu-tree, .menu-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .menu-tree a, .menu-list a {
-      display: block;
-      padding: 6px 8px;
-      color: var(--text-main);
-      border-radius: 4px;
-      font-size: 0.85rem;
-    }
-
-    .menu-tree a:hover, .menu-list a:hover {
-      background-color: var(--bg-hover);
-      color: var(--accent-color);
-    }
-
-    /* =========================================================
-       6. 메인 콘텐츠
-       ========================================================= */
-    .cafe-main-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .main-top-banner {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 16px;
-      margin-bottom: 16px;
-    }
-
-    .main-top-banner h3 {
-      margin: 0 0 10px 0;
-      font-size: 0.98rem;
-      color: var(--accent-color);
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 6px;
-    }
-
-    .rule-list {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .rule-list li {
-      padding: 7px 0;
-      font-size: 0.85rem;
-      color: var(--text-sub);
-      border-bottom: 1px solid var(--border-color);
-      word-break: keep-all;
-    }
-
-    .rule-list li:last-child {
-      border-bottom: none;
-    }
-
-    .board-header-bar {
-      margin-bottom: 14px;
-    }
-
-    .board-header-bar h2 {
-      margin: 0 0 4px 0;
-      font-size: 1.15rem;
-    }
-
-    .board-info-bar {
-      font-size: 0.8rem;
-      color: var(--text-sub);
-      margin-bottom: 8px;
-    }
-
-    .board-filter-tabs {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .btn-filter-tab {
-      background-color: var(--bg-card);
-      color: var(--text-sub);
-      border: 1px solid var(--border-color);
-      padding: 5px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-
-    .btn-filter-tab.active {
-      background-color: var(--accent-color);
-      color: #ffffff;
-      border-color: var(--accent-color);
-      font-weight: bold;
-    }
-
-    .board-table-wrapper {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-
-    .board-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.88rem;
-    }
-
-    .board-table th, .board-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .board-table th {
-      background-color: var(--bg-hover);
-      color: var(--text-sub);
-    }
-
-    .col-cat { width: 75px; text-align: center; }
-    .col-writer { width: 110px; }
-    .col-date { width: 90px; color: var(--text-sub); font-size: 0.8rem; }
-    .col-views { width: 60px; text-align: center; color: var(--text-sub); font-size: 0.8rem; }
-
-    /* =========================================================
-       7. 모달
-       ========================================================= */
-    .post-modal {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background-color: var(--modal-overlay);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 16px;
-    }
-
-    .post-modal.hidden {
-      display: none;
-    }
-
-    .modal-content {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      width: 100%;
-      max-width: 600px;
-      max-height: 85vh;
-      overflow-y: auto;
-      position: relative;
-      padding: 20px;
-    }
-
-    .btn-close-modal {
-      position: absolute;
-      top: 12px; right: 12px;
-      background: transparent;
-      border: none;
-      color: var(--text-sub);
-      font-size: 1.4rem;
-      cursor: pointer;
-    }
-
-    /* =========================================================
-       8. 모바일 전용
-       ========================================================= */
-    .mobile-menu-bar {
-      display: none;
-      margin-bottom: 14px;
-    }
-
-    .btn-sidebar-toggle {
-      background-color: var(--bg-card);
-      color: var(--text-main);
-      border: 1px solid var(--border-color);
-      padding: 7px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
-
-    .btn-sidebar-close {
-      display: none;
-      background: transparent;
-      border: none;
-      font-size: 1.4rem;
-      color: var(--text-main);
-      cursor: pointer;
-      position: absolute;
-      top: 12px; right: 12px;
-    }
-
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background-color: var(--modal-overlay);
-      z-index: 998;
-    }
-
-    @media screen and (max-width: 768px) {
-      .mobile-menu-bar {
-        display: block;
+  
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  
+  <title>한빛빌라 누리집 | 2020 주안4동</title>
+  <link rel="stylesheet" href="css/cafe-style.css">
+
+  <!-- 로딩 시 깜빡임(Flicker) 방지 스크립트 -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('user-theme') || 'dark';
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-theme');
+        document.documentElement.setAttribute('data-darkmode', 'false');
       }
-
-      .btn-sidebar-close {
-        display: block;
-      }
-
-      .cafe-sidebar {
-        position: fixed;
-        top: 0; left: 0;
-        width: 280px;
-        height: 100vh;
-        background-color: var(--bg-card);
-        z-index: 999;
-        padding: 16px 16px 80px 16px;
-        overflow-y: auto;
-        transform: translateX(-100%);
-        transition: transform 0.25s ease;
-      }
-
-      .cafe-sidebar.active {
-        transform: translateX(0);
-      }
-
-      .sidebar-overlay.active {
-        display: block;
-      }
-
-      .board-table, .board-table tbody {
-        display: block;
-        width: 100%;
-      }
-
-      .board-table thead {
-        display: none;
-      }
-
-      .board-table tr {
-        display: flex;
-        flex-direction: column;
-        padding: 12px 14px;
-        border-bottom: 1px solid var(--border-color);
-        background-color: var(--bg-card);
-        position: relative;
-      }
-
-      .board-table td {
-        display: block;
-        padding: 0;
-        border: none;
-      }
-
-      .board-table .col-cat {
-        font-size: 0.75rem;
-        color: var(--accent-color);
-        font-weight: bold;
-        text-align: left;
-        width: auto;
-        margin-bottom: 4px;
-      }
-
-      .board-table .col-title {
-        font-size: 0.95rem;
-        font-weight: 600;
-        line-height: 1.3;
-        margin-bottom: 8px;
-        color: var(--text-main);
-        word-break: break-all;
-      }
-
-      .board-table .col-writer {
-        display: inline-block;
-        width: auto;
-        font-size: 0.78rem;
-        color: var(--text-sub);
-      }
-
-      .board-table .col-writer::after {
-        content: " •";
-        margin: 0 4px;
-      }
-
-      .board-table .col-date {
-        display: inline-block;
-        width: auto;
-        font-size: 0.78rem;
-        color: var(--text-sub);
-      }
-
-      .board-table .col-views {
-        position: absolute;
-        right: 14px;
-        bottom: 12px;
-        font-size: 0.75rem;
-        color: var(--text-sub);
-        width: auto;
-        text-align: right;
-      }
-
-      .board-table .col-views::before {
-        content: "조회 ";
-      }
-    }
-  </style>
+    })();
+  </script>
 </head>
-<body>
+<body darkmode="off" data-darkmode="false">
 
   <div class="container">
 
+    <!-- 상단 배너 -->
     <header class="cafe-header">
       <div class="header-overlay">
-        <h1 class="header-title">한빛빌라 입주민 누리집</h1>
-        <p class="header-sub">인천 남동구 주안4동 한빛빌라 입주민 및 식구 전용 소통 공간입니다.</p>
+        <h1 class="header-title">🪹 [인천/주안4동] 한빛빌라 누리집</h1>
+        <p class="header-sub">주안4동 한빛빌라 식구 전용 소통 공간</p>
       </div>
 
+      <!-- 다크모드 토글 스위치 (슬라이드 내부 이모지 내장 & 하단 배치) -->
       <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="theme-toggle" aria-label="테마 전환">
+        <label class="theme-switch" for="theme-toggle">
           <input type="checkbox" id="theme-toggle">
-          <span class="slider"></span>
+          <span class="slider round"></span>
         </label>
       </div>
     </header>
 
+    <!-- 모바일용 햄버거 메뉴 버튼 -->
     <div class="mobile-menu-bar">
-      <button type="button" class="btn-sidebar-toggle" id="btn-sidebar-toggle">
-        ☰ 메뉴 및 프로필
-      </button>
+      <button id="btn-sidebar-toggle" class="btn-sidebar-toggle">☰ 메뉴</button>
     </div>
 
-    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <!-- 사이드바 오버레이 -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
+    <!-- 메인 레이아웃 -->
     <div class="cafe-layout">
-
+      
+      <!-- 왼쪽 사이드바 -->
       <aside class="cafe-sidebar" id="cafe-sidebar">
-        <button type="button" class="btn-sidebar-close" id="btn-sidebar-close" aria-label="사이드바 닫기">&times;</button>
+        <button id="btn-sidebar-close" class="btn-sidebar-close">✕</button>
 
-        <div class="side-card">
+        <!-- 프로필 카드 -->
+        <div class="side-card profile-card">
           <div class="profile-top">
-            <div class="profile-avatar">🏢</div>
+            <div class="profile-avatar">🏠</div>
             <div class="profile-info">
-              <div class="manager-name">오재현 <span class="badge-mgr">관리인</span></div>
-              <div class="cafe-date">개설일: 2012.03.15</div>
+              <strong class="manager-name">오재현 <span class="badge-mgr">관리자</span></strong>
+              <span class="cafe-date">2012.03.15 개설</span>
+              <a href="#" class="cafe-intro-link">거처 안내 보기</a>
             </div>
           </div>
 
-          <div class="stat-item">📍 인천 남동구 주안4동 12-3</div>
-          <div class="stat-item">👥 입주 및 거주 식구: 12명</div>
-          <div class="stat-item">✉️ 문의: 101호 정지아 / 관리인</div>
+          <div class="stat-item">
+            <span class="stat-label">👥 등록식구</span>
+            <span class="stat-val">비공개🔒</span>
+          </div>
+            
+          <div class="stat-item">
+            <span class="stat-label">🗺️ 미추홀구 인하로318번길 27-12</span>
+          </div>
 
-          <button type="button" class="btn-write-main" onclick="alert('글쓰기 기능')">카페 글쓰기</button>
-          <button type="button" class="btn-chat-main" onclick="alert('단톡방 기능')">입주민 단톡방</button>
+          <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">✏️ 게시물 작성</button>
+          <button class="btn-chat-main" onclick="alert('내부 연락망 채널로 연결됩니다.')">💬 가입하기</button>
 
           <div class="sidebar-search">
-            <input type="text" placeholder="게시글 검색..." aria-label="게시글 검색">
-            <button type="button">🔍</button>
+            <input type="text" placeholder="게시글 검색..." />
+            <button type="button" onclick="searchFromSidebar()">🔍</button>
           </div>
         </div>
 
-        <div class="side-card">
+        <!-- 메뉴 카드 (굵은 섹션 선 & 얇은 항목 선 반영) -->
+        <nav class="side-card menu-card">
           <div class="menu-group">
-            <div class="menu-title">📢 필독 및 공지</div>
+            <div class="menu-title">★ 게시물 카테고리</div>
             <ul class="menu-tree">
-              <li><a href="#">[공지] 전체 공지사항</a></li>
-              <li><a href="#">[제안] 건의 및 안건</a></li>
+              <li><a href="#" onclick="filterBoard('all', event)">📋 전체글보기</a></li>
+              <li><a href="#" onclick="filterBoard('notice', event)">📌 [공지] 관리 및 안전 안내</a></li>
+              <li><a href="#" onclick="filterBoard('proposal', event)">💡 [제안] 자료 및 공유</a></li>
+              <li><a href="#" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>             
+              <li><a href="#" onclick="filterBoard('etc', event)">💬 [기타] 잡담 및 모임</a></li>
             </ul>
           </div>
 
           <div class="menu-group">
-            <div class="menu-title">💬 입주민 소통</div>
+            <div class="menu-title">🏡 거주 세대</div>
             <ul class="menu-list">
-              <li><a href="#">전체글 보기</a></li>
-              <li><a href="#">나눔 & 대여</a></li>
-              <li><a href="#">잡담 및 일상</a></li>
+              <li><a href="#">⭐ 101호 | 정지아·박상철</a></li>
+              <li><a href="#">▫️ 102호 | 윤서우</a></li>
+              <li><a href="#">▫️ 201호 | 이태규</a></li>
+              <li class="user-highlight-menu"><a href="#">★ 202호 | (입주예정)</a></li>
             </ul>
           </div>
-        </div>
+
+          <div class="menu-group">
+            <div class="menu-title">💼 식구들 (본가/분가)</div>
+            <ul class="menu-list">
+              <li><a href="#">🧊 정지아 <small>(정나)</small></a></li>
+              <li><a href="#">🐕 박상철 <small>(퍼스트)</small></a></li>
+              <li><a href="#">🦉 윤서우 <small>(정가)</small></a></li>
+              <li><a href="#">🐈‍⬛ 이태규 <small>(퍼스트)</small></a></li>
+              <li><a href="#">🔥 윤도현 <small>(실가)</small></a></li>
+              <li><a href="#">🧾 김서현 <small>(수뇌)</small></a></li>
+              <li><a href="#">🚪 오재현 <small>(온누리)</small></a></li>
+              <li><a href="#">👣 이시환 <small>(실가)</small></a></li>
+              <li><a href="#">👣 문해주 <small>(실가)</small></a></li>
+              <li><a href="#">👣 최현우 <small>(실가)</small></a></li>
+              <li><a href="#">👣 한수진 <small>(정가)</small></a></li>
+              <li><a href="#">👣 배성호 <small>(한울)</small></a></li>
+              <li><a href="#">👣 강민호 <small>(실나)</small></a></li>
+            </ul>
+          </div>
+        </nav>
       </aside>
 
+      <!-- 메인 영역 -->
       <main class="cafe-main-content">
-
-        <section class="main-top-banner">
-          <h3>📌 한빛빌라 기본 거처 수칙</h3>
-          <ul class="rule-list">
-            <li>1. 야간 세탁기 및 청소기 사용 자제 (22:00 이후 진동 주의)</li>
-            <li>2. 공용 계단 및 복도 개인 물품 적재 금지</li>
-            <li>3. 외부 방문객 24시간 이상 장기 체류 시 사전 알림 필수</li>
-          </ul>
-        </section>
+        <!-- 기본 거처 수칙 박스 (연한 회색 구분선 적용) -->
+        <div class="main-top-banner">
+          <div class="banner-box-inner">
+            <h3>📍 한빛빌라 기본 거처 수칙</h3>
+            <ul class="rule-list">
+              <li>우편함 관리 및 장기 방치 금지</li>
+              <li>야간 세탁기 및 청소기 사용 자제</li>
+              <li>복도 및 계단 정숙</li>
+              <li>외부 방문객 및 야간 체류 제한</li>
+              <li>지하 공실 및 옥상 출입 금지</li>
+              <li>자세한 사항은 공지를 확인하세요.</li>
+            </ul>
+          </div>
+        </div>
 
         <div class="board-header-bar">
-          <h2>입주민 게시판</h2>
+          <h2 id="current-category-title">전체글보기</h2>
           <div class="board-info-bar">
-            총 <strong id="total-count" style="color: var(--accent-color);">3</strong>개의 글이 있습니다.
+            <span>총 <strong id="total-count">0</strong>개의 게시글</span>
           </div>
-
           <div class="board-filter-tabs">
-            <button type="button" class="btn-filter-tab active">전체</button>
-            <button type="button" class="btn-filter-tab">공지</button>
-            <button type="button" class="btn-filter-tab">제안</button>
-            <button type="button" class="btn-filter-tab">나눔</button>
-            <button type="button" class="btn-filter-tab">기타</button>
+            <button class="btn-filter-tab active" onclick="filterBoard('all', event)">전체</button>
+            <button class="btn-filter-tab" onclick="filterBoard('notice', event)">공지</button>
+            <button class="btn-filter-tab" onclick="filterBoard('proposal', event)">제안</button>
+            <button class="btn-filter-tab" onclick="filterBoard('share', event)">나눔</button>
+            <button class="btn-filter-tab" onclick="filterBoard('etc', event)">잡담</button>
           </div>
         </div>
 
@@ -723,62 +164,16 @@
           <table class="board-table">
             <thead>
               <tr>
-                <th class="col-cat">분류</th>
+                <th class="col-cat">구분</th>
                 <th class="col-title">제목</th>
                 <th class="col-writer">작성자</th>
                 <th class="col-date">작성일</th>
                 <th class="col-views">조회</th>
               </tr>
             </thead>
-            <tbody id="board-body">
-              <tr>
-                <td class="col-cat">[공지]</td>
-                <td class="col-title">3월 공용 계단 청소 일정 안내</td>
-                <td class="col-writer">관리인</td>
-                <td class="col-date">03.01</td>
-                <td class="col-views">42</td>
-              </tr>
-              <tr>
-                <td class="col-cat">[나눔]</td>
-                <td class="col-title">원목 식탁 나눔합니다 (201호)</td>
-                <td class="col-writer">201호</td>
-                <td class="col-date">02.28</td>
-                <td class="col-views">18</td>
-              </tr>
-            </tbody>
+            <tbody id="board-body"></tbody>
           </table>
         </div>
-
       </main>
+
     </div>
-  </div>
-
-  <!-- 테마 전환 및 모바일 메뉴 자바스크립트 -->
-  <script>
-    const themeToggle = document.getElementById('theme-toggle');
-    themeToggle.addEventListener('change', () => {
-      document.body.classList.toggle('light-theme', themeToggle.checked);
-    });
-
-    const btnToggle = document.getElementById('btn-sidebar-toggle');
-    const btnClose = document.getElementById('btn-sidebar-close');
-    const sidebar = document.getElementById('cafe-sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-
-    if (btnToggle) {
-      btnToggle.addEventListener('click', () => {
-        sidebar.classList.add('active');
-        overlay.classList.add('active');
-      });
-    }
-
-    const closeSidebar = () => {
-      sidebar.classList.remove('active');
-      overlay.classList.remove('active');
-    };
-
-    if (btnClose) btnClose.addEventListener('click', closeSidebar);
-    if (overlay) overlay.addEventListener('click', closeSidebar);
-  </script>
-</body>
-</html>
