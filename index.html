@@ -25,18 +25,21 @@
 
   <div class="container">
 
+    <!-- 상단 배너 -->
     <header class="cafe-header">
       <div class="header-overlay">
         <h1 class="header-title">🪹 [인천/주안4동] 한빛빌라 누리집</h1>
         <p class="header-sub">주안4동 한빛빌라 식구 전용 소통 공간</p>
       </div>
 
-      <!-- 슬라이드 토글 스위치 -->
+      <!-- 다크모드 토글 스위치 (해/달 아이콘 및 정돈된 위치) -->
       <div class="theme-switch-wrapper">
+        <span class="theme-icon">☀️</span>
         <label class="theme-switch" for="theme-toggle">
           <input type="checkbox" id="theme-toggle">
           <span class="slider round"></span>
         </label>
+        <span class="theme-icon">🌙</span>
       </div>
     </header>
 
@@ -48,13 +51,14 @@
     <!-- 사이드바 오버레이 -->
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <!-- 메인 레이아웃 (cafe-container -> cafe-layout으로 수정하여 CSS와 통일) -->
+    <!-- 메인 레이아웃 -->
     <div class="cafe-layout">
       
       <!-- 왼쪽 사이드바 -->
       <aside class="cafe-sidebar" id="cafe-sidebar">
         <button id="btn-sidebar-close" class="btn-sidebar-close">✕</button>
 
+        <!-- 프로필 카드 (박스 스타일 적용) -->
         <div class="side-card profile-card">
           <div class="profile-top">
             <div class="profile-avatar">🏠</div>
@@ -74,8 +78,9 @@
             <span class="stat-label">🗺️ 미추홀구 인하로318번길 27-12</span>
           </div>
 
-          <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">게시물 작성</button>
-          <button class="btn-chat-main" onclick="alert('내부 연락망 채널로 연결됩니다.')">가입하기</button>
+          <!-- 강조된 게시물 작성 버튼 -->
+          <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">✏️ 게시물 작성</button>
+          <button class="btn-chat-main" onclick="alert('내부 연락망 채널로 연결됩니다.')">💬 가입하기</button>
 
           <div class="sidebar-search">
             <input type="text" placeholder="게시글 검색..." />
@@ -83,6 +88,7 @@
           </div>
         </div>
 
+        <!-- 메뉴 카드 (박스 디자인 및 구분선 반영) -->
         <nav class="side-card menu-card">
           <div class="menu-group">
             <div class="menu-title">★ 게시물 카테고리</div>
@@ -126,23 +132,25 @@
         </nav>
       </aside>
 
-      <!-- 메인 영역 (cafe-main-body -> cafe-main-content로 수정하여 CSS와 통일) -->
+      <!-- 메인 영역 -->
       <main class="cafe-main-content">
+        <!-- 기본 거처 수칙 박스 -->
         <div class="main-top-banner">
           <div class="banner-box-inner">
             <h3>📍 한빛빌라 기본 거처 수칙</h3>
-            <p>· 우편함 관리 및 장기 방치 금지</p>
-            <p>· 야간 세탁기 및 청소기 사용 자제</p>
-            <p>· 복도 및 계단 정숙</p>
-            <p>· 외부 방문객 및 야간 체류 제한</p>
-            <p>· 지하 공실 및 옥상 출입 금지</p>
-            <p>· 자세한 사항은 공지를 확인하세요.</p>
+            <ul>
+              <li>우편함 관리 및 장기 방치 금지</li>
+              <li>야간 세탁기 및 청소기 사용 자제</li>
+              <li>복도 및 계단 정숙</li>
+              <li>외부 방문객 및 야간 체류 제한</li>
+              <li>지하 공실 및 옥상 출입 금지</li>
+              <li>자세한 사항은 공지를 확인하세요.</li>
+            </ul>
           </div>
         </div>
 
         <div class="board-header-bar">
           <h2 id="current-category-title">전체글보기</h2>
-          <!-- 카운트 표시 요소(total-count) 추가 -->
           <div class="board-info-bar">
             <span>총 <strong id="total-count">0</strong>개의 게시글</span>
           </div>
@@ -173,7 +181,7 @@
 
     </div>
 
-    <!-- 상세 모달 (close-btn -> btn-close-modal로 수정하여 CSS와 통일) -->
+    <!-- 상세 모달 -->
     <div id="post-view-modal" class="post-modal hidden">
       <div class="modal-content">
         <button class="btn-close-modal" onclick="closePost()">✕</button>
