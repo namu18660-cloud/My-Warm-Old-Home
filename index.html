@@ -1,228 +1,182 @@
+html:
+
 <!DOCTYPE html>
 <html lang="ko" data-darkmode="false">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="color-scheme" content="light dark">
-  <meta name="supported-color-schemes" content="light dark">
-  
-  <title>한빛빌라 누리집 | 2020 주안4동</title>
-  <link rel="stylesheet" href="css/cafe-style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="color-scheme" content="light dark">
+  <meta name="supported-color-schemes" content="light dark">
+  
+  <title>한빛빌라 누리집 | 2020 주안4동</title>
+  <link rel="stylesheet" href="css/cafe-style.css">
 
-  <script>
-    (function() {
-      const savedTheme = localStorage.getItem('user-theme') || 'dark';
-      if (savedTheme === 'light') {
-        document.documentElement.classList.add('light-theme');
-        document.documentElement.setAttribute('data-darkmode', 'false');
-      }
-    })();
-  </script>
+  <!-- 로딩 시 깜빡임(Flicker) 방지 스크립트 -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('user-theme') || 'dark';
+      if (savedTheme === 'light') {
+        document.documentElement.classList.add('light-theme');
+        document.documentElement.setAttribute('data-darkmode', 'false');
+      }
+    })();
+  </script>
 </head>
 <body darkmode="off" data-darkmode="false">
 
-  <div class="container">
+  <div class="container">
 
-    <header class="cafe-header">
-      <div class="header-overlay">
-        <h1 class="header-title">🪹 [인천/주안4동] 한빛빌라 누리집</h1>
-        <p class="header-sub">주안4동 한빛빌라 식구 전용 소통 공간</p>
-      </div>
+    <!-- 상단 배너 -->
+    <header class="cafe-header">
+      <div class="header-overlay">
+        <h1 class="header-title">🪹 [인천/주안4동] 한빛빌라 누리집</h1>
+        <p class="header-sub">주안4동 한빛빌라 식구 전용 소통 공간</p>
+      </div>
 
-      <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="theme-toggle">
-          <input type="checkbox" id="theme-toggle">
-          <span class="slider round"></span>
-        </label>
-      </div>
-    </header>
+      <!-- 다크모드 토글 스위치 (슬라이드 내부 이모지 내장 & 하단 배치) -->
+      <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="theme-toggle">
+          <input type="checkbox" id="theme-toggle">
+          <span class="slider round"></span>
+        </label>
+      </div>
+    </header>
 
-    <div class="mobile-menu-bar">
-      <button id="btn-sidebar-toggle" class="btn-sidebar-toggle">☰ 메뉴</button>
-    </div>
+    <!-- 모바일용 햄버거 메뉴 버튼 -->
+    <div class="mobile-menu-bar">
+      <button id="btn-sidebar-toggle" class="btn-sidebar-toggle">☰ 메뉴</button>
+    </div>
 
-    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    <!-- 사이드바 오버레이 -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
-    <div class="cafe-layout">
-      
-      <aside class="cafe-sidebar" id="cafe-sidebar">
-        <button id="btn-sidebar-close" class="btn-sidebar-close">✕</button>
+    <!-- 메인 레이아웃 -->
+    <div class="cafe-layout">
+      
+      <!-- 왼쪽 사이드바 -->
+      <aside class="cafe-sidebar" id="cafe-sidebar">
+        <button id="btn-sidebar-close" class="btn-sidebar-close">✕</button>
 
-        <div class="side-card profile-card">
-          <div class="profile-top">
-            <div class="profile-avatar">🏠</div>
-            <div class="profile-info">
-              <strong class="manager-name">오재현 <span class="badge-mgr">관리자</span></strong>
-              <span class="cafe-date">2012.03.15 개설</span>
-              <a href="#" class="cafe-intro-link">거처 안내 보기</a>
-            </div>
-          </div>
+        <!-- 프로필 카드 -->
+        <div class="side-card profile-card">
+          <div class="profile-top">
+            <div class="profile-avatar">🏠</div>
+            <div class="profile-info">
+              <strong class="manager-name">오재현 <span class="badge-mgr">관리자</span></strong>
+              <span class="cafe-date">2012.03.15 개설</span>
+              <a href="#" class="cafe-intro-link">거처 안내 보기</a>
+            </div>
+          </div>
 
-          <div class="stat-item">
-            <span class="stat-label">👥 등록식구</span>
-            <span class="stat-val">비공개🔒</span>
-          </div>
-            
-          <div class="stat-item">
-            <span class="stat-label">🗺️ 미추홀구 인하로318번길 27-12</span>
-          </div>
+          <div class="stat-item">
+            <span class="stat-label">👥 등록식구</span>
+            <span class="stat-val">비공개🔒</span>
+          </div>
+            
+          <div class="stat-item">
+            <span class="stat-label">🗺️ 미추홀구 인하로318번길 27-12</span>
+          </div>
 
-          <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">✏️ 게시물 작성</button>
-          <button class="btn-chat-main" onclick="alert('내부 연락망 채널로 연결됩니다.')">💬 가입하기</button>
+          <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">✏️ 게시물 작성</button>
+          <button class="btn-chat-main" onclick="alert('내부 연락망 채널로 연결됩니다.')">💬 가입하기</button>
 
-          <div class="sidebar-search">
-            <input type="text" placeholder="게시글 검색..." />
-            <button type="button" onclick="searchFromSidebar()">🔍</button>
-          </div>
-        </div>
+          <div class="sidebar-search">
+            <input type="text" placeholder="게시글 검색..." />
+            <button type="button" onclick="searchFromSidebar()">🔍</button>
+          </div>
+        </div>
 
-        <nav class="side-card menu-card">
-          <div class="menu-group">
-            <div class="menu-title">★ 게시물 카테고리</div>
-            <ul class="menu-tree">
-              <li><a href="#" onclick="filterBoard('all', event)">📋 전체글보기</a></li>
-              <li><a href="#" onclick="filterBoard('notice', event)">📌 [공지] 관리 및 안전 안내</a></li>
-              <li><a href="#" onclick="filterBoard('proposal', event)">💡 [제안] 자료 및 공유</a></li>
-              <li><a href="#" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>             
-              <li><a href="#" onclick="filterBoard('etc', event)">💬 [기타] 잡담 및 모임</a></li>
-            </ul>
-          </div>
+        <!-- 메뉴 카드 (굵은 섹션 선 & 얇은 항목 선 반영) -->
+        <nav class="side-card menu-card">
+          <div class="menu-group">
+            <div class="menu-title">★ 게시물 카테고리</div>
+            <ul class="menu-tree">
+              <li><a href="#" onclick="filterBoard('all', event)">📋 전체글보기</a></li>
+              <li><a href="#" onclick="filterBoard('notice', event)">📌 [공지] 관리 및 안전 안내</a></li>
+              <li><a href="#" onclick="filterBoard('proposal', event)">💡 [제안] 자료 및 공유</a></li>
+              <li><a href="#" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>             
+              <li><a href="#" onclick="filterBoard('etc', event)">💬 [기타] 잡담 및 모임</a></li>
+            </ul>
+          </div>
 
-          <div class="menu-group">
-            <div class="menu-title">🏡 거주 세대</div>
-            <ul class="menu-list">
-              <li><a href="#">⭐ 101호 | 정지아·박상철</a></li>
-              <li><a href="#">▫️ 102호 | 윤서우</a></li>
-              <li><a href="#">▫️ 201호 | 이태규</a></li>
-              <li class="user-highlight-menu"><a href="#">★ 202호 | (입주예정)</a></li>
-            </ul>
-          </div>
+          <div class="menu-group">
+            <div class="menu-title">🏡 거주 세대</div>
+            <ul class="menu-list">
+              <li><a href="#">⭐ 101호 | 정지아·박상철</a></li>
+              <li><a href="#">▫️ 102호 | 윤서우</a></li>
+              <li><a href="#">▫️ 201호 | 이태규</a></li>
+              <li class="user-highlight-menu"><a href="#">★ 202호 | (입주예정)</a></li>
+            </ul>
+          </div>
 
-          <div class="menu-group">
-            <div class="menu-title">💼 식구들 (본가/분가)</div>
-            <ul class="menu-list">
-              <li><a href="#">🧊 정지아 <small>(정나)</small></a></li>
-              <li><a href="#">🐕 박상철 <small>(퍼스트)</small></a></li>
-              <li><a href="#">🦉 윤서우 <small>(정가)</small></a></li>
-              <li><a href="#">🐈‍⬛ 이태규 <small>(퍼스트)</small></a></li>
-              <li><a href="#">🔥 윤도현 <small>(실가)</small></a></li>
-              <li><a href="#">🧾 김서현 <small>(수뇌)</small></a></li>
-              <li><a href="#">🚪 오재현 <small>(온누리)</small></a></li>
-              <li><a href="#">👣 이시환 <small>(실가)</small></a></li>
-              <li><a href="#">👣 문해주 <small>(실가)</small></a></li>
-              <li><a href="#">👣 최현우 <small>(실가)</small></a></li>
-              <li><a href="#">👣 한수진 <small>(정가)</small></a></li>
-              <li><a href="#">👣 배성호 <small>(한울)</small></a></li>
-              <li><a href="#">👣 강민호 <small>(실나)</small></a></li>
-            </ul>
-          </div>
-        </nav>
-      </aside>
+          <div class="menu-group">
+            <div class="menu-title">💼 식구들 (본가/분가)</div>
+            <ul class="menu-list">
+              <li><a href="#">🧊 정지아 <small>(정나)</small></a></li>
+              <li><a href="#">🐕 박상철 <small>(퍼스트)</small></a></li>
+              <li><a href="#">🦉 윤서우 <small>(정가)</small></a></li>
+              <li><a href="#">🐈‍⬛ 이태규 <small>(퍼스트)</small></a></li>
+              <li><a href="#">🔥 윤도현 <small>(실가)</small></a></li>
+              <li><a href="#">🧾 김서현 <small>(수뇌)</small></a></li>
+              <li><a href="#">🚪 오재현 <small>(온누리)</small></a></li>
+              <li><a href="#">👣 이시환 <small>(실가)</small></a></li>
+              <li><a href="#">👣 문해주 <small>(실가)</small></a></li>
+              <li><a href="#">👣 최현우 <small>(실가)</small></a></li>
+              <li><a href="#">👣 한수진 <small>(정가)</small></a></li>
+              <li><a href="#">👣 배성호 <small>(한울)</small></a></li>
+              <li><a href="#">👣 강민호 <small>(실나)</small></a></li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
 
-      <main class="cafe-main-content">
-        <div class="main-top-banner">
-          <div class="banner-box-inner">
-            <h3>📍 한빛빌라 기본 거처 수칙</h3>
-            <ul class="rule-list">
-              <li>우편함 관리 및 장기 방치 금지</li>
-              <li>야간 세탁기 및 청소기 사용 자제</li>
-              <li>복도 및 계단 정숙</li>
-              <li>외부 방문객 및 야간 체류 제한</li>
-              <li>지하 공실 및 옥상 출입 금지</li>
-              <li>자세한 사항은 공지를 확인하세요.</li>
-            </ul>
-          </div>
-        </div>
+      <!-- 메인 영역 -->
+      <main class="cafe-main-content">
+        <!-- 기본 거처 수칙 박스 (연한 회색 구분선 적용) -->
+        <div class="main-top-banner">
+          <div class="banner-box-inner">
+            <h3>📍 한빛빌라 기본 거처 수칙</h3>
+            <ul class="rule-list">
+              <li>우편함 관리 및 장기 방치 금지</li>
+              <li>야간 세탁기 및 청소기 사용 자제</li>
+              <li>복도 및 계단 정숙</li>
+              <li>외부 방문객 및 야간 체류 제한</li>
+              <li>지하 공실 및 옥상 출입 금지</li>
+              <li>자세한 사항은 공지를 확인하세요.</li>
+            </ul>
+          </div>
+        </div>
 
-        <div class="board-header-bar">
-          <h2 id="current-category-title">전체글보기</h2>
-          <div class="board-info-bar">
-            <span>총 <strong id="total-count">0</strong>개의 게시글</span>
-          </div>
-          <div class="board-filter-tabs">
-            <button class="btn-filter-tab active" onclick="filterBoard('all', event)">전체</button>
-            <button class="btn-filter-tab" onclick="filterBoard('notice', event)">공지</button>
-            <button class="btn-filter-tab" onclick="filterBoard('proposal', event)">제안</button>
-            <button class="btn-filter-tab" onclick="filterBoard('share', event)">나눔</button>
-            <button class="btn-filter-tab" onclick="filterBoard('etc', event)">잡담</button>
-          </div>
-        </div>
+        <div class="board-header-bar">
+          <h2 id="current-category-title">전체글보기</h2>
+          <div class="board-info-bar">
+            <span>총 <strong id="total-count">0</strong>개의 게시글</span>
+          </div>
+          <div class="board-filter-tabs">
+            <button class="btn-filter-tab active" onclick="filterBoard('all', event)">전체</button>
+            <button class="btn-filter-tab" onclick="filterBoard('notice', event)">공지</button>
+            <button class="btn-filter-tab" onclick="filterBoard('proposal', event)">제안</button>
+            <button class="btn-filter-tab" onclick="filterBoard('share', event)">나눔</button>
+            <button class="btn-filter-tab" onclick="filterBoard('etc', event)">잡담</button>
+          </div>
+        </div>
 
-        <div class="board-table-wrapper">
-          <table class="board-table">
-            <thead>
-              <tr>
-                <th class="col-cat">구분</th>
-                <th class="col-title">제목</th>
-                <th class="col-writer">작성자</th>
-                <th class="col-date">작성일</th>
-                <th class="col-views">조회</th>
-              </tr>
-            </thead>
-            <tbody id="board-body"></tbody>
-          </table>
-        </div>
-      </main>
+        <div class="board-table-wrapper">
+          <table class="board-table">
+            <thead>
+              <tr>
+                <th class="col-cat">구분</th>
+                <th class="col-title">제목</th>
+                <th class="col-writer">작성자</th>
+                <th class="col-date">작성일</th>
+                <th class="col-views">조회</th>
+              </tr>
+            </thead>
+            <tbody id="board-body"></tbody>
+          </table>
+        </div>
+      </main>
 
-    </div>
-  </div>
+    </div>
 
-  <div id="postDetailModal" class="post-detail-modal hidden">
-    <div class="modal-top-bar">
-      <button class="btn-back-modal" onclick="closePostModal()">
-        ← 목록으로
-      </button>
-      <div class="modal-top-actions">
-        <button class="btn-action-icon" onclick="alert('링크가 복사되었습니다.')" title="공유">🔗</button>
-        <button class="btn-action-icon" title="더보기">⋮</button>
-      </div>
-    </div>
-
-    <div class="post-detail-container">
-      <article class="article-wrapper">
-        <header class="article-header">
-          <span class="article-category" id="modal-category">카테고리</span>
-          <h1 class="article-title" id="modal-title">게시글 제목</h1>
-          <div class="article-profile">
-            <div class="author-avatar" id="modal-avatar">🏡</div>
-            <div class="author-meta">
-              <span class="author-nickname" id="modal-writer">작성자</span>
-              <div class="article-info-list">
-                <span id="modal-date">2026.00.00</span>
-                <span>•</span>
-                <span>조회 <span id="modal-views">0</span></span>
-              </div>
-            </div>
-          </div>
-        </header>
-
-        <section class="article-body" id="modal-content">
-          </section>
-
-        <div class="article-reaction-bar">
-          <button class="btn-like-post" onclick="toggleLike(this)">
-            💚 공감 <span id="modal-like-count">0</span>
-          </button>
-        </div>
-      </article>
-
-      <section class="comments-section">
-        <h3 class="comments-title">댓글 <span id="modal-comment-count">0</span></h3>
-        
-        <div class="comment-input-box">
-          <textarea id="comment-input-text" placeholder="따뜻한 댓글을 남겨주세요."></textarea>
-          <div class="comment-submit-bar">
-            <button class="btn-submit-comment" onclick="submitComment()">등록</button>
-          </div>
-        </div>
-
-        <div class="comment-list" id="modal-comment-list">
-          </div>
-      </section>
-    </div>
-  </div>
-
-  <script src="js/cafe-script.js"></script>
-</body>
-</html>
