@@ -96,6 +96,7 @@ const boardData = {
       { writer: "박상철", date: "09.01 11:20", text: "@윤도현 니네 숙소 두고 왜 남의 빌라에 와서 자꾸 자빠져 자냐?" }
     ]
   },
+
   4: {
     id: 4,
     category: "proposal",
@@ -111,6 +112,7 @@ const boardData = {
       { writer: "이태규", date: "09.04 09:30", text: "@박상철 넌 감부터 잡아라." }
     ]
   },
+
   5: {
     id: 5,
     category: "etc",
@@ -130,6 +132,7 @@ const boardData = {
       { writer: "김서현", date: "09.03 19:10", text: "나도 갈게! 콜라 큰 거 사 들고 간다~" }
     ]
   },
+
   6: {
     id: 6,
     category: "share",
@@ -146,6 +149,7 @@ const boardData = {
       { writer: "윤서우", date: "09.02 20:45", text: "…아니에요. 걍 두세요." }
     ]
   },
+
   7: {
     id: 7,
     category: "etc",
@@ -160,6 +164,7 @@ const boardData = {
       { writer: "박상철", date: "08.30 15:00", text: "@최현우 오올 때 박카스 한 박스 사 와라." }
     ]
   },
+
   8: {
     id: 8,
     category: "notice",
@@ -202,7 +207,7 @@ const boardData = {
       { writer: "김서현", date: "09.12 15:20", text: "서우야! 본가 사무실에도 멀티탭 3개 필요한데 혹시 같이 주문 가능할까? 경비로 올려줄게!" },
       { writer: "윤서우", date: "09.12 15:45", text: "@김서현 가능합니다. 모델명 메신저로 보내드릴게요." },
       { writer: "박상철", date: "09.12 16:10", text: "야 101호 안방 모니터 거치대도 들어가냐? 지아한테 물어보고 알려줌" },
-      { writer: "정지아", date: "09.12 16:25", text: "@정지아 필요 없습니다. 제 책상 규격에 안 맞습니다." }
+      { writer: "정지아", date: "09.12 16:25", text: "@박상철 필요 없습니다. 제 책상 규격에 안 맞습니다." }
     ]
   },
 
@@ -288,8 +293,31 @@ const boardData = {
   }
 };
 
-// 현재 선택된 카테고리 상태 관리
+// 상태 변수
 let currentCategory = "all";
+let currentOpenedPostId = null;
+
+// 유틸리티: 카테고리 한글 명칭 반환
+function getCategoryName(catKey) {
+  switch (catKey) {
+    case "notice": return "[공지]";
+    case "proposal": return "[제안]";
+    case "share": return "[나눔]";
+    case "etc": return "[잡담]";
+    default: return "[일반]";
+  }
+}
+
+// 유틸리티: HTML 이스케이프 (XSS 방지 및 개행 문자 처리)
+function escapeHtml(str) {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 // =========================================================
 // 2. DOM 로드 후 초기화
@@ -331,18 +359,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const overlay = document.getElementById("sidebar-overlay");
 
   if (btnToggle) btnToggle.addEventListener("click", openSidebar);
-  if (btnClose) btnClose.addEventListener("click", () => closeSidebar(true));
-  if (overlay) overlay.addEventListener("click", () => closeSidebar(true));
+  if (btnClose) btnClose.addEventListener("click", closeSidebar);
+  if (overlay) overlay.addEventListener("click", closeSidebar);
 
-  // 사이드바 검색창 엔터키 및 클릭 이벤트 바인딩
+  // 사이드바 검색창 엔터키 이벤트
   const sidebarSearchInput = document.querySelector(".sidebar-search input");
   const sidebarSearchBtn = document.querySelector(".sidebar-search button");
 
   if (sidebarSearchInput) {
     sidebarSearchInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        searchFromSidebar();
-      }
+      if (e.key === "Enter") searchFromSidebar();
     });
   }
 
@@ -350,21 +376,18 @@ document.addEventListener("DOMContentLoaded", () => {
     sidebarSearchBtn.addEventListener("click", searchFromSidebar);
   }
 
-  // ESC 키로 모든 모달/사이드바/세계관 닫기
+  // ESC 키로 모달/사이드바 닫기
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      closePost(true);
-      closeSidebar(true);
-      closeWorldIntro(true);
+      closePostModal();
+      closeSidebar();
     }
   });
 
   renderBoard();
 });
 
-// =========================================================
-// 3. 사이드바 열기/닫기 제어
-// =========================================================
+// 사이드바 열기/닫기
 function openSidebar() {
   const sidebar = document.getElementById("cafe-sidebar");
   const overlay = document.getElementById("sidebar-overlay");
@@ -372,51 +395,21 @@ function openSidebar() {
     sidebar.classList.add("active");
     overlay.classList.add("active");
     document.body.style.overflow = "hidden";
-    
-    history.pushState({ sidebarOpen: true }, "");
   }
 }
 
-function closeSidebar(triggerHistoryBack = true) {
+function closeSidebar() {
   const sidebar = document.getElementById("cafe-sidebar");
   const overlay = document.getElementById("sidebar-overlay");
-  if (sidebar && sidebar.classList.contains("active")) {
+  if (sidebar && overlay) {
     sidebar.classList.remove("active");
     overlay.classList.remove("active");
     document.body.style.overflow = "";
-
-    if (triggerHistoryBack && history.state && history.state.sidebarOpen) {
-      history.back();
-    }
   }
 }
 
 // =========================================================
-// 4. 세계관 소개 섹션 제어
-// =========================================================
-function openWorldIntro() {
-  const worldSection = document.getElementById("world-intro-section");
-  if (worldSection) {
-    worldSection.classList.remove("hidden");
-    document.body.style.overflow = "hidden";
-    history.pushState({ worldOpen: true }, "");
-  }
-}
-
-function closeWorldIntro(triggerHistoryBack = true) {
-  const worldSection = document.getElementById("world-intro-section");
-  if (worldSection && !worldSection.classList.contains("hidden")) {
-    worldSection.classList.add("hidden");
-    document.body.style.overflow = "";
-
-    if (triggerHistoryBack && history.state && history.state.worldOpen) {
-      history.back();
-    }
-  }
-}
-
-// =========================================================
-// 5. 게시판 자동 렌더링 & 검색
+// 3. 게시판 자동 렌더링
 // =========================================================
 function renderBoard(categoryFilter = "all", searchQuery = "") {
   const boardBody = document.getElementById("board-body");
@@ -436,19 +429,13 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
   const query = searchQuery.trim().toLowerCase();
 
   const html = posts.map(post => {
-    // 1) 카테고리 필터링
-    if (categoryFilter !== "all" && post.category !== categoryFilter) {
-      return "";
-    }
+    if (categoryFilter !== "all" && post.category !== categoryFilter) return "";
 
-    // 2) 검색어 필터링
     if (query !== "") {
       const matchTitle = post.title.toLowerCase().includes(query);
       const matchContent = post.content.toLowerCase().includes(query);
       const matchWriter = post.writer.toLowerCase().includes(query);
-      if (!matchTitle && !matchContent && !matchWriter) {
-        return "";
-      }
+      if (!matchTitle && !matchContent && !matchWriter) return "";
     }
 
     renderedCount++;
@@ -462,7 +449,7 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
       <tr ${rowClass} data-id="${post.id}">
         <td class="col-cat">${catBadge}</td>
         <td class="col-title">
-          <a href="#" onclick="openPost(event, ${post.id})">
+          <a href="#" onclick="openPostModal(event, ${post.id})">
             ${escapeHtml(post.title)}
           </a>
         </td>
@@ -478,16 +465,131 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
 }
 
 // =========================================================
-// 6. 카테고리 필터링 & 메인/사이드바 동기화
+// 4. 게시글 풀스크린 모달 제어
+// =========================================================
+function openPostModal(event, postId) {
+  if (event) event.preventDefault();
+
+  const post = boardData[postId];
+  if (!post) return;
+
+  currentOpenedPostId = postId;
+
+  // 1. 조회수 증가 및 테이블 동기화
+  post.viewCount += 1;
+  const viewTd = document.querySelector(`tr[data-id="${postId}"] .col-views`);
+  if (viewTd) viewTd.textContent = post.viewCount;
+
+  // 2. 모달 데이터 채우기
+  document.getElementById("modal-category").textContent = getCategoryName(post.category);
+  document.getElementById("modal-title").textContent = post.title;
+  document.getElementById("modal-writer").textContent = post.writer;
+  document.getElementById("modal-date").textContent = post.date;
+  document.getElementById("modal-views").textContent = post.viewCount;
+
+  // 본문 개행 처리
+  const formattedContent = escapeHtml(post.content).replace(/\n/g, "<br>");
+  document.getElementById("modal-content").innerHTML = `<p>${formattedContent}</p>`;
+
+  // 댓글 렌더링
+  renderModalComments(post.comments || []);
+
+  // 3. 모달 표시 및 배경 스크롤 방지
+  const modal = document.getElementById("postDetailModal");
+  if (modal) {
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closePostModal() {
+  const modal = document.getElementById("postDetailModal");
+  if (modal) {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+    currentOpenedPostId = null;
+  }
+}
+
+// 모달 내부 댓글 렌더링
+function renderModalComments(comments) {
+  const commentListEl = document.getElementById("modal-comment-list");
+  const countEl = document.getElementById("modal-comment-count");
+
+  if (countEl) countEl.textContent = comments.length;
+  if (!commentListEl) return;
+
+  if (comments.length === 0) {
+    commentListEl.innerHTML = `<div style="padding: 20px 0; color: var(--text-sub); font-size: 0.9rem;">첫 댓글을 남겨보세요!</div>`;
+    return;
+  }
+
+  const html = comments.map(cmt => `
+    <div class="comment-item">
+      <div class="comment-header">
+        <span class="comment-author">${escapeHtml(cmt.writer)}</span>
+        <span class="comment-date">${cmt.date}</span>
+      </div>
+      <p class="comment-text">${escapeHtml(cmt.text)}</p>
+    </div>
+  `).join("");
+
+  commentListEl.innerHTML = html;
+}
+
+// 댓글 작성 등록 기능
+function submitComment() {
+  if (!currentOpenedPostId) return;
+
+  const inputEl = document.getElementById("comment-input-text");
+  const text = inputEl.value.trim();
+
+  if (!text) {
+    alert("댓글 내용을 입력해주세요.");
+    return;
+  }
+
+  const post = boardData[currentOpenedPostId];
+  if (!post) return;
+
+  const now = new Date();
+  const timeStr = `${String(now.getMonth() + 1).padStart(2, '0')}.${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+  const newComment = {
+    writer: "방문자",
+    date: timeStr,
+    text: text
+  };
+
+  if (!post.comments) post.comments = [];
+  post.comments.push(newComment);
+
+  renderModalComments(post.comments);
+  inputEl.value = "";
+}
+
+// 좋아요 토글
+function toggleLike(btn) {
+  const countEl = document.getElementById("modal-like-count");
+  let count = parseInt(countEl.textContent, 10) || 0;
+  
+  if (btn.classList.contains("active")) {
+    btn.classList.remove("active");
+    countEl.textContent = count - 1;
+  } else {
+    btn.classList.add("active");
+    countEl.textContent = count + 1;
+  }
+}
+
+// =========================================================
+// 5. 카테고리 필터링 & 검색
 // =========================================================
 function filterBoard(category, event) {
-  if (event) {
-    event.preventDefault();
-  }
+  if (event) event.preventDefault();
 
   currentCategory = category;
 
-  // 메인 탭 버튼 동기화
   const filterButtons = document.querySelectorAll(".btn-filter-tab");
   filterButtons.forEach(btn => {
     btn.classList.remove("active");
@@ -496,190 +598,15 @@ function filterBoard(category, event) {
     }
   });
 
-  // 사이드바 메뉴 활성화 동기화
-  const sidebarLinks = document.querySelectorAll(".menu-tree a");
-  sidebarLinks.forEach(link => {
-    if (link.getAttribute("onclick") && link.getAttribute("onclick").includes(`'${category}'`)) {
-      link.style.fontWeight = "bold";
-      link.style.color = "var(--accent-color)";
-    } else {
-      link.style.fontWeight = "normal";
-      link.style.color = "";
-    }
-  });
-
   renderBoard(category);
-  closeSidebar(true);
+  closeSidebar();
 }
 
-// =========================================================
-// 7. 사이드바 검색 기능
-// =========================================================
 function searchFromSidebar() {
   const searchInput = document.querySelector(".sidebar-search input");
   if (!searchInput) return;
 
   const query = searchInput.value;
   renderBoard(currentCategory, query);
-  closeSidebar(true);
-}
-
-// =========================================================
-// 8. 게시글 모달 및 댓글 제어
-// =========================================================
-function openPost(event, postId) {
-  if (event) {
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  const post = boardData[postId];
-  if (!post) return;
-
-  post.viewCount += 1;
-  const viewCell = document.querySelector(`#board-body tr[data-id="${postId}"] .col-views`);
-  if (viewCell) viewCell.textContent = post.viewCount;
-
-  const modal = document.getElementById("post-view-modal");
-  const modalBody = document.getElementById("modal-post-body");
-
-  if (!modal || !modalBody) return;
-
-  let commentsHtml = post.comments.map(c => `
-    <div class="comment-item">
-      <div class="comment-meta">
-        <strong>${escapeHtml(c.writer)}</strong>
-        <span class="comment-date">${c.date}</span>
-      </div>
-      <div class="comment-text">${escapeHtml(c.text)}</div>
-    </div>
-  `).join("");
-
-  modalBody.innerHTML = `
-    <div class="post-detail-header">
-      <span class="post-cat-badge">[${getCategoryName(post.category)}]</span>
-      <h2 class="post-detail-title">${escapeHtml(post.title)}</h2>
-      <div class="post-detail-info">
-        <span>작성자: <strong>${escapeHtml(post.writer)}</strong></span>
-        <span>•</span>
-        <span>작성일: ${post.date}</span>
-        <span>•</span>
-        <span>조회: ${post.viewCount}</span>
-      </div>
-    </div>
-    <hr class="post-divider">
-    <div class="post-detail-content">${escapeHtml(post.content).replace(/\n/g, '<br>')}</div>
-    <hr class="post-divider">
-    <div class="comments-section">
-      <h3>💬 댓글 (${post.comments.length})</h3>
-      <div class="comments-list" id="comments-list-${post.id}">
-        ${commentsHtml}
-      </div>
-      <div class="comment-write-box">
-        <input type="text" id="comment-writer-input" placeholder="작성자 이름" value="202호 입주민">
-        <textarea id="comment-text-input" placeholder="댓글을 남겨보세요..." rows="2"></textarea>
-        <button type="button" onclick="addComment(${post.id})">댓글 등록</button>
-      </div>
-    </div>
-  `;
-
-  modal.classList.remove("hidden");
-  document.body.style.overflow = "hidden";
-
-  history.pushState({ modalOpen: true }, "");
-}
-
-function closePost(triggerHistoryBack = true) {
-  const modal = document.getElementById("post-view-modal");
-  if (modal && !modal.classList.contains("hidden")) {
-    modal.classList.add("hidden");
-    document.body.style.overflow = "";
-
-    if (triggerHistoryBack && history.state && history.state.modalOpen) {
-      history.back();
-    }
-  }
-}
-
-// 댓글 추가 기능
-function addComment(postId) {
-  const writerInput = document.getElementById("comment-writer-input");
-  const textInput = document.getElementById("comment-text-input");
-
-  if (!writerInput || !textInput) return;
-
-  const writer = writerInput.value.trim();
-  const text = textInput.value.trim();
-
-  if (!writer || !text) {
-    alert("작성자와 댓글 내용을 모두 입력해주세요.");
-    return;
-  }
-
-  const today = new Date();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = String(today.getDate()).padStart(2, '0');
-  const hours = String(today.getHours()).padStart(2, '0');
-  const minutes = String(today.getMinutes()).padStart(2, '0');
-  const dateStr = `${month}.${day} ${hours}:${minutes}`;
-
-  const newComment = { writer, date: dateStr, text };
-  boardData[postId].comments.push(newComment);
-
-  // 모달 재호출로 댓글 목록 즉시 갱신
-  openPost(null, postId);
-}
-
-// =========================================================
-// 9. 통합 뒤로가기(popstate) & 바깥 클릭 이벤트 제어
-// =========================================================
-window.addEventListener("popstate", () => {
-  const modal = document.getElementById("post-view-modal");
-  const sidebar = document.getElementById("cafe-sidebar");
-  const worldSection = document.getElementById("world-intro-section");
-
-  // 1. 게시글 모달이 열려있으면 닫기
-  if (modal && !modal.classList.contains("hidden")) {
-    closePost(false);
-  }
-
-  // 2. 모바일 사이드바가 열려있으면 닫기
-  if (sidebar && sidebar.classList.contains("active")) {
-    closeSidebar(false);
-  }
-
-  // 3. 세계관 섹션이 열려있으면 닫기
-  if (worldSection && !worldSection.classList.contains("hidden")) {
-    closeWorldIntro(false);
-  }
-});
-
-// 게시글 모달 바깥 배경 클릭 시 닫기
-window.onclick = function(event) {
-  const modal = document.getElementById("post-view-modal");
-  if (event.target === modal) {
-    closePost(true);
-  }
-};
-
-// =========================================================
-// 10. 유틸리티 함수
-// =========================================================
-function getCategoryName(cat) {
-  const names = {
-    notice: "공지",
-    proposal: "제안",
-    share: "나눔",
-    etc: "기타"
-  };
-  return names[cat] || "일반";
-}
-
-function escapeHtml(text) {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  closeSidebar();
 }
