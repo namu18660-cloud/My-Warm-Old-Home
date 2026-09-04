@@ -3,10 +3,64 @@
  */
 
 // =========================================================
-// 1. 게시글 및 댓글 데이터베이스
+// 1. 게시글 및 댓글 데이터베이스 (0번 글 추가)
 // =========================================================
 const boardData = {
   1: {
+    id: 0,
+    category: "notice",
+    title: "[안내] 누리집 이용 수칙 및 카테고리 안내",
+    writer: "오재현(관리)",
+    date: "2007.03.15",
+    viewCount: 45,
+    content: `한빛빌라 누리집에 오신 것을 환영합니다.\n\n본 공간은 주안4동 한빛빌라 입주민 및 관련 식구 전용 소통 채널입니다.\n\n- 공지: 건물 관리 및 중요 변경사항\n- 제안: 공유 자료 및 건의사항\n- 나눔: 입주민 간 물품 나눔\n- 기타: 잡담 및 일상 소통\n\n타인에 대한 비방이나 불필요한 마찰은 자제해 주시기 바랍니다.`,
+    comments: [
+      { writer: "김서현", date: "08.25 14:10", text: "확인했습니다! 게시판 깔끔하네요." }
+    ]
+  },
+
+  2: {
+    id: 6,
+    category: "notice",
+    title: "[공지] 한빛빌라 거처 기본 생활 수칙 안내 (반드시 숙지 바랍니다)",
+    writer: "정지아",
+    date: "2019.09.02",
+    viewCount: 38,
+    content: `101호 정지아입니다.
+
+공동주택 특성상 기본 질서가 지켜지지 않으면 입주민 간 불필요한 마찰이 발생합니다.
+신규 입주 및 오가는 식구분들이 늘어남에 따라 기본 거처 수칙을 정리해 올리니 반드시 숙지해 주시기 바랍니다.
+
+1. 우편함 관리 및 장기 방치 금지
+- 우편물과 전단지는 3일 이상 쌓이지 않도록 주기적으로 수거하십시오. 
+- 명의 불분명 우편물이나 안내문은 무단 개봉하지 마시고 101호로 전달 바랍니다.
+
+2. 야간 세탁기 및 청소기 사용 자제
+- 22:00 이후 가전제품 사용에 따른 진동과 소음은 층간소음의 주원인입니다.
+- 야간 가전 사용은 엄격히 금하며, 불가피한 사정이 있을 경우 미리 양해를 구하십시오.
+
+3. 복도 및 계단 정숙
+- 공용 공간은 소리가 크게 울립니다. 복도 이동 시 고성방가 및 대화 자제 바랍니다.
+- 공용 계단에 개인 물품을 적재하여 통행을 방해하는 행위는 금지합니다.
+
+4. 외부 방문객 및 야간 체류 제한
+- 외부 방문객의 24시간 이상 장기 체류 및 야간 숙박은 사전에 동의를 구해야 합니다.
+- 입주민 외 출입자의 동선과 보안 관리를 위한 조치이니 협조 부탁드립니다.
+
+5. 지하 공실 및 옥상 출입 금지
+- 지하 관리 공간 및 옥상은 안전사고 예방을 위해 지정된 관리인 외 출입을 엄격히 금합니다.
+- 이상 소음이나 시설 점검이 필요한 경우 직접 확인하지 마시고 101호나 관리인(오재현)에게 즉시 알리십시오.
+
+기본 수칙을 준수하여 조용하고 안정된 주거 환경을 유지할 수 있도록 협조 바랍니다.
+수칙 위반 시 별도로 말씀드리겠습니다.`,
+    comments: [
+      { writer: "박상철", date: "09.02 13:00", text: "확인~ 고생했다!" }
+      { writer: "윤서우", date: "09.02 13:00", text: "확인했습니다." }
+      { writer: "이태규", date: "09.02 13:00", text: "확인." }
+    ]
+  },
+  
+  3: {
     id: 1,
     category: "notice",
     title: "[공지] 202호 공실 대여 안내",
@@ -21,7 +75,7 @@ const boardData = {
       { writer: "박상철", date: "09.01 11:20", text: "@윤도현 니네 숙소 두고 왜 남의 빌라에 와서 자꾸 자빠져 자냐?" }
     ]
   },
-  2: {
+  4: {
     id: 2,
     category: "proposal",
     title: "[제안] 스포츠 데이터 분석 관련 서적 공유하실 분",
@@ -34,7 +88,7 @@ const boardData = {
       { writer: "이태규", date: "09.04 09:30", text: "@박상철 넌 감부터 잡아라." }
     ]
   },
-  3: {
+  5: {
     id: 3,
     category: "etc",
     title: "오늘 저녁에 족발 시키실 분 붙으셈",
@@ -51,7 +105,7 @@ const boardData = {
       { writer: "김서현", date: "09.03 19:10", text: "나도 갈게! 콜라 큰 거 사 들고 간다~" }
     ]
   },
-  4: {
+  6: {
     id: 4,
     category: "share",
     title: "원목 소형 협탁 나눔합니다!",
@@ -65,7 +119,7 @@ const boardData = {
       { writer: "윤서우", date: "09.02 20:45", text: "…아니에요. 걍 두세요." }
     ]
   },
-  5: {
+  7: {
     id: 5,
     category: "etc",
     title: "[기타] 202호 수리하면서 뺀 야전침대 주인 찾음",
@@ -84,7 +138,6 @@ const boardData = {
 // 2. DOM 로드 후 초기화
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
-  /* --- [A] 테마 설정 --- */
   const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("user-theme") || "dark";
 
@@ -114,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* --- [B] 모바일 사이드바 --- */
   const sidebar = document.getElementById("cafe-sidebar");
   const btnToggle = document.getElementById("btn-sidebar-toggle");
   const btnClose = document.getElementById("btn-sidebar-close");
@@ -140,7 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnClose) btnClose.addEventListener("click", closeSidebar);
   if (overlay) overlay.addEventListener("click", closeSidebar);
 
-  /* --- [C] ESC 키로 닫기 --- */
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       closePost();
@@ -148,19 +199,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* --- [D] 게시판 목록 최초 렌더링 --- */
   renderBoard();
 });
 
 // =========================================================
-// 3. 게시판 자동 렌더링 (동적 생성)
+// 3. 게시판 자동 렌더링 (공지사항 상단 고정 정렬 적용)
 // =========================================================
 function renderBoard(categoryFilter = "all") {
   const boardBody = document.getElementById("board-body");
   const totalCountEl = document.getElementById("total-count");
   if (!boardBody) return;
 
-  const posts = Object.values(boardData).sort((a, b) => b.id - a.id);
+  // 정렬 로직: 공지사항(notice)을 무조건 상단 배치, 같은 분류 내에서는 ID 역순(최신순)
+  const posts = Object.values(boardData).sort((a, b) => {
+    const aIsNotice = a.category === "notice";
+    const bIsNotice = b.category === "notice";
+
+    if (aIsNotice && !bIsNotice) return -1;
+    if (!aIsNotice && bIsNotice) return 1;
+    return b.id - a.id;
+  });
+
   let renderedCount = 0;
 
   const html = posts.map(post => {
@@ -214,7 +273,7 @@ function filterBoard(category, event) {
 }
 
 // =========================================================
-// 5. 게시글 모달 관리 및 댓글
+// 5. 게시글 모달 및 댓글
 // =========================================================
 function openPost(event, postId) {
   if (event) {
