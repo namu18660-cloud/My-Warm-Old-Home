@@ -132,32 +132,39 @@ input:checked + .slider:before {
 }
 
 /* =========================================================
-   3. 사이드바 & 오버레이
+   3. 사이드바 & 오버레이 (디자인 최적화 버전)
    ========================================================= */
 
 /* PC 기본 사이드바 레이아웃 */
 .cafe-sidebar {
-  width: 240px;
+  width: 250px;
   flex-shrink: 0;
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 20px;
+  border-radius: 14px;
+  padding: 20px 16px;
   box-sizing: border-box;
   height: fit-content;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 사이드바 검색창 */
+/* 🔍 개선된 사이드바 검색창 */
 .sidebar-search {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   background-color: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 4px 8px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 10px;
+  padding: 4px 6px 4px 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sidebar-search:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
 }
 
 .sidebar-search input {
@@ -166,54 +173,82 @@ input:checked + .slider:before {
   border: none;
   outline: none;
   color: var(--text-main);
-  font-size: 0.9rem;
-  padding: 6px 4px;
+  font-size: 0.92rem;
+  padding: 6px 0;
 }
 
+/* 시원하고 크게 개선된 검색 버튼 */
 .sidebar-search button {
-  background: transparent;
+  background-color: var(--accent-color);
   border: none;
-  color: var(--text-sub);
+  color: #ffffff;
   cursor: pointer;
-  font-size: 1rem;
-  padding: 4px;
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s ease;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .sidebar-search button:hover {
-  color: var(--accent-color);
+  background-color: var(--accent-hover);
+  transform: scale(1.03);
 }
 
-/* 사이드바 메뉴 트리 */
+.sidebar-search button:active {
+  transform: scale(0.97);
+}
+
+/* 📁 개선된 게시물 카테고리 메뉴 UI */
+.menu-tree-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-sub);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 8px 10px;
+}
+
 .menu-tree {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .menu-tree li {
-  margin-bottom: 6px;
+  margin: 0;
 }
 
 .menu-tree a {
-  display: block;
-  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  padding: 11px 14px;
   color: var(--text-main);
   text-decoration: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  border-radius: 8px;
+  font-size: 0.93rem;
+  font-weight: 500;
+  position: relative;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
 }
 
+/* 카테고리 호버 & 활성화 효과 */
 .menu-tree a:hover {
   background-color: var(--bg-hover);
   color: var(--accent-color);
+  padding-left: 18px; /* 살짝 밀리는 애니메이션 */
+  border-left-color: var(--accent-color);
 }
 
-/* 모바일 전용 요소 */
+/* 모바일 전용 UI 요소를 위한 설정 */
 .btn-sidebar-close {
   display: none;
   background: transparent;
@@ -241,6 +276,20 @@ input:checked + .slider:before {
   transition: opacity 0.3s ease;
 }
 
+.mobile-menu-bar {
+  display: none;
+  margin-bottom: 16px;
+}
+
+.btn-sidebar-toggle {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
 /* 모바일 메뉴 열기 토글 버튼 */
 .mobile-menu-bar {
   display: none;
