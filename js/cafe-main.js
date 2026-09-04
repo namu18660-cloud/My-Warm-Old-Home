@@ -1,6 +1,6 @@
 /**
  * 한빛빌라 입주민 누리집 - 메인 인터렉션 & 게시글/댓글 데이터 & 테마/사이드바 제어
- * 2020년 주안4동 한빛빌라 101호/102호/201호/202호 및 하나 본가/가지 식구들 데이터
+ * 2019년 주안4동 한빛빌라 101호/102호/201호/202호 및 하나 본가/가지 식구들 데이터
  */
 
 // =========================================================
@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnClose) btnClose.addEventListener("click", closeSidebar);
   if (overlay) overlay.addEventListener("click", closeSidebar);
 
-  /* --- [C] ESC 키 입력 시 모달/사이드바 닫기 (보완) --- */
+  /* --- [C] ESC 키 입력 시 모달/사이드바 닫기 --- */
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       closePost();
@@ -175,18 +175,23 @@ document.addEventListener("DOMContentLoaded", () => {
 // 3. 게시글 상세 열람 (모달 열기)
 // =========================================================
 function openPost(event, postId) {
-  if (event) event.preventDefault();
+  if (event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
 
   const post = boardData[postId];
   if (!post) return;
 
-  // [보완 1] 게시글 열람 시 조회수 증가 및 UI 연동
+  // 조회수 증가 및 화면 표기 업데이트
   post.viewCount += 1;
   const viewCell = document.querySelector(`#board-body tr[data-id="${postId}"] .col-views`);
   if (viewCell) viewCell.textContent = post.viewCount;
 
   const modal = document.getElementById("post-view-modal");
   const modalBody = document.getElementById("modal-post-body");
+
+  if (!modal || !modalBody) return;
 
   let commentsHtml = post.comments.map(c => `
     <div class="comment-item">
@@ -226,7 +231,7 @@ function openPost(event, postId) {
     </div>
   `;
 
-  if (modal) modal.classList.remove("hidden");
+  modal.classList.remove("hidden");
 }
 
 // =========================================================
@@ -268,7 +273,6 @@ function addComment(postId) {
 // =========================================================
 // 6. 카테고리 탭 필터링
 // =========================================================
-// [보완 2] event 파라미터를 명시적으로 전달받아 호환성 문제 해결
 function filterBoard(category, event) {
   const buttons = document.querySelectorAll(".btn-filter-tab");
   buttons.forEach(btn => btn.classList.remove("active"));
@@ -282,15 +286,11 @@ function filterBoard(category, event) {
     if (category === "all") {
       row.style.display = "";
     } else {
-      const onclickAttr = row.querySelector("a")?.getAttribute("onclick") || "";
-      const match = onclickAttr.match(/openPost\((?:event,\s*)?(\d+)\)/);
-      if (match) {
-        const postId = match[1];
-        if (boardData[postId] && boardData[postId].category === category) {
-          row.style.display = "";
-        } else {
-          row.style.display = "none";
-        }
+      const postId = row.getAttribute("data-id");
+      if (postId && boardData[postId] && boardData[postId].category === category) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
       }
     }
   });
