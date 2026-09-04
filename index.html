@@ -77,7 +77,8 @@
           </div>
 
           <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">✏️ 게시물 작성</button>
-          <!-- 가입하기 버튼 클릭 시 세계관 화면 연결 -->
+          
+          <!-- ★ 가입하기 버튼 이벤트 연결 완료 ★ -->
           <button class="btn-chat-main" onclick="openWorldIntro()">💬 가입하기</button>
 
           <div class="sidebar-search">
@@ -132,7 +133,6 @@
 
       <!-- 메인 영역 -->
       <main class="cafe-main-content">
-        <!-- 기본 거처 수칙 박스 -->
         <div class="main-top-banner">
           <div class="banner-box-inner">
             <h3>📍 한빛빌라 기본 거처 수칙</h3>
@@ -187,9 +187,9 @@
       </div>
     </div>
 
-  </div>
+  </div> <!-- .container 끝 -->
 
-  <!-- 세계관 소개 풀스크린 섹션 (body 내부 정위치) -->
+  <!-- ★ 세계관 소개 풀스크린 섹션 (body 내부 올바른 위치로 이동) ★ -->
   <div id="world-intro-section" class="world-section hidden">
     <div class="world-container">
       <button type="button" class="btn-close-world" onclick="closeWorldIntro()">← 돌아가기</button>
