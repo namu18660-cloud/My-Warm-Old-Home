@@ -1,55 +1,53 @@
-
 /* =========================================================
-   1. 2020 카페 레트로 감성 컬러 팔레트
+   0. CSS Variables & Theme Configuration
    ========================================================= */
-
-/* 기본 (다크 모드) : 쌩블랙 제거, 묵직한 2020 다크 네이비/차콜 톤 */
 :root {
-  --bg-main: #181a1d;           /* 쌩블랙 대신 묵직한 차콜 */
-  --bg-card: #22252a;           /* 카드 배경 */
-  --bg-hover: rgba(255, 255, 255, 0.05);
-  --text-main: #e2e4e8;         /* 소프트 화이트 */
-  --text-sub: #9096a2;          /* 차분한 회색 */
-  --border-color: #32363e;      /* 테두리 선 */
-  --border-thick: #424752;      /* 섹션 구분 굵은 선 */
-  --accent-color: #2e8b57;      /* 클래식 세이지/딥 그린 */
-  --accent-hover: #3cb371;
-  --notice-bg: rgba(46, 139, 87, 0.12);
-  --modal-overlay: rgba(0, 0, 0, 0.7);
+  --bg-main: #121212;
+  --bg-sub: #1e1e1e;
+  --bg-card: #252525;
+  --border-color: #333333;
+  --text-main: #e0e0e0;
+  --text-sub: #999999;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+  --tag-notice-bg: rgba(239, 68, 68, 0.15);
+  --tag-notice-text: #f87171;
+  --row-hover-bg: rgba(255, 255, 255, 0.03);
+  --row-notice-bg: rgba(59, 130, 246, 0.05);
 }
 
-/* 라이트 모드 : 쌩화이트 제거, 2020년 카페 특유의 따뜻한 크림/아이보리 톤 */
-body.light-theme {
-  --bg-main: #f5f4f0;           /* 따뜻한 연아이보리/소프트 크림 배경 */
-  --bg-card: #ffffff;           /* 카드는 깔끔한 흰색으로 대비 효과 */
-  --bg-hover: rgba(0, 0, 0, 0.04);
-  --text-main: #2b2b2b;         /* 쌩블랙 대신 소프트 딥그레이 */
-  --text-sub: #6e7278;          /* 편안한 중성 회색 */
-  --border-color: #e3e1d9;      /* 따뜻한 베이지 빛 도는 회색 선 */
-  --border-thick: #d1cecf;      /* 섹션 구분 굵은 선 */
-  --accent-color: #1f6b3a;      /* 2020 카페 대표 딥 그린 */
-  --accent-hover: #144926;
-  --notice-bg: #edf6f0;         /* 연한 연두빛 공지 배경 */
-  --modal-overlay: rgba(0, 0, 0, 0.4);
+.light-theme,
+[data-darkmode="false"],
+[darkmode="off"] {
+  --bg-main: #f4f5f7;
+  --bg-sub: #ffffff;
+  --bg-card: #ffffff;
+  --border-color: #e5e7eb;
+  --text-main: #111827;
+  --text-sub: #6b7280;
+  --accent-color: #2563eb;
+  --accent-hover: #1d4ed8;
+  --tag-notice-bg: #fee2e2;
+  --tag-notice-text: #dc2626;
+  --row-hover-bg: #f9fafb;
+  --row-notice-bg: #eff6ff;
 }
 
 /* =========================================================
-   2. 글로벌 레이아웃 및 뷰포트 방어
+   1. Reset & Base Styles
    ========================================================= */
 * {
   box-sizing: border-box;
-}
-
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden; /* 가로 스크롤 잘림 방지 */
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
   background-color: var(--bg-main);
   color: var(--text-main);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  line-height: 1.5;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 a {
@@ -57,350 +55,201 @@ a {
   text-decoration: none;
 }
 
-button {
-  font-family: inherit;
-}
-
-.container {
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 20px 16px 100px 16px;
+ul, ol {
+  list-style: none;
 }
 
 /* =========================================================
-   3. 상단 배너
+   2. Layout & Common Components
    ========================================================= */
-.cafe-header {
+.cafe-container {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 12px;
-  padding: 16px 0;
-  border-bottom: 2px solid var(--border-thick);
-  margin-bottom: 20px;
+  min-height: 100vh;
 }
 
-.header-overlay {
-  flex: 1;
-  min-width: 0; /* Flex 자식 이탈 방지 */
-}
-
-.header-title {
-  margin: 0;
-  font-size: clamp(1.1rem, 4vw, 1.4rem);
-  word-break: keep-all; /* 모바일 대응 한글 자연스러운 줄바꿈 */
-  line-height: 1.3;
-}
-
-.header-sub {
-  margin: 4px 0 0 0;
-  color: var(--text-sub);
-  font-size: 0.85rem;
-  word-break: keep-all;
-}
-
-/* 다크모드 스위치 */
-.theme-switch-wrapper {
-  flex-shrink: 0;
-  margin-bottom: 2px;
-}
-
-.theme-switch {
-  position: relative;
-  display: inline-block;
-  width: 48px;
-  height: 26px;
-}
-
-.theme-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #333333;
-  transition: .3s;
-  border-radius: 26px;
-  border: 1px solid var(--border-color);
-}
-
-.slider:before {
-  position: absolute;
-  content: "🌙";
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20px;
-  width: 20px;
-  left: 2px;
-  bottom: 2px;
-  background-color: #222222;
-  transition: .3s;
-  border-radius: 50%;
-}
-
-input:checked + .slider {
-  background-color: var(--accent-color);
-}
-
-input:checked + .slider:before {
-  content: "☀️";
-  transform: translateX(22px);
-  background-color: #ffffff;
-}
-
-/* =========================================================
-   4. 레이아웃 & 사이드바
-   ========================================================= */
-.cafe-layout {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start;
-}
-
+/* 사이드바 */
 .cafe-sidebar {
   width: 260px;
-  flex-shrink: 0;
+  background-color: var(--bg-sub);
+  border-right: 1px solid var(--border-color);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  transition: transform 0.3s ease;
 }
 
-.side-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 16px;
-}
-
-.profile-top {
+.sidebar-header {
+  padding: 20px;
   display: flex;
-  gap: 12px;
   align-items: center;
-  margin-bottom: 12px;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.profile-avatar {
-  font-size: 2rem;
+.sidebar-header h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
 }
 
-.profile-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.manager-name {
-  font-size: 0.95rem;
-  font-weight: 600;
-}
-
-.badge-mgr {
-  font-size: 0.7rem;
-  background-color: var(--accent-color);
-  color: #fff;
-  padding: 2px 5px;
-  border-radius: 4px;
-}
-
-.cafe-date, .cafe-intro-link {
-  font-size: 0.8rem;
-}
-
-.stat-item {
-  font-size: 0.82rem;
-  color: var(--text-sub);
-  margin-bottom: 6px;
-  word-break: break-all;
-}
-
-.btn-write-main {
-  width: 100%;
-  padding: 9px;
-  margin-top: 8px;
-  border-radius: 4px;
+.btn-sidebar-close {
+  background: none;
   border: none;
-  background-color: var(--accent-color);
-  color: #ffffff;
-  font-weight: bold;
-  font-size: 0.9rem;
+  color: var(--text-main);
+  font-size: 1.2rem;
   cursor: pointer;
+  display: none;
 }
 
-.btn-chat-main {
-  width: 100%;
-  padding: 8px;
-  margin-top: 6px;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
-  background-color: transparent;
-  color: var(--text-main);
-  font-size: 0.85rem;
-  cursor: pointer;
+.sidebar-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .sidebar-search {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 12px;
-  background-color: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  padding: 2px 8px;
+  margin-bottom: 20px;
 }
 
 .sidebar-search input {
-  width: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
+  flex: 1;
+  padding: 8px 12px;
+  background-color: var(--bg-main);
+  border: 1px solid var(--border-color);
+  border-radius: 4px 0 0 4px;
   color: var(--text-main);
-  font-size: 0.85rem;
-  padding: 6px 0;
+  outline: none;
 }
 
 .sidebar-search button {
-  background: transparent;
+  padding: 0 12px;
+  background-color: var(--accent-color);
+  color: #fff;
   border: none;
-  color: var(--text-sub);
+  border-radius: 0 4px 4px 0;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-/* =========================================================
-   5. 사이드바 구분선
-   ========================================================= */
-.menu-group {
-  padding-bottom: 14px;
-  margin-bottom: 14px;
-  border-bottom: 2px solid var(--border-thick);
+.sidebar-search button:hover {
+  background-color: var(--accent-hover);
 }
 
-.menu-group:last-child {
-  padding-bottom: 0;
-  margin-bottom: 0;
-  border-bottom: none;
+.menu-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.menu-title {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-sub);
-  padding-bottom: 6px;
-  margin-bottom: 8px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-.menu-tree, .menu-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.menu-tree a, .menu-list a {
-  display: block;
-  padding: 6px 8px;
-  color: var(--text-main);
+.menu-tree a {
+  padding: 8px 10px;
   border-radius: 4px;
-  font-size: 0.85rem;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.menu-tree a:hover, .menu-list a:hover {
-  background-color: var(--bg-hover);
+.menu-tree a:hover {
+  background-color: var(--row-hover-bg);
   color: var(--accent-color);
 }
 
-/* =========================================================
-   6. 메인 콘텐츠
-   ========================================================= */
-.cafe-main-content {
-  flex: 1;
-  min-width: 0; /* flex 자식 넘침 방지 핵심 */
+/* 오버레이 (모바일 사이드바 배경) */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 99;
 }
 
-.main-top-banner {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 16px;
+.sidebar-overlay.active {
+  display: block;
+}
+
+/* 메인 콘텐츠 영역 */
+.cafe-main {
+  flex: 1;
+  margin-left: 260px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cafe-header {
+  height: 60px;
+  background-color: var(--bg-sub);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-left, .header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.btn-sidebar-toggle {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: none;
+}
+
+/* =========================================================
+   3. Board & Table Styles
+   ========================================================= */
+.cafe-content {
+  padding: 24px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.board-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
 }
 
-.main-top-banner h3 {
-  margin: 0 0 10px 0;
-  font-size: 0.98rem;
-  color: var(--accent-color);
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 6px;
-}
-
-.rule-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.rule-list li {
-  padding: 7px 0;
-  font-size: 0.85rem;
-  color: var(--text-sub);
-  border-bottom: 1px solid var(--border-color);
-  word-break: keep-all;
-}
-
-.rule-list li:last-child {
-  border-bottom: none;
-}
-
-.board-header-bar {
-  margin-bottom: 14px;
-}
-
-.board-header-bar h2 {
-  margin: 0 0 4px 0;
-  font-size: 1.15rem;
-}
-
-.board-info-bar {
-  font-size: 0.8rem;
-  color: var(--text-sub);
-  margin-bottom: 8px;
-}
-
-.board-filter-tabs {
+.filter-tabs {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .btn-filter-tab {
-  background-color: var(--bg-card);
-  color: var(--text-sub);
+  padding: 6px 14px;
+  background-color: var(--bg-sub);
   border: 1px solid var(--border-color);
-  padding: 5px 12px;
-  border-radius: 4px;
+  border-radius: 20px;
+  color: var(--text-sub);
+  font-size: 0.9rem;
   cursor: pointer;
-  font-size: 0.8rem;
+  transition: all 0.2s ease;
 }
 
+.btn-filter-tab:hover,
 .btn-filter-tab.active {
   background-color: var(--accent-color);
-  color: #ffffff;
   border-color: var(--accent-color);
-  font-weight: bold;
+  color: #fff;
 }
 
-/* PC 게시판 테이블 */
 .board-table-wrapper {
-  background-color: var(--bg-card);
+  background-color: var(--bg-sub);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -408,211 +257,78 @@ input:checked + .slider:before {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 0.88rem;
+  font-size: 0.95rem;
 }
 
-.board-table th, .board-table td {
-  padding: 10px 12px;
+.board-table th,
+.board-table td {
+  padding: 14px 16px;
   border-bottom: 1px solid var(--border-color);
 }
 
 .board-table th {
-  background-color: var(--bg-hover);
-  color: var(--text-sub);
-}
-
-.col-cat { width: 75px; text-align: center; }
-.col-writer { width: 110px; }
-.col-date { width: 90px; color: var(--text-sub); font-size: 0.8rem; }
-.col-views { width: 60px; text-align: center; color: var(--text-sub); font-size: 0.8rem; }
-
-/* =========================================================
-   7. 모달
-   ========================================================= */
-.post-modal {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background-color: var(--modal-overlay);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 16px;
-}
-
-.post-modal.hidden {
-  display: none;
-}
-
-.modal-content {
   background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 85vh;
-  overflow-y: auto;
-  position: relative;
-  padding: 20px;
-}
-
-.btn-close-modal {
-  position: absolute;
-  top: 12px; right: 12px;
-  background: transparent;
-  border: none;
   color: var(--text-sub);
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
-/* =========================================================
-   8. 모바일 전용 (768px 이하 완벽 최적화)
-   ========================================================= */
-.mobile-menu-bar {
-  display: none;
-  margin-bottom: 14px;
-}
-
-.btn-sidebar-toggle {
-  background-color: var(--bg-card);
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
-  padding: 7px 12px;
-  border-radius: 4px;
-  cursor: pointer;
+  font-weight: 600;
   font-size: 0.85rem;
 }
 
-.btn-sidebar-close {
-  display: none;
-  background: transparent;
-  border: none;
-  font-size: 1.4rem;
-  color: var(--text-main);
-  cursor: pointer;
-  position: absolute;
-  top: 12px; right: 12px;
+.board-table tbody tr {
+  transition: background-color 0.15s ease;
 }
 
-.sidebar-overlay {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  background-color: var(--modal-overlay);
-  z-index: 998;
+.board-table tbody tr:hover {
+  background-color: var(--row-hover-bg);
 }
 
-@media screen and (max-width: 768px) {
-  .mobile-menu-bar {
-    display: block;
-  }
+.board-table tbody tr.row-notice {
+  background-color: var(--row-notice-bg);
+}
 
-  .btn-sidebar-close {
-    display: block;
-  }
+/* 테이블 컬럼 폭 최적화 */
+.col-cat { width: 10%; text-align: center; }
+.col-title { width: 55%; }
+.col-writer { width: 15%; }
+.col-date { width: 12%; text-align: center; }
+.col-views { width: 8%; text-align: center; }
 
-  /* 사이드바 오프캔버스 슬라이드 */
+/* 공지 태그 */
+.tag-notice {
+  display: inline-block;
+  padding: 2px 8px;
+  background-color: var(--tag-notice-bg);
+  color: var(--tag-notice-text);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* =========================================================
+   4. Responsive Styles
+   ========================================================= */
+@media (max-width: 992px) {
   .cafe-sidebar {
-    position: fixed;
-    top: 0; left: 0;
-    width: 280px;
-    height: 100vh;
-    background-color: var(--bg-card);
-    z-index: 999;
-    padding: 16px 16px 80px 16px;
-    overflow-y: auto;
     transform: translateX(-100%);
-    transition: transform 0.25s ease;
   }
 
   .cafe-sidebar.active {
     transform: translateX(0);
   }
 
-  .sidebar-overlay.active {
+  .cafe-main {
+    margin-left: 0;
+  }
+
+  .btn-sidebar-toggle,
+  .btn-sidebar-close {
     display: block;
   }
 
-  /* 모바일 게시판 구조 전면 개편 (카페 앱 스타일) */
-  .board-table, .board-table tbody {
-    display: block;
-    width: 100%;
+  .col-views, .col-date {
+    display: none;
   }
 
-  .board-table thead {
-    display: none; /* 모바일 헤더 숨김 */
-  }
-
-  .board-table tr {
-    display: flex;
-    flex-direction: column;
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border-color);
-    background-color: var(--bg-card);
-    position: relative;
-  }
-
-  .board-table td {
-    display: block;
-    padding: 0;
-    border: none;
-  }
-
-  /* 1. 카테고리 태그 */
-  .board-table .col-cat {
-    font-size: 0.75rem;
-    color: var(--accent-color);
-    font-weight: bold;
-    text-align: left;
+  .col-title {
     width: auto;
-    margin-bottom: 4px;
-  }
-
-  /* 2. 글 제목 */
-  .board-table .col-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    line-height: 1.3;
-    margin-bottom: 8px;
-    color: var(--text-main);
-    word-break: break-all;
-  }
-
-  /* 3. 메타 정보 하단 라인 (작성자 / 작성일 / 조회수 정렬) */
-  .board-table .col-writer {
-    display: inline-block;
-    width: auto;
-    font-size: 0.78rem;
-    color: var(--text-sub);
-  }
-
-  .board-table .col-writer::after {
-    content: " •";
-    margin: 0 4px;
-  }
-
-  .board-table .col-date {
-    display: inline-block;
-    width: auto;
-    font-size: 0.78rem;
-    color: var(--text-sub);
-  }
-
-  /* 조회수를 중앙이 아니라 우측 하단에 고정 */
-  .board-table .col-views {
-    position: absolute;
-    right: 14px;
-    bottom: 12px;
-    font-size: 0.75rem;
-    color: var(--text-sub);
-    width: auto;
-    text-align: right;
-  }
-
-  .board-table .col-views::before {
-    content: "조회 ";
   }
 }
