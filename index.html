@@ -8,168 +8,178 @@
 </head>
 <body>
 
-  <!-- 카페 상단 헤더 -->
-  <header class="cafe-header">
-    <div class="header-inner">
-      <h1 class="cafe-title">🪹 [인천/주안4동] 한빛빌라 누리집</h1>
-      <p class="cafe-sub">주안4동 한빛빌라 식구 전용 소통 공간</p>
-    </div>
-  </header>
+  <div class="cafe-wrapper">
 
-  <!-- 메인 콘텐트 (2단 레이아웃) -->
-  <div class="cafe-container">
-    
-    <!-- 좌측 사이드바 (카페 정보 & 입주민 현황) -->
-    <aside class="cafe-sidebar">
-      
-      <!-- 카페 프로필 박스 -->
-      <div class="side-box cafe-info-box">
-        <h3>📍 거처 정보</h3>
-        <p class="info-text"><b>위치:</b> 인천 미추홀구 주안4동</p>
-        <p class="info-text"><b>건물:</b> 2007년 준공 2층 다가구주택</p>
-        <p class="info-text"><b>관리:</b> 온누리부동산 (오재현)</p>
-        <div class="security-badge">🔒 일반 주택가 보안 수칙 준수</div>
+    <header class="cafe-header-banner">
+      <div class="header-overlay">
+        <h1 class="header-title"></h1>🪹 [인천/주안4동] 한빛빌라 누리집</h1>
+        <p class="header-sub">주안4동 한빛빌라 식구 전용 소통 공간</p>
       </div>
+    </header>
 
-      <!-- 거주 및 임시 대여 현황 -->
-      <div class="side-box resident-box">
-        <h3>🏘️ 세대별 거주 현황</h3>
-        <ul class="resident-list">
-          <li>
-            <span class="room">101호</span> 
-            <strong>정지아</strong> <span class="badge badge-hana">본가 정나</span>
-          </li>
-          <li>
-            <span class="room">101호</span> 
-            <strong>박상철</strong> <span class="badge badge-branch">퍼스트</span>
-          </li>
-          <li>
-            <span class="room">102호</span> 
-            <strong>윤서우</strong> <span class="badge badge-hana">본가 정가</span>
-          </li>
-          <li>
-            <span class="room">201호</span> 
-            <strong>이태규</strong> <span class="badge badge-branch">퍼스트</span>
-          </li>
-          <li class="user-row">
-            <span class="room">202호</span> 
-            <strong class="user-highlight">____</strong>
-          </li>
-        </ul>
-      </div>
+    <div class="cafe-container">
 
-      <!-- 자주 들르는 식구들 -->
-      <div class="side-box frequent-box">
-        <h3>👥 접속중인 식구들</h3>
-        <ul class="tag-cloud">
-          <li>김서현 <small>(수뇌)</small></li>
-          <li>윤도현 <small>(실가)</small></li>
-          <li>오재현 <small>(온누리)</small></li>
-          <li>배성호 <small>(한울)</small></li>
-          <li>최현우 <small>(실가)</small></li>
-          <li>강민호 <small>(실나)</small></li>
-        </ul>
-      </div>
+      <aside class="cafe-sidebar">
 
-    </aside>
+        <div class="side-card profile-card">
+          <div class="profile-top">
+            <div class="profile-avatar">🏠</div>
+            <div class="profile-info">
+              <strong class="manager-name">오재현 <span class="badge-mgr">관리자</span></strong>
+              <span class="cafe-date">2007.03.15 개설</span>
+              <a href="#" class="cafe-intro-link">거처 안내 보기</a>
+            </div>
+          </div>
+          <div class="stat-item">
+              <span class="stat-label">👥 등록식구</span>
+              <span class="stat-val">11명 🔒</span>
+            </div>
+          </div>
 
-    <!-- 우측 게시판 메인 영역 -->
-    <main class="cafe-main-content">
+          <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">카페 글쓰기</button>
+          <button class="btn-chat-main" onclick="alert('내부 연락망 채널로 연결됩니다.')">세대별 연락망</button>
 
-      <!-- 카테고리 탭 메뉴 -->
-      <nav class="board-tabs">
-        <button class="tab-btn active" onclick="filterBoard('all')">전체글 보기</button>
-        <button class="tab-btn" onclick="filterBoard('notice')">[공지]</button>
-        <button class="tab-btn" onclick="filterBoard('share')">[나눔/생활]</button>
-        <button class="tab-btn" onclick="filterBoard('proposal')">[제안/공유]</button>
-        <button class="tab-btn" onclick="filterBoard('etc')">[기타/잡담]</button>
-      </nav>
-
-      <!-- 게시판 테이블 (카페 게시판 스타일) -->
-      <div class="board-table-wrapper">
-        <table class="board-table">
-          <thead>
-            <tr>
-              <th class="th-num">번호</th>
-              <th class="th-title">제목</th>
-              <th class="th-writer">작성자</th>
-              <th class="th-date">작성일</th>
-            </tr>
-          </thead>
-          <tbody id="board-body">
-            
-            <!-- 공지사항 1 -->
-            <tr class="row-notice">
-              <td>공지</td>
-              <td class="title-cell">
-                <a href="#" onclick="openPost(1)">[공지] 202호 누전 수리 완료 및 공실 임시 대여 안내</a>
-                <span class="comment-count">[3]</span>
-              </td>
-              <td>오재현(관리)</td>
-              <td>09.01</td>
-            </tr>
-
-            <!-- 일반 게시글들 -->
-            <tr>
-              <td>4</td>
-              <td class="title-cell">
-                <a href="#" onclick="openPost(2)">[제안] 스포츠 데이터 분석 관련 서적 공유하실 분</a>
-                <span class="comment-count">[2]</span>
-              </td>
-              <td>이태규</td>
-              <td>09.04</td>
-            </tr>
-
-            <tr>
-              <td>3</td>
-              <td class="title-cell">
-                <a href="#" onclick="openPost(3)">[기타] 오늘 저녁에 족발 시키실 분 붙으셈</a>
-                <span class="comment-count">[4]</span>
-              </td>
-              <td>윤도현</td>
-              <td>09.03</td>
-            </tr>
-
-            <tr>
-              <td>2</td>
-              <td class="title-cell">
-                <a href="#" onclick="openPost(4)">[나눔] 원목 소형 협탁 필요하신 분 가져가세요</a>
-                <span class="comment-count">[3]</span>
-              </td>
-              <td>김서현</td>
-              <td>09.02</td>
-            </tr>
-
-            <tr>
-              <td>1</td>
-              <td class="title-cell">
-                <a href="#" onclick="openPost(5)">[기타] 202호 수리하면서 뺀 야전침대 주인 찾음</a>
-                <span class="comment-count">[2]</span>
-              </td>
-              <td>박상철</td>
-              <td>08.30</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 게시물 글쓰기 버튼 영역 -->
-      <div class="board-footer-tools">
-        <button class="write-btn" onclick="alert('입주민(유저) 글쓰기 기능 준비 중입니다.')">✏️ 게시글 작성</button>
-      </div>
-
-      <!-- 게시글 상세 열람 모달/뷰어 영역 -->
-      <div id="post-view-modal" class="post-modal hidden">
-        <div class="modal-content">
-          <button class="close-btn" onclick="closePost()">✕ 닫기</button>
-          <div id="modal-post-body">
-            <!-- JavaScript로 선택한 글 내용이 동적 로드됨 -->
+          <div class="sidebar-search">
+            <input type="text" placeholder="카페 글 검색">
+            <button class="btn-search">검색</button>
           </div>
         </div>
-      </div>
 
-    </main>
+        <nav class="side-card menu-card">
+          <div class="menu-group">
+            <div class="menu-title">★ 한빛빌라 세대 현황</div>
+            <ul class="menu-list">
+              <li><a href="#" onclick="filterBoard('all')">📋 전체글보기 <span class="count-badge">5</span></a></li>
+            </ul>
+          </div>
+
+          <div class="menu-group">
+            <div class="menu-title">🏡 거주 세대</div>
+            <ul class="menu-list">
+              <li><a href="#">▫️ 101호 | 정지아·박상철</a></li>
+              <li><a href="#">▫️ 102호 | 윤서우</a></li>
+              <li><a href="#">▫️ 201호 | 이태규</a></li>
+              <li class="user-highlight-menu"><a href="#">★ 202호 | <strong id="user-display-name">{{user}}</strong> (입주)</a></li>
+            </ul>
+          </div>
+
+          <div class="menu-group">
+            <div class="menu-title">💼 오가는 식구들 (본가/가지)</div>
+            <ul class="menu-list">
+              <li><a href="#" onclick="filterBoard('notice')">📌 [공지] 관리 및 안전 안내</a></li>
+              <li><a href="#" onclick="filterBoard('share')">🎁 [나눔] 물품 및 지원</a></li>
+              <li><a href="#" onclick="filterBoard('proposal')">💡 [제안] 자료 및 공유</a></li>
+              <li><a href="#" onclick="filterBoard('etc')">💬 [기타] 잡담 및 모임</a></li>
+            </ul>
+          </div>
+        </nav>
+
+      </aside>
+
+      <main class="cafe-main-body">
+
+        <div class="main-top-banner">
+          <div class="banner-box-inner">
+            <h3>📍 한빛빌라 기본 거처 수칙</h3>
+            <p>· 외관상 일반 주택 유지 | 외부인에 「하나」 관련성 노출 금지</p>
+            <p>· 202호: 임시 대여 거처 누전 수리 완료 후 신규 입주 정돈 완료</p>
+          </div>
+        </div>
+
+        <div class="board-header-bar">
+          <h2>전체글보기</h2>
+          <div class="board-tools">
+            <span class="total-post-count">총 <strong>5</strong>개의 글</span>
+            <button class="btn-filter-tab active" onclick="filterBoard('all')">전체</button>
+            <button class="btn-filter-tab" onclick="filterBoard('notice')">공지</button>
+            <button class="btn-filter-tab" onclick="filterBoard('etc')">잡담</button>
+          </div>
+        </div>
+
+        <div class="board-table-container">
+          <table class="cafe-board-table">
+            <thead>
+              <tr>
+                <th class="col-cat">카테고리</th>
+                <th class="col-title">제목</th>
+                <th class="col-writer">작성자</th>
+                <th class="col-date">작성일</th>
+                <th class="col-views">조회</th>
+              </tr>
+            </thead>
+            <tbody id="board-body">
+
+              <tr class="row-notice">
+                <td class="col-cat"><span class="tag-notice">공지</span></td>
+                <td class="col-title">
+                  <a href="#" onclick="openPost(1)">[공지] 202호 누전 수리 완료 및 공실 임시 대여 안내</a>
+                  <span class="comment-num">[3]</span>
+                  <span class="icon-new">N</span>
+                </td>
+                <td class="col-writer">오재현(관리)</td>
+                <td class="col-date">09.01.</td>
+                <td class="col-views">24</td>
+              </tr>
+
+              <tr>
+                <td class="col-cat"><span class="tag-normal">제안</span></td>
+                <td class="col-title">
+                  <a href="#" onclick="openPost(2)">[제안] 스포츠 데이터 분석 관련 서적 공유하실 분</a>
+                  <span class="comment-num">[2]</span>
+                </td>
+                <td class="col-writer">이태규</td>
+                <td class="col-date">09.04.</td>
+                <td class="col-views">12</td>
+              </tr>
+
+              <tr>
+                <td class="col-cat"><span class="tag-normal">기타</span></td>
+                <td class="col-title">
+                  <a href="#" onclick="openPost(3)">[기타] 오늘 저녁에 족발 시키실 분 붙으셈</a>
+                  <span class="comment-num">[4]</span>
+                  <span class="icon-new">N</span>
+                </td>
+                <td class="col-writer">윤도현</td>
+                <td class="col-date">09.03.</td>
+                <td class="col-views">18</td>
+              </tr>
+
+              <tr>
+                <td class="col-cat"><span class="tag-normal">나눔</span></td>
+                <td class="col-title">
+                  <a href="#" onclick="openPost(4)">[나눔] 원목 소형 협탁 필요하신 분 가져가세요</a>
+                  <span class="comment-num">[3]</span>
+                </td>
+                <td class="col-writer">김서현</td>
+                <td class="col-date">09.02.</td>
+                <td class="col-views">15</td>
+              </tr>
+
+              <tr>
+                <td class="col-cat"><span class="tag-normal">기타</span></td>
+                <td class="col-title">
+                  <a href="#" onclick="openPost(5)">[기타] 202호 수리하면서 뺀 야전침대 주인 찾음</a>
+                  <span class="comment-num">[2]</span>
+                </td>
+                <td class="col-writer">박상철</td>
+                <td class="col-date">08.30.</td>
+                <td class="col-views">21</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+      </main>
+
+    </div>
+
+    <div id="post-view-modal" class="post-modal hidden">
+      <div class="modal-content">
+        <button class="close-btn" onclick="closePost()">✕ 닫기</button>
+        <div id="modal-post-body"></div>
+      </div>
+    </div>
 
   </div>
 
