@@ -1,5 +1,5 @@
 /**
- * 한빛빌라 입주민 누리집 - 메인 인터렉션 & 데이터 제어 (완전 통합본)
+ * 한빛빌라 입주민 누리집 - 메인 인터랙션 & 데이터 제어
  */
 
 const boardData = {
@@ -22,7 +22,7 @@ const boardData = {
     writer: "정지아",
     date: "2013.07.11",
     viewCount: 38,
-    content: `101호 정지아입니다.\n\n공동주택 특성상 기본 질서가 지켜지지 않으면 입주민 간 불필요한 마찰이 발생합니다.\n신규 입주 및 오가는 식구분들이 늘어남에 따라 기본 거처 수칙을 정리해 올리니 반드시 숙지해 주시기 바랍니다.\n\n1. 우편함 관리 및 장기 방치 금지\n- 우편물과 전단지는 3일 이상 쌓이지 않도록 주기적으로 수거하십시오. \n- 명의 불분명 우편물이나 안내문은 무단 개봉하지 마시고 101호로 전달 바랍니다.\n\n2. 야간 세탁기 및 청소기 사용 자제\n- 22:00 이후 가전제품 사용에 따른 진동과 소음은 층간소음의 주원인입니다.\n- 야간 가전 사용은 엄격히 금하며, 불가피한 사정이 있을 경우 미리 양해를 구하십시오.\n\n3. 복도 및 계단 정숙\n- 공용 공간은 소리가 크게 울립니다. 복도 이동 시 고성방가 및 대화 자제 바랍니다.\n- 공용 계단에 개인 물품을 적재하여 통행을 방해하는 행위는 금지합니다.\n\n4. 외부 방문객 및 야간 체류 제한\n- 외부 방문객의 24시간 이상 장기 체류 및 야간 숙박은 사전에 동의를 구해야 합니다.\n- 입주민 외 출입자의 동선과 보안 관리를 위한 조치이니 협조 부탁드립니다.\n\n5. 지하 공실 및 옥상 출입 금지\n- 지하 관리 공간 및 옥상은 안전사고 예방을 위해 지정된 관리인 외 출입을 엄격히 금합니다.\n- 이상 소음이나 시설 점검이 필요한 경우 직접 확인하지 마시고 101호나 관리인(오재현)에게 즉시 알리십시오.\n\n기본 수칙을 준수하여 조용하고 안정된 주거 환경을 유지할 수 있도록 협조 바랍니다.\n수칙 위반 시 별도로 말씀드리겠습니다.`,
+    content: `101호 정지아입니다.\n\n공동주택 특성상 기본 질서가 지켜지지 않으면 입주민 간 불필요한 마찰이 발생합니다.\n신규 입주 및 오가는 식구분들이 늘어남에 따라 기본 거처 수칙을 정리해 올리니 반드시 숙지해 주시기 바랍니다.\n\n1. 우편함 관리 및 장기 방치 금지\n- 우편물과 전단지는 3일 이상 쌓이지 않도록 주기적으로 수거하십시오.\n- 명의 불분명 우편물이나 안내문은 무단 개봉하지 마시고 101호로 전달 바랍니다.\n\n2. 야간 세탁기 및 청소기 사용 자제\n- 22:00 이후 가전제품 사용에 따른 진동과 소음은 층간소음의 주원인입니다.\n- 야간 가전 사용은 엄격히 금하며, 불가피한 사정이 있을 경우 미리 양해를 구하십시오.\n\n3. 복도 및 계단 정숙\n- 공용 공간은 소리가 크게 울립니다. 복도 이동 시 고성방가 및 대화 자제 바랍니다.\n- 공용 계단에 개인 물품을 적재하여 통행을 방해하는 행위는 금지합니다.\n\n4. 외부 방문객 및 야간 체류 제한\n- 외부 방문객의 24시간 이상 장기 체류 및 야간 숙박은 사전에 동의를 구해야 합니다.\n- 입주민 외 출입자의 동선과 보안 관리를 위한 조치이니 협조 부탁드립니다.\n\n5. 지하 공실 및 옥상 출입 금지\n- 지하 관리 공간 및 옥상은 안전사고 예방을 위해 지정된 관리인 외 출입을 엄격히 금합니다.\n- 이상 소음이나 시설 점검이 필요한 경우 직접 확인하지 마시고 101호나 관리인(오재현)에게 즉시 알리십시오.\n\n기본 수칙을 준수하여 조용하고 안정된 주거 환경을 유지할 수 있도록 협조 바랍니다.\n수칙 위반 시 별도로 말씀드리겠습니다.`,
     comments: [
       { writer: "박상철", date: "09.02 13:00", text: "확인~ 고생했다!" },
       { writer: "윤서우", date: "09.02 13:00", text: "확인했습니다." },
@@ -36,7 +36,7 @@ const boardData = {
     writer: "오재현(관리)",
     date: "2019.09.01",
     viewCount: 24,
-    content: `주민 및 식구 여러분 안녕하십니까. 온누리부동산 오재현입니다.\n\n우선, 온누리부동산 내부 전산 시스템 처리 과정에서 발생한 심각한 오류에 대해 심심한 사죄의 말씀 드립니다.  \n최근 202호의 내부 리모델링 작업을 마무리한 뒤 온누리부동산 측에서 해당 세대에 대한 '식구 임시 대여' 등록 절차를 진행하던 중, 전산 입력 상의 착오로 인해 해당 매물이 외부 부동산망에 전체 공개 매물로 오등록되는 사고가 발생했습니다.\n이 과정에서 정식 임대차 계약 신청 및 입주 수속이 전산상으로 승인되어 버리는 일이 일어났습니다.\n\n건물주이신 정지아 님과 박상철 님께서 상황을 전달받으신 후 해당 계약건을 수용해 주시어, 202호는 예정과 달리 일반 신규 입주민을 정식으로 맞이하는 방향으로 결정되었습니다.\n이에 따라, 그동안 인천 현장 지원이나 대기 목적으로 202호를 임시 이용하시던 식구분들께서는 금일부터 당분간 다른 거처를 이용해 주시기 바랍니다.\n\n202호는 현재 신규 입주민 맞이를 위한 최종 집기 정리 및 정돈 작업이 진행 중입니다.\n입주가 예정되어 있는 만큼, 건물 내 보안 및 사생활 보호 수칙은 이전보다 더욱 엄격하게 유지될 예정이니 식구 여러분의 적극적인 협조 부탁드립니다.\n\n다시 한번 전산 관리 미흡으로 불편을 드려 죄송합니다.`,
+    content: `주민 및 식구 여러분 안녕하십니까. 온누리부동산 오재현입니다.\n\n우선, 온누리부동산 내부 전산 시스템 처리 과정에서 발생한 심각한 오류에 대해 심심한 사죄의 말씀 드립니다.\n최근 202호의 내부 리모델링 작업을 마무리한 뒤 온누리부동산 측에서 해당 세대에 대한 '식구 임시 대여' 등록 절차를 진행하던 중, 전산 입력 상의 착오로 인해 해당 매물이 외부 부동산망에 전체 공개 매물로 오등록되는 사고가 발생했습니다.\n이 과정에서 정식 임대차 계약 신청 및 입주 수속이 전산상으로 승인되어 버리는 일이 일어났습니다.\n\n건물주이신 정지아 님과 박상철 님께서 상황을 전달받으신 후 해당 계약건을 수용해 주시어, 202호는 예정과 달리 일반 신규 입주민을 정식으로 맞이하는 방향으로 결정되었습니다.\n이에 따라, 그동안 인천 현장 지원이나 대기 목적으로 202호를 임시 이용하시던 식구분들께서는 금일부터 당분간 다른 거처를 이용해 주시기 바랍니다.\n\n202호는 현재 신규 입주민 맞이를 위한 최종 집기 정리 및 정돈 작업이 진행 중입니다.\n입주가 예정되어 있는 만큼, 건물 내 보안 및 사생활 보호 수칙은 이전보다 더욱 엄격하게 유지될 예정이니 식구 여러분의 적극적인 협조 부탁드립니다.\n\n다시 한번 전산 관리 미흡으로 불편을 드려 죄송합니다.`,
     comments: [
       { writer: "문해주", date: "09.01 11:20", text: "임무시 다른 거처 관련해 추후 문의드리겠습니다." },
       { writer: "김서현", date: "09.01 10:15", text: "리모델링 및 정산 비용은 원(元) 쪽 경비 계좌로 처리해 두었습니다. 수고많으셨습니다." },
@@ -108,7 +108,7 @@ const boardData = {
     writer: "정지아",
     date: "2019.09.08",
     viewCount: 31,
-    content: `101호 정지아입니다.\n\n금일 14:00 ~ 17:00 사이 건물 내 공용 배선반 및 인터넷 신호 안정화 작업이 진행될 예정입니다.\n\n102호 윤서우 주민 및 201호 이태규 주민과 사전협의 후 직접 진행하는 점검 작업이며, 작업 시간 동안 잠시 인터넷 신호 끊김 현상이 발생할 수 있습니다. \n\n복도에 작업 도구가 노출될 수 있으니 통행 시 주의 바라며, 외부 기사 방문은 없으니 안심하시기 바랍니다.\n\n문의사항은 101호나 102호로 전달해주십시오.`,
+    content: `101호 정지아입니다.\n\n금일 14:00 ~ 17:00 사이 건물 내 공용 배선반 및 인터넷 신호 안정화 작업이 진행될 예정입니다.\n\n102호 윤서우 주민 및 201호 이태규 주민과 사전협의 후 직접 진행하는 점검 작업이며, 작업 시간 동안 잠시 인터넷 신호 끊김 현상이 발생할 수 있습니다.\n\n복도에 작업 도구가 노출될 수 있으니 통행 시 주의 바라며, 외부 기사 방문은 없으니 안심하시기 바랍니다.\n\n문의사항은 101호나 102호로 전달해주십시오.`,
     comments: [
       { writer: "오재현(관리)", date: "09.08 10:12", text: "건물 관리에 신경 써주셔서 감사합니다. 필요 재료비 전산 청구 부탁드립니다." },
       { writer: "윤도현", date: "09.08 11:30", text: "어쩐지 서우 아침부터 연장 가방 들고 돌아다니더라 ㅋㅋㅋ 수고해라!" },
@@ -154,7 +154,7 @@ const boardData = {
     writer: "박상철",
     date: "2019.09.22",
     viewCount: 27,
-    content: `101호 냉장고 첫 번째 칸에 레쓰비 한 박스 들어있던데 이거 도현이 너냐?\n마셔도 되는 건지 써놓지도 않고 던져두고 갔길래 일단 두 캔 마셨다. \n\n임자 없으면 나랑 지아가 계속 마신다?`,
+    content: `101호 냉장고 첫 번째 칸에 레쓰비 한 박스 들어있던데 이거 도현이 너냐?\n마셔도 되는 건지 써놓지도 않고 던져두고 갔길래 일단 두 캔 마셨다.\n\n임자 없으면 나랑 지아가 계속 마신다?`,
     comments: [
       { writer: "윤도현", date: "09.22 13:00", text: "ㅋㅋㅋㅋㅋㅋㅋㅋ 형님 그거 제 거 맞는데 드시라고 사다 놓은 겁니다!" },
       { writer: "윤도현", date: "09.22 13:01", text: "대신 다음에 101호 갈 때 고기 사주셈" },
@@ -170,7 +170,7 @@ const boardData = {
     writer: "김서현",
     date: "2019.09.27",
     viewCount: 14,
-    content: `서류함 교체하면서 상태 깨끗한 A4 스틸 파일박스(블랙) 5개 정도 남았습니다!\n\n잠금장치도 정상 작동하고 문서 수납하기 엄청 튼튼해요. \n기록 보관이나 개인 서류 정리에 유용합니다. \n\n필요하신 분 댓글 남겨주시면 전달해 드릴게요. \n없으면 101호나 흥신소 쪽으로 넘기겠습니다~`,
+    content: `서류함 교체하면서 상태 깨끗한 A4 스틸 파일박스(블랙) 5개 정도 남았습니다!\n\n잠금장치도 정상 작동하고 문서 수납하기 엄청 튼튼해요.\n기록 보관이나 개인 서류 정리에 유용합니다.\n\n필요하신 분 댓글 남겨주시면 전달해 드릴게요.\n없으면 101호나 흥신소 쪽으로 넘기겠습니다~`,
     comments: [
       { writer: "정지아", date: "09.27 17:05", text: "2개 수령하겠습니다. 101호 서재 보관용으로 적합해 보입니다." },
       { writer: "이태규", date: "09.27 17:30", text: "흥신소에 3개 다 가져다주십쇼. 사건 파일 분류할 때 쓰겠습니다." },
@@ -205,15 +205,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function applyTheme(theme) {
     if (theme === "light") {
       document.body.classList.add("light-theme");
-      document.documentElement.classList.add("light-theme");
-      document.documentElement.setAttribute("data-darkmode", "false");
-      document.body.setAttribute("darkmode", "off");
       if (themeToggle) themeToggle.checked = true;
     } else {
       document.body.classList.remove("light-theme");
-      document.documentElement.classList.remove("light-theme");
-      document.documentElement.removeAttribute("data-darkmode");
-      document.body.removeAttribute("darkmode");
       if (themeToggle) themeToggle.checked = false;
     }
   }
@@ -287,11 +281,11 @@ function closeSidebar() {
 // 카테고리 명칭 반환 헬퍼 함수
 function getCategoryName(category) {
   switch(category) {
-    case 'notice': return '공지';
-    case 'proposal': return '제안';
-    case 'share': return '나눔';
-    case 'etc': return '기타';
-    default: return '일반';
+    case 'notice': return '[공지]';
+    case 'proposal': return '[제안]';
+    case 'share': return '[나눔]';
+    case 'etc': return '[기타]';
+    default: return '[일반]';
   }
 }
 
@@ -335,15 +329,10 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
     }
 
     renderedCount++;
-    const isNotice = post.category === "notice";
-    const rowClass = isNotice ? 'class="row-notice"' : '';
-    const catBadge = isNotice 
-      ? '<span class="tag-notice">공지</span>' 
-      : getCategoryName(post.category);
 
     return `
-      <tr ${rowClass} data-id="${post.id}">
-        <td class="col-cat">${catBadge}</td>
+      <tr data-id="${post.id}">
+        <td class="col-cat">${getCategoryName(post.category)}</td>
         <td class="col-title">
           <a href="#" onclick="openPost(event, ${post.id})">
             ${escapeHtml(post.title)}
@@ -374,17 +363,6 @@ function filterBoard(category, event) {
     }
   });
 
-  const sidebarLinks = document.querySelectorAll(".menu-tree a");
-  sidebarLinks.forEach(link => {
-    if (link.getAttribute("onclick") && link.getAttribute("onclick").includes(`'${category}'`)) {
-      link.style.fontWeight = "bold";
-      link.style.color = "var(--accent-color)";
-    } else {
-      link.style.fontWeight = "normal";
-      link.style.color = "";
-    }
-  });
-
   renderBoard(category);
   closeSidebar();
 }
@@ -399,7 +377,7 @@ function searchFromSidebar() {
   closeSidebar();
 }
 
-// 상세 페이지 열기 (조회수 증가 및 모달 연동 확장)
+// 상세 페이지 열기 (조회수 증가 및 모달 연동)
 function openPost(event, postId) {
   if (event) event.preventDefault();
   const post = boardData[postId];
@@ -407,39 +385,37 @@ function openPost(event, postId) {
 
   // 조회수 증가
   post.viewCount += 1;
-  renderBoard(currentCategory); // 목록 화면 조회수 업데이트 반영
+  renderBoard(currentCategory); // 목록 화면 조회수 반영
 
-  // 상세 모달 레이어 제어 (HTML에 #post-modal 엘리먼트가 존재할 경우)
   const modal = document.getElementById("post-modal");
   if (modal) {
-    document.getElementById("modal-title").textContent = post.title;
-    document.getElementById("modal-writer").textContent = post.writer;
-    document.getElementById("modal-date").textContent = post.date;
-    document.getElementById("modal-views").textContent = post.viewCount;
-    document.getElementById("modal-content").innerText = post.content;
+    if (document.getElementById("modal-title")) document.getElementById("modal-title").textContent = post.title;
+    if (document.getElementById("modal-writer")) document.getElementById("modal-writer").textContent = post.writer;
+    if (document.getElementById("modal-date")) document.getElementById("modal-date").textContent = post.date;
+    if (document.getElementById("modal-views")) document.getElementById("modal-views").textContent = post.viewCount;
+    if (document.getElementById("modal-content")) document.getElementById("modal-content").innerText = post.content;
 
     // 댓글 목록 렌더링
     const commentsContainer = document.getElementById("modal-comments");
     if (commentsContainer && post.comments) {
       commentsContainer.innerHTML = post.comments.map(c => `
-        <div class="comment-item">
-          <strong>${escapeHtml(c.writer)}</strong> <small>(${escapeHtml(c.date)})</small>
-          <p>${escapeHtml(c.text)}</p>
+        <div class="comment-item" style="border-top:1px solid var(--border-color); padding:8px 0; margin-top:8px;">
+          <strong>${escapeHtml(c.writer)}</strong> <small style="color:var(--text-sub);">(${escapeHtml(c.date)})</small>
+          <p style="margin:4px 0 0 0; font-size:0.85rem;">${escapeHtml(c.text)}</p>
         </div>
       `).join("");
     }
 
-    modal.classList.add("active");
+    modal.classList.remove("hidden"); // CSS hidden 클래스 제거하여 모달 열기
   } else {
-    // 모달 DOM이 없을 때 기본 대체 동작
     alert(`[${post.title}]\n작성자: ${post.writer} | 조회수: ${post.viewCount}\n\n${post.content}`);
   }
 }
 
-// 상세 페이지 닫기
+// 상세 모달 닫기
 function closePost() {
   const modal = document.getElementById("post-modal");
   if (modal) {
-    modal.classList.remove("active");
+    modal.classList.add("hidden");
   }
 }
