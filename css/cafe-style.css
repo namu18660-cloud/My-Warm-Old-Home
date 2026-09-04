@@ -129,7 +129,7 @@ button {
 
 .slider:before {
   position: absolute;
-  content: "☀️";
+  content: "🌙";
   font-size: 12px;
   display: flex;
   align-items: center;
@@ -148,7 +148,7 @@ input:checked + .slider {
 }
 
 input:checked + .slider:before {
-  content: "🌙";
+  content: "☀️";
   transform: translateX(22px);
   background-color: #222222;
 }
