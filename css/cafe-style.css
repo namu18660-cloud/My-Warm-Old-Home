@@ -6,18 +6,18 @@
 :root {
   --bg-main: #121212;
   --bg-card: #1e1e1e;
-  --bg-hover: rgba(255, 255, 255, 0.05);
+  --bg-hover: rgba(255, 255, 255, 0.06);
   --text-main: #e0e0e0;
   --text-sub: #a0a0a0;
   --border-color: #333333;
-  --accent-color: #4caf50;
-  --accent-hover: #45a049;
+  --accent-color: #2e7d32;
+  --accent-hover: #388e3c;
   --notice-bg: rgba(76, 175, 80, 0.1);
   --modal-overlay: rgba(0, 0, 0, 0.75);
 }
 
 body.light-theme {
-  --bg-main: #f5f5f7;
+  --bg-main: #f4f5f7;
   --bg-card: #ffffff;
   --bg-hover: rgba(0, 0, 0, 0.04);
   --text-main: #222222;
@@ -30,7 +30,7 @@ body.light-theme {
 }
 
 /* =========================================================
-   2. 기본 글로벌 스타일
+   2. 기본 글로벌 스타일 & 하단 여유 공간 설정
    ========================================================= */
 * {
   box-sizing: border-box;
@@ -54,41 +54,47 @@ button {
   font-family: inherit;
 }
 
-/* 메인 컨테이너 */
 .container {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 20px 20px 80px 20px; /* 메인 하단 스크롤 여유 공간 확보 (80px) */
 }
 
-/* 상단 헤더 */
+/* =========================================================
+   3. 상단 배너 최적화
+   ========================================================= */
 .cafe-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 20px 0;
-  border-bottom: 1px solid var(--border-color);
+  align-items: flex-end; /* 토글 위치를 배너 영역 아래 쪽으로 배치 */
+  padding: 20px 0 16px 0;
+  border-bottom: 2px solid var(--border-color);
   margin-bottom: 24px;
 }
 
-.cafe-header h1 {
+.header-title {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
+  word-break: keep-all; /* 모바일 단어 단위 줄바꿈 방지 */
+  line-height: 1.3;
 }
 
 .header-sub {
-  margin: 4px 0 0 0;
+  margin: 6px 0 0 0;
   color: var(--text-sub);
-  font-size: 0.9rem;
+  font-size: 0.92rem;
 }
 
-/* 다크모드 토글 스위치 */
+/* 다크모드 토글 스위치 (아이콘 추가 & 하단 배치) */
 .theme-switch-wrapper {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  color: var(--text-sub);
+  gap: 6px;
+  margin-bottom: 2px; /* 배너 하단 라인과 정렬 맞춤 */
+}
+
+.theme-icon {
+  font-size: 1rem;
 }
 
 .theme-switch {
@@ -108,7 +114,7 @@ button {
   position: absolute;
   cursor: pointer;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #ccc;
+  background-color: #555;
   transition: .3s;
   border-radius: 22px;
 }
@@ -131,58 +137,63 @@ input:checked + .slider:before {
   transform: translateX(22px);
 }
 
-/* 레이아웃 분할 (사이드바 + 콘텐츠) */
+/* =========================================================
+   4. 레이아웃 & 사이드바 (PC / 모바일 최적화)
+   ========================================================= */
 .cafe-layout {
   display: flex;
   gap: 24px;
+  align-items: flex-start;
 }
 
-/* =========================================================
-   3. 사이드바 & 오버레이
-   ========================================================= */
-
 .cafe-sidebar {
-  width: 260px;
+  width: 270px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 20px;
 }
 
+/* 사이드바 카드 박스 */
 .side-card {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 16px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
+/* 프로필 카드의 관리자 명찰 & 요소 정돈 */
 .profile-top {
   display: flex;
   gap: 12px;
-  margin-bottom: 12px;
+  align-items: center;
+  margin-bottom: 14px;
 }
 
 .profile-avatar {
-  font-size: 2rem;
+  font-size: 2.2rem;
+  line-height: 1;
 }
 
 .profile-info {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .manager-name {
-  font-size: 0.95rem;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .badge-mgr {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   background-color: var(--accent-color);
   color: #fff;
-  padding: 1px 4px;
-  border-radius: 3px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  vertical-align: middle;
 }
 
 .cafe-date {
@@ -194,6 +205,7 @@ input:checked + .slider:before {
   font-size: 0.8rem;
   color: var(--accent-color);
   margin-top: 2px;
+  text-decoration: underline;
 }
 
 .stat-item {
@@ -202,34 +214,52 @@ input:checked + .slider:before {
   margin-bottom: 8px;
 }
 
-.btn-write-main,
-.btn-chat-main {
+/* 눈에 띄는 [게시물 작성] 주요 버튼 */
+.btn-write-main {
   width: 100%;
-  padding: 8px;
-  margin-top: 6px;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-main);
-  color: var(--text-main);
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: var(--accent-color);
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 0.95rem;
   cursor: pointer;
-  font-size: 0.88rem;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-.btn-write-main:hover,
+.btn-write-main:hover {
+  background-color: var(--accent-hover);
+}
+
+.btn-chat-main {
+  width: 100%;
+  padding: 9px;
+  margin-top: 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-main);
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
 .btn-chat-main:hover {
   background-color: var(--bg-hover);
 }
 
-/* 사이드바 검색창 */
 .sidebar-search {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 12px;
+  margin-top: 14px;
   background-color: var(--bg-main);
   border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 4px 8px;
+  padding: 4px 10px;
 }
 
 .sidebar-search input {
@@ -238,8 +268,8 @@ input:checked + .slider:before {
   border: none;
   outline: none;
   color: var(--text-main);
-  font-size: 0.9rem;
-  padding: 6px 4px;
+  font-size: 0.88rem;
+  padding: 6px 0;
 }
 
 .sidebar-search button {
@@ -247,47 +277,47 @@ input:checked + .slider:before {
   border: none;
   color: var(--text-sub);
   cursor: pointer;
-  font-size: 1rem;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s ease;
+  font-size: 0.95rem;
 }
 
-.sidebar-search button:hover {
-  color: var(--accent-color);
-}
-
-/* 메뉴 그룹 및 트리스티일 */
+/* =========================================================
+   5. 사이드바 섹션 구분선 및 깔끔한 목록 (원형 불릿 제거)
+   ========================================================= */
 .menu-group {
+  padding-bottom: 16px;
   margin-bottom: 16px;
+  border-bottom: 2px solid var(--border-color); /* 카테고리 간 굵은 구분선 */
 }
 
 .menu-group:last-child {
+  padding-bottom: 0;
   margin-bottom: 0;
+  border-bottom: none;
 }
 
 .menu-title {
-  font-size: 0.82rem;
-  font-weight: bold;
+  font-size: 0.88rem;
+  font-weight: 700;
   color: var(--text-sub);
-  margin-bottom: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-color); /* 섹션명과 항목 사이 얇은 구분선 */
 }
 
+/* 불릿 스타일 완전 제거 */
 .menu-tree, .menu-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .menu-tree li, .menu-list li {
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .menu-tree a, .menu-list a {
   display: block;
-  padding: 6px 8px;
+  padding: 7px 10px;
   color: var(--text-main);
   border-radius: 6px;
   font-size: 0.88rem;
@@ -299,75 +329,51 @@ input:checked + .slider:before {
   color: var(--accent-color);
 }
 
-/* 모바일 전용 요소 */
-.btn-sidebar-close {
-  display: none;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--text-main);
-  cursor: pointer;
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  line-height: 1;
-}
-
-.sidebar-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: var(--modal-overlay);
-  backdrop-filter: blur(2px);
-  z-index: 998;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.mobile-menu-bar {
-  display: none;
-  margin-bottom: 16px;
-}
-
-.btn-sidebar-toggle {
-  background-color: var(--bg-card);
-  color: var(--text-main);
-  border: 1px solid var(--border-color);
-  padding: 8px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
+.user-highlight-menu a {
+  font-weight: bold;
+  color: var(--accent-color);
 }
 
 /* =========================================================
-   4. 메인 콘텐츠 및 게시판 테이블
+   6. 메인 콘텐츠 영역 (수칙 박스 디자인 최적화)
    ========================================================= */
 .cafe-main-content {
   flex-grow: 1;
   min-width: 0;
 }
 
+/* '기본 거처 수칙' 카드 박스화 */
 .main-top-banner {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 12px;
-  padding: 16px 20px;
+  padding: 20px;
   margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .main-top-banner h3 {
-  margin: 0 0 10px 0;
-  font-size: 1rem;
+  margin: 0 0 12px 0;
+  font-size: 1.05rem;
   color: var(--accent-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
 }
 
-.banner-box-inner p {
-  margin: 4px 0;
-  font-size: 0.88rem;
+.banner-box-inner ul {
+  margin: 0;
+  padding-left: 20px;
   color: var(--text-sub);
+  font-size: 0.9rem;
+}
+
+.banner-box-inner li {
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.banner-box-inner li:last-child {
+  margin-bottom: 0;
 }
 
 .board-header-bar {
@@ -375,14 +381,20 @@ input:checked + .slider:before {
 }
 
 .board-header-bar h2 {
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   font-size: 1.25rem;
+}
+
+.board-info-bar {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  margin-bottom: 10px;
 }
 
 .board-filter-tabs {
   display: flex;
   gap: 8px;
-  margin-top: 12px;
+  margin-top: 10px;
   flex-wrap: wrap;
 }
 
@@ -409,18 +421,13 @@ input:checked + .slider:before {
   font-weight: bold;
 }
 
-.board-info-bar {
-  font-size: 0.85rem;
-  color: var(--text-sub);
-  margin-bottom: 8px;
-}
-
-/* 테이블 스타일 */
+/* 게시판 테이블 */
 .board-table-wrapper {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .board-table {
@@ -451,7 +458,6 @@ input:checked + .slider:before {
   background-color: var(--bg-hover);
 }
 
-/* 공지사항 행 강조 */
 .board-table tr.row-notice {
   background-color: var(--notice-bg);
 }
@@ -471,14 +477,8 @@ input:checked + .slider:before {
 .col-date { width: 100px; color: var(--text-sub); font-size: 0.85rem; }
 .col-views { width: 70px; text-align: center; color: var(--text-sub); font-size: 0.85rem; }
 
-.count-badge {
-  color: var(--accent-color);
-  font-size: 0.8rem;
-  margin-left: 4px;
-}
-
 /* =========================================================
-   5. 게시글 상세보기 모달
+   7. 상세 모달
    ========================================================= */
 .post-modal {
   position: fixed;
@@ -519,91 +519,53 @@ input:checked + .slider:before {
   cursor: pointer;
 }
 
-.post-detail-title {
-  margin: 10px 0 8px 0;
-  font-size: 1.3rem;
-}
-
-.post-detail-info {
-  font-size: 0.85rem;
-  color: var(--text-sub);
-}
-
-.post-divider {
+/* =========================================================
+   8. 반응형 (모바일 사이드바 하단 스크롤 확보)
+   ========================================================= */
+.btn-sidebar-close {
+  display: none;
+  background: transparent;
   border: none;
-  border-top: 1px solid var(--border-color);
-  margin: 16px 0;
-}
-
-.post-detail-content {
-  line-height: 1.6;
-  font-size: 0.95rem;
-  white-space: pre-wrap;
-  min-height: 120px;
-}
-
-/* 댓글 섹션 */
-.comments-section {
-  margin-top: 20px;
-}
-
-.comments-section h3 {
-  font-size: 1rem;
-  margin-bottom: 12px;
-}
-
-.comment-item {
-  padding: 10px 0;
-  border-bottom: 1px dashed var(--border-color);
-}
-
-.comment-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.82rem;
-  margin-bottom: 4px;
-}
-
-.comment-date {
-  color: var(--text-sub);
-}
-
-.comment-text {
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.comment-write-box {
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.comment-write-box input,
-.comment-write-box textarea {
-  background-color: var(--bg-main);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+  font-size: 1.5rem;
   color: var(--text-main);
-  padding: 8px 12px;
-  font-size: 0.88rem;
+  cursor: pointer;
+  position: absolute;
+  top: 16px;
+  right: 16px;
 }
 
-.comment-write-box button {
-  align-self: flex-end;
-  background-color: var(--accent-color);
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background-color: var(--modal-overlay);
+  backdrop-filter: blur(2px);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-menu-bar {
+  display: none;
+  margin-bottom: 16px;
+}
+
+.btn-sidebar-toggle {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
+  font-size: 0.9rem;
 }
 
-/* =========================================================
-   6. 반응형 (모바일)
-   ========================================================= */
 @media screen and (max-width: 768px) {
+  .header-title {
+    font-size: 1.25rem; /* 모바일 타이틀 자동 조절 */
+  }
+
   .mobile-menu-bar {
     display: block;
   }
@@ -616,13 +578,14 @@ input:checked + .slider:before {
     position: fixed;
     top: 0;
     left: 0;
-    width: 280px;
+    width: 290px;
     height: 100vh;
     background-color: var(--bg-card);
     z-index: 999;
-    padding: 20px;
+    padding: 20px 20px 80px 20px; /* 모바일 사이드바 하단 스크롤 여유 공간 확보 (80px) */
     overflow-y: auto;
     transform: translateX(-100%);
+    transition: transform 0.3s ease;
     box-shadow: 4px 0 16px rgba(0, 0, 0, 0.3);
   }
 
