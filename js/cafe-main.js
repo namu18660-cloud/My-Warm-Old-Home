@@ -108,31 +108,26 @@ const boardData = {
 // 2. DOM 로드 후 실행 - 테마 설정 & 모바일 사이드바 초기화
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
-  /* --- [A] 다크/라이트 테마 토글 (웨일/OS 다크모드 차단) --- */
+  /* --- [A] 다크/라이트 테마 토글 --- */
   const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("user-theme") || "dark";
 
-  // 테마 적용 함수
   function applyTheme(theme) {
     if (theme === "light") {
       document.body.classList.add("light-theme");
+      document.body.classList.remove("dark-theme");
       document.documentElement.classList.add("light-theme");
-      document.documentElement.setAttribute("data-darkmode", "false");
-      document.body.setAttribute("darkmode", "off");
       if (themeToggle) themeToggle.checked = true;
     } else {
       document.body.classList.remove("light-theme");
+      document.body.classList.add("dark-theme");
       document.documentElement.classList.remove("light-theme");
-      document.documentElement.removeAttribute("data-darkmode");
-      document.body.removeAttribute("darkmode");
       if (themeToggle) themeToggle.checked = false;
     }
   }
 
-  // 초기 테마 설정
   applyTheme(savedTheme);
 
-  // 스위치 조작 이벤트 등록
   if (themeToggle) {
     themeToggle.addEventListener("change", () => {
       const nextTheme = themeToggle.checked ? "light" : "dark";
@@ -151,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (sidebar && overlay) {
       sidebar.classList.add("active");
       overlay.classList.add("active");
-      document.body.style.overflow = "hidden"; // 모바일 배경 스크롤 차단
+      document.body.style.overflow = "hidden";
     }
   }
 
@@ -159,13 +154,21 @@ document.addEventListener("DOMContentLoaded", () => {
     if (sidebar && overlay) {
       sidebar.classList.remove("active");
       overlay.classList.remove("active");
-      document.body.style.overflow = ""; // 스크롤 해제
+      document.body.style.overflow = "";
     }
   }
 
   if (btnToggle) btnToggle.addEventListener("click", openSidebar);
   if (btnClose) btnClose.addEventListener("click", closeSidebar);
   if (overlay) overlay.addEventListener("click", closeSidebar);
+
+  /* --- [C] ESC 키 입력 시 모달/사이드바 닫기 (보완) --- */
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closePost();
+      closeSidebar();
+    }
+  });
 });
 
 // =========================================================
@@ -176,6 +179,11 @@ function openPost(event, postId) {
 
   const post = boardData[postId];
   if (!post) return;
+
+  // [보완 1] 게시글 열람 시 조회수 증가 및 UI 연동
+  post.viewCount += 1;
+  const viewCell = document.querySelector(`#board-body tr[data-id="${postId}"] .col-views`);
+  if (viewCell) viewCell.textContent = post.viewCount;
 
   const modal = document.getElementById("post-view-modal");
   const modalBody = document.getElementById("modal-post-body");
@@ -260,12 +268,13 @@ function addComment(postId) {
 // =========================================================
 // 6. 카테고리 탭 필터링
 // =========================================================
-function filterBoard(category) {
+// [보완 2] event 파라미터를 명시적으로 전달받아 호환성 문제 해결
+function filterBoard(category, event) {
   const buttons = document.querySelectorAll(".btn-filter-tab");
   buttons.forEach(btn => btn.classList.remove("active"));
 
-  if (window.event && window.event.target) {
-    window.event.target.classList.add("active");
+  if (event && event.target) {
+    event.target.classList.add("active");
   }
 
   const rows = document.querySelectorAll("#board-body tr");
