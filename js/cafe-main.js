@@ -236,6 +236,16 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnClose) btnClose.addEventListener("click", () => closeSidebar());
   if (overlay) overlay.addEventListener("click", () => closeSidebar());
 
+  // 모달 영역 바깥 클릭 시 닫기 이벤트 추가
+  const modal = document.getElementById("post-view-modal");
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closePost(false);
+      }
+    });
+  }
+
   // 검색창 엔터키
   const sidebarSearchInput = document.querySelector(".sidebar-search input");
   if (sidebarSearchInput) {
@@ -244,24 +254,33 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 브라우저 뒤로가기 / 앞으로가기 제어
-  window.addEventListener("popstate", () => {
+  // 통합 브라우저 뒤로가기 / 앞으로가기 제어 (모달 & 세계관 슬라이드 대응)
+  window.addEventListener("popstate", (event) => {
+    const modal = document.getElementById("post-view-modal");
     const viewport = document.getElementById("app-viewport");
-    if (!viewport) return;
 
-    if (location.hash === "#world") {
-      viewport.classList.add("show-world");
-    } else {
-      viewport.classList.remove("show-world");
+    // 1. 모달이 열려 있는 상태에서 뒤로가기 시 모달부터 닫음
+    if (modal && !modal.classList.contains("hidden")) {
+      closePost(true);
+      return;
+    }
+
+    // 2. 세계관 슬라이드 해시값 판별
+    if (viewport) {
+      if (location.hash === "#world") {
+        viewport.classList.add("show-world");
+      } else {
+        viewport.classList.remove("show-world");
+      }
     }
   });
 
   // ESC 키
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      closePost();
+      closePost(false);
       closeSidebar();
-      closeWorldIntro();
+      closeWorldIntro(false);
     }
   });
 
@@ -369,6 +388,7 @@ function searchFromSidebar() {
   closeSidebar();
 }
 
+// 모달 열기 (뒤로가기 감지용 pushState 추가)
 function openPost(event, postId) {
   if (event && event.preventDefault) event.preventDefault();
 
@@ -390,6 +410,7 @@ function openPost(event, postId) {
   `).join("");
 
   modalBody.innerHTML = `
+    <button type="button" class="btn-close-modal" onclick="closePost(false)" style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--text-sub); font-size:1.4rem; cursor:pointer;">&times;</button>
     <h2>${escapeHtml(post.title)}</h2>
     <p><small>작성자: ${escapeHtml(post.writer)} | 작성일: ${post.date} | 조회: ${post.viewCount}</small></p>
     <hr>
@@ -405,11 +426,22 @@ function openPost(event, postId) {
   `;
 
   modal.classList.remove("hidden");
+
+  // 모달 전용 히스토리 추가
+  history.pushState({ modalOpen: true, postId: postId }, "");
 }
 
-function closePost() {
+// 모달 닫기
+function closePost(isBackNav = false) {
   const modal = document.getElementById("post-view-modal");
-  if (modal) modal.classList.add("hidden");
+  if (!modal || modal.classList.contains("hidden")) return;
+
+  modal.classList.add("hidden");
+
+  // X 버튼이나 배경 클릭으로 닫았을 때 히스토리 되돌리기
+  if (!isBackNav && history.state && history.state.modalOpen) {
+    history.back();
+  }
 }
 
 function addComment(postId) {
