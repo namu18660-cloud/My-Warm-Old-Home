@@ -3,7 +3,7 @@
  */
 
 // =========================================================
-// 1. 게시글 및 댓글 데이터베이스
+// 1. 게시글 및 댓글 데이터베이스 (기존 유지)
 // =========================================================
 const boardData = {
   1: {
@@ -197,10 +197,48 @@ const boardData = {
   }
 };
 
+// =========================================================
+// 2. 사이드바 항목별 소개 정보 데이터
+// =========================================================
+const sidebarInfoData = {
+  "101호": {
+    title: "⭐ 101호 | 정지아·박상철",
+    content: "한빛빌라의 메인 거처이자 수뇌부가 거주하는 공간입니다.\n기본 생활 수칙 준수 및 외부인 출입 통제가 가장 엄격하게 이루어집니다."
+  },
+  "정지아": {
+    title: "🧊 정지아 (정나)",
+    content: "소속: 정나\n한빛빌라 및 주요 거처의 전체적인 규칙과 질서를 관장하는 인물입니다.\n엄격하고 철저한 성격으로 외부 방문객 관리 및 보안 수칙을 총괄합니다."
+  },
+  "박상철": {
+    title: "🐕 박상철 (퍼스트)",
+    content: "소속: 퍼스트\n101호에 상주하며 빌라 내 실질적인 관리를 돕는 인물입니다.\n직설적인 표현을 쓰지만 주민과 식구들을 잘 챙깁니다."
+  },
+  "윤서우": {
+    title: "🦉 윤서우 (정가)",
+    content: "소속: 정가\n102호 주민. 건물 내 배선반, 인터넷 시스템, 전자 장비 관리 및 수리를 담당합니다."
+  },
+  "이태규": {
+    title: "🐈‍⬛ 이태규 (퍼스트)",
+    content: "소속: 퍼스트\n201호 주민. 스포츠 데이터 분석 및 각종 기록/사건 파일 관리업무를 맡고 있습니다."
+  },
+  "윤도현": {
+    title: "🔥 윤도현 (실가)",
+    content: "소속: 실가\n낙천적인 성격으로 식구들과의 모임 및 야식을 자주 주도하는 분위기 메이커입니다."
+  },
+  "김서현": {
+    title: "🧾 김서현 (수뇌)",
+    content: "소속: 수뇌\n빌라 리모델링, 경비 정산 및 물품 나눔 등을 적극적으로 지원합니다."
+  },
+  "오재현": {
+    title: "🚪 오재현 (온누리)",
+    content: "소속: 온누리부동산\n한빛빌라 관리인. 공실 대여, 보수용 단열재 지원 등 실질적인 건물 관리를 총괄합니다."
+  }
+};
+
 let currentCategory = "all";
 
 // =========================================================
-// 2. DOM 로드 후 안전한 초기화
+// 3. DOM 로드 후 초기화
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
   // 다크모드
@@ -236,16 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnClose) btnClose.addEventListener("click", () => closeSidebar());
   if (overlay) overlay.addEventListener("click", () => closeSidebar());
 
-  // 모달 영역 바깥 클릭 시 닫기 이벤트 추가
-  const modal = document.getElementById("post-view-modal");
-  if (modal) {
-    modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        closePost(false);
-      }
-    });
-  }
-
   // 검색창 엔터키
   const sidebarSearchInput = document.querySelector(".sidebar-search input");
   if (sidebarSearchInput) {
@@ -254,33 +282,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 통합 브라우저 뒤로가기 / 앞으로가기 제어 (모달 & 세계관 슬라이드 대응)
-  window.addEventListener("popstate", (event) => {
-    const modal = document.getElementById("post-view-modal");
-    const viewport = document.getElementById("app-viewport");
+  // 뒤로가기 제어 (모달 & 페이지 슬라이드)
+  window.addEventListener("popstate", () => {
+    const postModal = document.getElementById("post-view-modal");
+    const infoModal = document.getElementById("info-modal");
 
-    // 1. 모달이 열려 있는 상태에서 뒤로가기 시 모달부터 닫음
-    if (modal && !modal.classList.contains("hidden")) {
+    // 1. 소개 모달 열려있으면 닫기
+    if (infoModal && !infoModal.classList.contains("hidden")) {
+      closeInfoModal(true);
+      return;
+    }
+
+    // 2. 게시글 모달 열려있으면 닫기
+    if (postModal && !postModal.classList.contains("hidden")) {
       closePost(true);
       return;
     }
 
-    // 2. 세계관 슬라이드 해시값 판별
-    if (viewport) {
-      if (location.hash === "#world") {
-        viewport.classList.add("show-world");
-      } else {
-        viewport.classList.remove("show-world");
-      }
+    // 3. 세계관 페이지 제어
+    const viewport = document.getElementById("app-viewport");
+    if (!viewport) return;
+
+    if (location.hash === "#world") {
+      viewport.classList.add("show-world");
+    } else {
+      viewport.classList.remove("show-world");
     }
   });
 
-  // ESC 키
+  // ESC 키 제어
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
+      closeInfoModal(false);
       closePost(false);
       closeSidebar();
-      closeWorldIntro(false);
+      closeWorldIntro();
     }
   });
 
@@ -288,7 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================================
-// 3. UI 및 모달/페이지 제어 함수
+// 4. UI 및 모달 제어 함수
 // =========================================================
 function openSidebar() {
   const sidebar = document.getElementById("cafe-sidebar");
@@ -308,7 +344,6 @@ function closeSidebar() {
   }
 }
 
-// 세계관 페이지로 슬라이드 이동
 function openWorldIntro() {
   const viewport = document.getElementById("app-viewport");
   if (viewport) {
@@ -320,7 +355,6 @@ function openWorldIntro() {
   }
 }
 
-// 메인 페이지로 슬라이드 복귀
 function closeWorldIntro(useHistory = true) {
   const viewport = document.getElementById("app-viewport");
   if (viewport) {
@@ -388,7 +422,9 @@ function searchFromSidebar() {
   closeSidebar();
 }
 
-// 모달 열기 (뒤로가기 감지용 pushState 추가)
+// ---------------------------------------------------------
+// 5. 게시글 모달 & 댓글 alert 처리
+// ---------------------------------------------------------
 function openPost(event, postId) {
   if (event && event.preventDefault) event.preventDefault();
 
@@ -410,7 +446,6 @@ function openPost(event, postId) {
   `).join("");
 
   modalBody.innerHTML = `
-    <button type="button" class="btn-close-modal" onclick="closePost(false)" style="position:absolute; top:12px; right:12px; background:none; border:none; color:var(--text-sub); font-size:1.4rem; cursor:pointer;">&times;</button>
     <h2>${escapeHtml(post.title)}</h2>
     <p><small>작성자: ${escapeHtml(post.writer)} | 작성일: ${post.date} | 조회: ${post.viewCount}</small></p>
     <hr>
@@ -426,45 +461,82 @@ function openPost(event, postId) {
   `;
 
   modal.classList.remove("hidden");
-
-  // 모달 전용 히스토리 추가
-  history.pushState({ modalOpen: true, postId: postId }, "");
+  history.pushState({ modalOpen: true, postId: postId }, "", `#post-${postId}`);
 }
 
-// 모달 닫기
 function closePost(isBackNav = false) {
   const modal = document.getElementById("post-view-modal");
   if (!modal || modal.classList.contains("hidden")) return;
 
   modal.classList.add("hidden");
 
-  // X 버튼이나 배경 클릭으로 닫았을 때 히스토리 되돌리기
   if (!isBackNav && history.state && history.state.modalOpen) {
     history.back();
   }
 }
 
+// 댓글쓰기 버튼 제어 (요청사항: 경고 팝업만 출력)
 function addComment(postId) {
-  const writerInput = document.getElementById("comment-writer-input");
-  const textInput = document.getElementById("comment-text-input");
-
-  if (!writerInput || !textInput || !writerInput.value || !textInput.value) {
-    alert("작성자와 내용을 입력해 주세요.");
-    return;
-  }
-
-  const today = new Date();
-  const dateStr = `${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')} ${String(today.getHours()).padStart(2, '0')}:${String(today.getMinutes()).padStart(2, '0')}`;
-
-  boardData[postId].comments.push({
-    writer: writerInput.value,
-    date: dateStr,
-    text: textInput.value
-  });
-
-  openPost(null, postId);
+  alert("가입자만 작성 가능합니다");
 }
 
+// ---------------------------------------------------------
+// 6. 사이드바 항목 소개 모달 처리
+// ---------------------------------------------------------
+function openInfoModal(key) {
+  const info = sidebarInfoData[key];
+  if (!info) return;
+
+  let modal = document.getElementById("info-modal");
+
+  // 모달 동적 생성 (HTML에 없을 경우)
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "info-modal";
+    modal.style.cssText = `
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center;
+      align-items: center; z-index: 1000;
+    `;
+    modal.innerHTML = `
+      <div style="background: var(--bg-card, #fff); color: var(--text-main, #333); padding: 20px 24px; border-radius: 8px; max-width: 400px; width: 85%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative;">
+        <h3 id="info-modal-title" style="margin-top:0; margin-bottom:12px;"></h3>
+        <p id="info-modal-content" style="white-space: pre-wrap; line-height: 1.5; margin-bottom: 20px;"></p>
+        <button type="button" onclick="closeInfoModal(false)" style="float: right; padding: 6px 16px; cursor: pointer;">확인</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeInfoModal(false);
+    });
+  }
+
+  document.getElementById("info-modal-title").textContent = info.title;
+  document.getElementById("info-modal-content").textContent = info.content;
+
+  modal.classList.remove("hidden");
+  modal.style.display = "flex";
+
+  closeSidebar();
+  history.pushState({ infoModalOpen: true }, "", `#info-${key}`);
+}
+
+function closeInfoModal(isBackNav = false) {
+  const modal = document.getElementById("info-modal");
+  if (!modal || modal.classList.contains("hidden")) return;
+
+  modal.classList.add("hidden");
+  modal.style.display = "none";
+
+  if (!isBackNav && history.state && history.state.infoModalOpen) {
+    history.back();
+  }
+}
+
+// ---------------------------------------------------------
+// 7. 유틸리티 함수
+// ---------------------------------------------------------
 function getCategoryName(cat) {
   const names = { notice: "공지", proposal: "제안", share: "나눔", etc: "기타" };
   return names[cat] || "일반";
