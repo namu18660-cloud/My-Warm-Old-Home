@@ -45,7 +45,6 @@ body.light-theme {
 html, body {
   width: 100%;
   max-width: 100%;
-  /* overflow-x: hidden 대신 clip을 사용하여 position: sticky 무력화 방지 */
   overflow-x: clip;
   margin: 0;
   padding: 0;
@@ -77,7 +76,6 @@ button {
 .app-viewport {
   width: 100%;
   min-height: 100vh;
-  /* overflow-x: hidden 대신 clip 사용 */
   overflow-x: clip;
   position: relative;
 }
@@ -186,27 +184,30 @@ input:checked + .slider::before {
 }
 
 /* =========================================================
-   5. 레이아웃 & 사이드바 (Sticky 완벽 적용)
+   5. 레이아웃 & 사이드바 (수정됨)
    ========================================================= */
 .cafe-layout {
-  display: flex;
-  gap: 20px;
-  /* 핵심: 사이드바 높이가 메인 콘텐츠를 따라 팽창하지 않도록 함 */
-  align-items: flex-start;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 20px !important;
+  align-items: flex-start !important;
+  width: 100% !important;
 }
 
 .cafe-sidebar {
-  width: 260px;
-  flex-shrink: 0;
+  flex: 0 0 260px !important;
+  width: 260px !important;
+  max-width: 260px !important;
   display: flex;
   flex-direction: column;
   gap: 16px;
 
-  /* === [핵심] 스티키 고정 및 내부 스크롤 설정 === */
-  position: sticky;
-  top: 20px;
-  max-height: calc(100vh - 40px); /* 화면보다 메뉴가 길어질 경우 대비 */
-  overflow-y: auto; /* 사이드바 내부 독립 스크롤 가능 */
+  position: sticky !important;
+  top: 20px !important;
+  max-height: calc(100vh - 40px) !important;
+  overflow-y: auto !important;
+  z-index: 10 !important;
 }
 
 /* 사이드바 스크롤바 커스텀 */
@@ -390,11 +391,12 @@ input:checked + .slider::before {
 }
 
 /* =========================================================
-   6. 메인 콘텐츠 및 게시판
+   6. 메인 콘텐츠 및 게시판 (수정됨)
    ========================================================= */
 .cafe-main-content {
-  flex: 1;
-  min-width: 0;
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  width: 0 !important;
 }
 
 .main-top-banner {
@@ -474,12 +476,14 @@ input:checked + .slider::before {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  overflow: hidden;
+  overflow-x: auto !important;
+  width: 100% !important;
 }
 
 .board-table {
-  width: 100%;
-  border-collapse: collapse;
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
   text-align: left;
   font-size: 0.88rem;
 }
@@ -487,6 +491,9 @@ input:checked + .slider::before {
 .board-table th, .board-table td {
   padding: 10px 12px;
   border-bottom: 1px solid var(--border-color);
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
 }
 
 .board-table th {
@@ -503,10 +510,11 @@ input:checked + .slider::before {
   background-color: var(--bg-hover);
 }
 
-.col-cat { width: 75px; text-align: center; }
-.col-writer { width: 110px; }
-.col-date { width: 90px; color: var(--text-sub); font-size: 0.8rem; }
-.col-views { width: 60px; text-align: center; color: var(--text-sub); font-size: 0.8rem; }
+.col-cat { width: 70px !important; text-align: center; }
+.col-title { width: auto !important; text-align: left; }
+.col-writer { width: 100px !important; }
+.col-date { width: 90px !important; text-align: center; color: var(--text-sub); font-size: 0.8rem; }
+.col-views { width: 55px !important; text-align: center; color: var(--text-sub); font-size: 0.8rem; }
 
 /* =========================================================
    7. 모달 시스템
@@ -913,17 +921,17 @@ input:checked + .slider::before {
     display: block;
   }
 
-  /* 모바일 오프캠버스 사이드바 (fixed 오버레이로 변경) */
   .cafe-sidebar {
-    position: fixed;
-    top: 0; left: 0;
-    width: 280px;
-    height: 100vh;
-    max-height: 100vh;
+    position: fixed !important;
+    top: 0 !important; left: 0 !important;
+    width: 280px !important;
+    max-width: 280px !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
     background-color: var(--bg-card);
-    z-index: 999;
+    z-index: 999 !important;
     padding: 16px 16px 80px 16px;
-    overflow-y: auto;
+    overflow-y: auto !important;
     transform: translateX(-100%);
     transition: transform 0.25s ease;
   }
@@ -982,7 +990,7 @@ input:checked + .slider::before {
     color: var(--accent-color);
     font-weight: bold;
     text-align: left;
-    width: auto;
+    width: auto !important;
     margin-bottom: 4px;
   }
 
@@ -993,11 +1001,12 @@ input:checked + .slider::before {
     margin-bottom: 8px;
     color: var(--text-main);
     word-break: break-all;
+    width: auto !important;
   }
 
   .board-table .col-writer {
     display: inline-block;
-    width: auto;
+    width: auto !important;
     font-size: 0.78rem;
     color: var(--text-sub);
   }
@@ -1009,7 +1018,7 @@ input:checked + .slider::before {
 
   .board-table .col-date {
     display: inline-block;
-    width: auto;
+    width: auto !important;
     font-size: 0.78rem;
     color: var(--text-sub);
   }
@@ -1020,7 +1029,7 @@ input:checked + .slider::before {
     bottom: 12px;
     font-size: 0.75rem;
     color: var(--text-sub);
-    width: auto;
+    width: auto !important;
     text-align: right;
   }
 
