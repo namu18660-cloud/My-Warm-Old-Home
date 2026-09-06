@@ -1,5 +1,5 @@
 /**
- * 한빛빌라 입주민 누리집 - 메인 인터렉션 & 데이터 제어
+ * 한빛빌라 입주민 누리집 - 메인 인터렉션 & 데이터 제어 (수정 완료본)
  */
 
 // =========================================================
@@ -198,17 +198,17 @@ const boardData = {
 };
 
 // =========================================================
-// 2. 사이드바 항목별 소개 정보 데이터
+// 2. 사이드바 항목별 소개 정보 데이터 (태그 문구 수정)
 // =========================================================
 const sidebarInfoData = {
   "한빛빌라": {
     title: "🏡 한빛빌라",
     image: "https://github.com/user-attachments/assets/7d6b88c7-9b84-43ee-89ad-610f525b816c",
-    content: `🗺️ 미추홀구 인하로318번길 27-12\n\n한빛빌라에 대한 소개를 여기에 작성하세요.\n\n건물의 역사, 주변 환경, 위치적 특징 등을 자유롭게 적을 수 있습니다.\n\n<건물 구조>\n\n추가 설명도 줄바꿈 그대로 출력됩니다.`
+    content: `🗺️ 미추홀구 인하로318번길 27-12\n\n한빛빌라에 대한 소개를 여기에 작성하세요.\n\n건물의 역사, 주변 환경, 위치적 특징 등을 자유롭게 적을 수 있습니다.\n\n[건물 구조]\n\n추가 설명도 줄바꿈 그대로 출력됩니다.`
   },
   "101호": {
     title: "⭐ 101호 | 정지아·박상철",
-    content: `한빛빌라 공동명의자 부부 정지아, 박상철이 거주하는 공간입니다.\n\n<공간구조>\n\n<img src="https://github.com/user-attachments/assets/37552053-7739-403f-bd00-d6c55bb3ac04" alt="101호 구조" class="sidebar-info-image">`
+    content: `한빛빌라 공동명의자 부부 정지아, 박상철이 거주하는 공간입니다.\n\n[공간구조]\n\n<img src="https://github.com/user-attachments/assets/37552053-7739-403f-bd00-d6c55bb3ac04" alt="101호 구조" class="sidebar-info-image">`
   },
   "202호": {
     title: "★ 202호 | (입주예정)",
@@ -245,6 +245,7 @@ const sidebarInfoData = {
 };
 
 let currentCategory = "all";
+let currentSearchQuery = "";
 let infoModalOpen = false;
 
 // =========================================================
@@ -292,24 +293,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 4) 단일 통합 popstate 제어 (뒤로가기)
+  // 4) 단일 통합 popstate 제어 (뒤로가기 안전 처리)
   window.addEventListener("popstate", () => {
     const postModal = document.getElementById("post-view-modal");
     const infoModal = document.getElementById("info-modal");
 
-    // 소개 모달이 열려있으면 닫기 (useHistory = false로 추가 history.back 방지)
     if (infoModal && !infoModal.classList.contains("hidden")) {
       closeInfoModal(false);
       return;
     }
 
-    // 게시글 모달이 열려있으면 닫기
     if (postModal && !postModal.classList.contains("hidden")) {
       closePost(true);
       return;
     }
 
-    // 세계관 페이지 제어
     const viewport = document.getElementById("app-viewport");
     if (viewport) {
       if (location.hash === "#world") {
@@ -320,13 +318,23 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 5) 단일 통합 ESC 키 제어
+  // 5) 계층형 ESC 키 제어 (단 하나의 레이어만 최상위부터 순차 닫기)
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      closeInfoModal(true);
-      closePost(false);
-      closeSidebar();
-      closeWorldIntro(true);
+      const infoModal = document.getElementById("info-modal");
+      const postModal = document.getElementById("post-view-modal");
+      const sidebar = document.getElementById("cafe-sidebar");
+      const viewport = document.getElementById("app-viewport");
+
+      if (infoModal && !infoModal.classList.contains("hidden")) {
+        closeInfoModal(true);
+      } else if (postModal && !postModal.classList.contains("hidden")) {
+        closePost(false);
+      } else if (sidebar && sidebar.classList.contains("active")) {
+        closeSidebar();
+      } else if (viewport && viewport.classList.contains("show-world")) {
+        closeWorldIntro(true);
+      }
     }
   });
 
@@ -376,17 +384,20 @@ function closeWorldIntro(useHistory = true) {
   }
 }
 
-function renderBoard(categoryFilter = "all", searchQuery = "") {
+function renderBoard(categoryFilter = currentCategory, searchQuery = currentSearchQuery) {
+  currentCategory = categoryFilter;
+  currentSearchQuery = searchQuery;
+
   const boardBody = document.getElementById("board-body");
   const totalCountEl = document.getElementById("total-count");
   if (!boardBody) return;
 
   const posts = Object.values(boardData).sort((a, b) => b.id - a.id);
   let renderedCount = 0;
-  const query = searchQuery.trim().toLowerCase();
+  const query = currentSearchQuery.trim().toLowerCase();
 
   const html = posts.map(post => {
-    if (categoryFilter !== "all" && post.category !== categoryFilter) return "";
+    if (currentCategory !== "all" && post.category !== currentCategory) return "";
     if (query !== "") {
       const matchTitle = post.title.toLowerCase().includes(query);
       const matchWriter = post.writer.toLowerCase().includes(query);
@@ -415,14 +426,13 @@ function renderBoard(categoryFilter = "all", searchQuery = "") {
 
 function filterBoard(category, event) {
   if (event && event.preventDefault) event.preventDefault();
-  currentCategory = category;
 
   document.querySelectorAll(".btn-filter-tab").forEach(btn => {
     btn.classList.remove("active");
     if (btn.getAttribute("onclick")?.includes(`'${category}'`)) btn.classList.add("active");
   });
 
-  renderBoard(category);
+  renderBoard(category, currentSearchQuery);
   closeSidebar();
 }
 
@@ -433,7 +443,7 @@ function searchFromSidebar() {
 }
 
 // =========================================================
-// 5. 게시글 모달 & 댓글 alert 처리
+// 5. 게시글 모달 처리
 // =========================================================
 function openPost(event, postId) {
   if (event && event.preventDefault) event.preventDefault();
@@ -442,7 +452,7 @@ function openPost(event, postId) {
   if (!post) return;
 
   post.viewCount += 1;
-  renderBoard(currentCategory);
+  renderBoard(currentCategory, currentSearchQuery);
 
   const modal = document.getElementById("post-view-modal");
   const modalBody = document.getElementById("modal-post-body");
@@ -498,7 +508,6 @@ function openInfoModal(key) {
 
   let modal = document.getElementById("info-modal");
 
-  // 모달 동적 생성
   if (!modal) {
     modal = document.createElement("div");
     modal.id = "info-modal";
