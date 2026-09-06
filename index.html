@@ -10,18 +10,24 @@
   <title>한빛빌라 누리집 | 2020 주안4동</title>
   <link rel="stylesheet" href="./css/cafe-style.css">
 
-  <!-- 로딩 시 깜빡임(Flicker) 방지 스크립트 -->
+  <!-- 로딩 시 깜빡임(Flicker) 방지 스크립트 개선 -->
   <script>
     (function() {
       const savedTheme = localStorage.getItem('user-theme') || 'dark';
-      if (savedTheme === 'light') {
+      const isDark = savedTheme === 'dark';
+      
+      document.documentElement.setAttribute('data-darkmode', isDark ? 'true' : 'false');
+      if (isDark) {
+        document.documentElement.classList.add('dark-theme');
+        document.documentElement.classList.remove('light-theme');
+      } else {
         document.documentElement.classList.add('light-theme');
-        document.documentElement.setAttribute('data-darkmode', 'false');
+        document.documentElement.classList.remove('dark-theme');
       }
     })();
   </script>
 </head>
-<body darkmode="off" data-darkmode="false">
+<body>
 
   <!-- ★ 슬라이더 Viewport 전체 감싸기 시작 -->
   <div id="app-viewport" class="app-viewport">
@@ -40,7 +46,7 @@
 
             <!-- 다크모드 토글 스위치 -->
             <div class="theme-switch-wrapper">
-              <label class="theme-switch" for="theme-toggle">
+              <label class="theme-switch" for="theme-toggle" aria-label="다크 모드 토글">
                 <input type="checkbox" id="theme-toggle">
                 <span class="slider round"></span>
               </label>
@@ -49,7 +55,7 @@
 
           <!-- 모바일용 햄버거 메뉴 버튼 -->
           <div class="mobile-menu-bar">
-            <button id="btn-sidebar-toggle" class="btn-sidebar-toggle">☰ 메뉴</button>
+            <button type="button" id="btn-sidebar-toggle" class="btn-sidebar-toggle">☰ 메뉴</button>
           </div>
 
           <!-- 사이드바 오버레이 -->
@@ -60,7 +66,7 @@
             
             <!-- 왼쪽 사이드바 -->
             <aside class="cafe-sidebar" id="cafe-sidebar">
-              <button id="btn-sidebar-close" class="btn-sidebar-close">✕</button>
+              <button type="button" id="btn-sidebar-close" class="btn-sidebar-close">✕</button>
 
               <!-- 프로필 카드 -->
               <div class="side-card profile-card">
@@ -69,7 +75,7 @@
                   <div class="profile-info">
                     <strong class="manager-name">오재현 <span class="badge-mgr">관리자</span></strong>
                     <span class="cafe-date">2012.03.15 개설</span>
-                    <a href="#" class="cafe-intro-link" onclick="openWorldIntro(); return false;">거처 안내 보기</a>
+                    <a href="javascript:void(0);" class="cafe-intro-link" onclick="openWorldIntro();">거처 안내 보기</a>
                   </div>
                 </div>
 
@@ -89,15 +95,16 @@
                   </button>
                 </div>
 
-                <button class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">✏️ 게시물 작성</button>
+                <button type="button" class="btn-write-main" onclick="alert('가입자만 작성 가능합니다.')">✏️ 게시물 작성</button>
                 
                 <!-- 가입하기 버튼 (슬라이드 연출) -->
-                <button class="btn-chat-main" onclick="openWorldIntro()">💬 가입하기</button>
+                <button type="button" class="btn-chat-main" onclick="openWorldIntro()">💬 가입하기</button>
 
-                <div class="sidebar-search">
-                  <input type="text" placeholder="게시글 검색..." />
-                  <button type="button" onclick="searchFromSidebar()">🔍</button>
-                </div>
+                <!-- 검색 폼 (엔터키 제출 가능하도록 form 태그 추가 및 input ID 부여) -->
+                <form class="sidebar-search" onsubmit="searchFromSidebar(event);">
+                  <input type="text" id="sidebar-search-input" placeholder="게시글 검색..." aria-label="게시글 검색" />
+                  <button type="submit" aria-label="검색">🔍</button>
+                </form>
               </div>
 
               <!-- 메뉴 카드 -->
@@ -105,11 +112,11 @@
                 <div class="menu-group">
                   <div class="menu-title">★ 게시물 카테고리</div>
                   <ul class="menu-tree">
-                    <li><a href="#" onclick="filterBoard('all', event)">📋 전체글보기</a></li>
-                    <li><a href="#" onclick="filterBoard('notice', event)">📌 [공지] 관리 및 안전 안내</a></li>
-                    <li><a href="#" onclick="filterBoard('proposal', event)">💡 [제안] 자료 및 공유</a></li>
-                    <li><a href="#" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>             
-                    <li><a href="#" onclick="filterBoard('etc', event)">💬 [기타] 잡담 및 모임</a></li>
+                    <li><a href="javascript:void(0);" onclick="filterBoard('all', event)">📋 전체글보기</a></li>
+                    <li><a href="javascript:void(0);" onclick="filterBoard('notice', event)">📌 [공지] 관리 및 안전 안내</a></li>
+                    <li><a href="javascript:void(0);" onclick="filterBoard('proposal', event)">💡 [제안] 자료 및 공유</a></li>
+                    <li><a href="javascript:void(0);" onclick="filterBoard('share', event)">🎁 [나눔] 물품 및 지원</a></li>             
+                    <li><a href="javascript:void(0);" onclick="filterBoard('etc', event)">💬 [기타] 잡담 및 모임</a></li>
                   </ul>
                 </div>
 
@@ -117,8 +124,8 @@
                   <div class="menu-title">🏡 거주 세대</div>
                   <ul class="menu-list">
                     <li onclick="openInfoModal('101호')">⭐ 101호 | 정지아·박상철</li>
-                    <li><a href="#">▫️ 102호 | 윤서우</a></li>
-                    <li><a href="#">▫️ 201호 | 이태규</a></li>
+                    <li><a href="javascript:void(0);" onclick="openInfoModal('102호')">▫️ 102호 | 윤서우</a></li>
+                    <li><a href="javascript:void(0);" onclick="openInfoModal('201호')">▫️ 201호 | 이태규</a></li>
                     <li class="user-highlight-menu" onclick="openInfoModal('202호')">★ 202호 | (입주예정)</li>
                   </ul>
                 </div>
@@ -133,12 +140,12 @@
                     <li onclick="openInfoModal('윤도현')">🔥 윤도현 <small>(실가)</small></li>
                     <li onclick="openInfoModal('김서현')">🧾 김서현 <small>(수뇌)</small></li>
                     <li onclick="openInfoModal('오재현')">🚪 오재현 <small>(온누리)</small></li>
-                    <li><a href="#">👣 이시환 <small>(실가)</small></a></li>
-                    <li><a href="#">👣 문해주 <small>(실가)</small></a></li>
-                    <li><a href="#">👣 최현우 <small>(실가)</small></a></li>
-                    <li><a href="#">👣 한수진 <small>(정가)</small></a></li>
-                    <li><a href="#">👣 배성호 <small>(한울)</small></a></li>
-                    <li><a href="#">👣 강민호 <small>(실나)</small></a></li>
+                    <li onclick="openInfoModal('이시환')">👣 이시환 <small>(실가)</small></li>
+                    <li onclick="openInfoModal('문해주')">👣 문해주 <small>(실가)</small></li>
+                    <li onclick="openInfoModal('최현우')">👣 최현우 <small>(실가)</small></li>
+                    <li onclick="openInfoModal('한수진')">👣 한수진 <small>(정가)</small></li>
+                    <li onclick="openInfoModal('배성호')">👣 배성호 <small>(한울)</small></li>
+                    <li onclick="openInfoModal('강민호')">👣 강민호 <small>(실나)</small></li>
                   </ul>
                 </div>
               </nav>
@@ -166,11 +173,11 @@
                   <span>총 <strong id="total-count">0</strong>개의 게시글</span>
                 </div>
                 <div class="board-filter-tabs">
-                  <button class="btn-filter-tab active" onclick="filterBoard('all', event)">전체</button>
-                  <button class="btn-filter-tab" onclick="filterBoard('notice', event)">공지</button>
-                  <button class="btn-filter-tab" onclick="filterBoard('proposal', event)">제안</button>
-                  <button class="btn-filter-tab" onclick="filterBoard('share', event)">나눔</button>
-                  <button class="btn-filter-tab" onclick="filterBoard('etc', event)">잡담</button>
+                  <button type="button" class="btn-filter-tab active" onclick="filterBoard('all', event)">전체</button>
+                  <button type="button" class="btn-filter-tab" onclick="filterBoard('notice', event)">공지</button>
+                  <button type="button" class="btn-filter-tab" onclick="filterBoard('proposal', event)">제안</button>
+                  <button type="button" class="btn-filter-tab" onclick="filterBoard('share', event)">나눔</button>
+                  <button type="button" class="btn-filter-tab" onclick="filterBoard('etc', event)">잡담</button>
                 </div>
               </div>
 
@@ -194,138 +201,141 @@
         </div> <!-- /.container -->
       </div> <!-- /[PAGE 1] 메인 카페 화면 끝 -->
 
-     <!-- [PAGE 2] 세계관 상세 화면 -->
-<div class="page-view">
-  <div id="world-intro-section" class="world-container">
-    
-    <button type="button" class="btn-close-world" onclick="closeWorldIntro()">← 메인으로 돌아가기</button>
-    
-    <header class="world-header">
-      <span class="world-badge">주안4동 한빛빌라</span>
-      <h1>정겨운 나의 집</h1>
-      <p class="world-subtitle">유사가족군상극RP시뮬레이션</p>
-    </header>
-
-    <div class="world-body">
-      <div class="world-card">
-        <h3 class="world-title">🏘️ 세계관 상세 배경</h3>
-        
-        <!-- 1. 픽션 면책 조항 -->
-        <blockquote class="world-disclaimer">
-          "본 작품의 배경 지명은 실제를 바탕으로 하였으나, 등장 인물과 사건은 모두 창작된 픽션입니다."
-        </blockquote>
-
-        <!-- 2. 기본 배경 -->
-        <section class="world-section">
-          <h4 class="section-title">🏙️ 배경 : 2020년 인천</h4>
-          <p class="world-text">
-            민간인이 알지 못하는 <strong>도시의 이면</strong>에도 일상은 존재합니다.<br>
-            경찰과 법만으로는 완전히 통제되지 않는 뒷세계의 인간관계와 네트워크—사람을 찾고, 정보를 사고팔고, 신분을 마련하고, 거처를 제공하며 때로는 사람을 죽이는 이들이 존재합니다.
-          </p>
-          <p class="world-text">
-            이들은 거대한 범죄 제국이 아닌, 작은 조직과 개인들이 느슨하게 연결된 <strong>생태계</strong>를 이루고 있으며, 그 중심에는 <strong>「하나」</strong>가 있습니다.
-          </p>
-        </section>
-
-        <!-- 3. 핵심 조직: 하나 -->
-        <section class="world-section">
-          <h4 class="section-title">⚖️ 핵심 조직 「하나」</h4>
-          <p class="world-text intro-desc">
-            조직폭력배 '태성회'를 와해시키기 위해 설립된 조직이었으나, 목적을 달성한 후에도 어째선지 해체되지 않고 유지되고 있습니다.
-          </p>
-
-          <!-- 본가 / 분가 구도 그리드 -->
-          <div class="faction-grid">
-            <div class="faction-card">
-              <span class="badge badge-main">본가 (중앙본부)</span>
-              <ul>
-                <li>구성원 개개인의 자아와 판단력이 강함</li>
-                <li>서로 간의 동료의식이 매우 두터움</li>
-              </ul>
-            </div>
-            <div class="faction-card">
-              <span class="badge badge-sub">분가 (독립 네트워크)</span>
-              <ul>
-                <li>하청 구조가 아닌, 하나를 중심으로 연결된 '독립된 집' 형태</li>
-                <li>소속감과 가족의식은 제각각이나 이상할 정도로 원활히 운영됨</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- TMI 상자 -->
-          <div class="tmi-box">
-            <div class="tmi-header">🔍 <strong>[하나] 비하인드 & 소문</strong></div>
-            <ul class="tmi-list">
-              <li><strong>별명 :</strong> '뒷골목의 청소부'</li>
-              <li><strong>이름의 유래 :</strong> 정확히 아는 사람은 없음
-                <div class="tmi-quote">
-                  "가족 같아서 '하나'라던데?"<br>
-                  "백날 원칙을 '하나!'부터 읊어대서 굳어진 거라던데?"
-                </div>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <!-- 4. 주요 세력 및 부서 태그 -->
-        <section class="world-section">
-          <h4 class="section-title">👥 '정겨운 나의 집' 등장 세력 및 소속</h4>
+      <!-- [PAGE 2] 세계관 상세 화면 -->
+      <div class="page-view">
+        <div id="world-intro-section" class="world-container">
           
-          <div class="dept-container">
-            <div class="dept-group">
-              <span class="dept-label">🏛️ 본가</span>
-              <div class="tag-group">
-                <span class="tag tag-main">수뇌부</span>
-                <span class="tag tag-main">실행부 가</span>
-                <span class="tag tag-main">실행부 나</span>
-                <span class="tag tag-main">정보부 가</span>
-                <span class="tag tag-main">정보부 나</span>
-              </div>
-            </div>
+          <button type="button" class="btn-close-world" onclick="closeWorldIntro()">← 메인으로 돌아가기</button>
+          
+          <header class="world-header">
+            <span class="world-badge">주안4동 한빛빌라</span>
+            <h1>정겨운 나의 집</h1>
+            <p class="world-subtitle">유사가족군상극RP시뮬레이션</p>
+          </header>
 
-            <div class="dept-group">
-              <span class="dept-label">🏠 분가</span>
-              <div class="tag-group">
-                <span class="tag tag-branch">퍼스트 흥신소</span>
-                <span class="tag tag-branch">온누리 부동산</span>
-              </div>
-            </div>
-          </div>
-        </section>
+          <div class="world-body">
+            <div class="world-card">
+              <h3 class="world-title">🏘️ 세계관 상세 배경</h3>
+              
+              <!-- 1. 픽션 면책 조항 -->
+              <blockquote class="world-disclaimer">
+                "본 작품의 배경 지명은 실제를 바탕으로 하였으나, 등장 인물과 사건은 모두 창작된 픽션입니다."
+              </blockquote>
 
-        <!-- 5. 하단 캐치프레이즈 -->
-        <div class="world-hook">
-          <p class="hook-question">"나도 '하나'에서 <strong>귀소처</strong>를 찾을 수 있을까?"</p>
-          <p class="hook-question">"혹은 '하나'가 되지 않고도 <strong>가족</strong>이 될 수 있을까?"</p>
-          <p class="hook-footer"><strong>『정겨운 나의 집』</strong>에서 확인해보세요.</p>
-        </div>
+              <!-- 2. 기본 배경 -->
+              <section class="world-section">
+                <h4 class="section-title">🏙️ 배경 : 2020년 인천</h4>
+                <p class="world-text">
+                  민간인이 알지 못하는 <strong>도시의 이면</strong>에도 일상은 존재합니다.<br>
+                  경찰과 법만으로는 완전히 통제되지 않는 뒷세계의 인간관계와 네트워크—사람을 찾고, 정보를 사고팔고, 신분을 마련하고, 거처를 제공하며 때로는 사람을 죽이는 이들이 존재합니다.
+                </p>
+                <p class="world-text">
+                  이들은 거대한 범죄 제국이 아닌, 작은 조직과 개인들이 느슨하게 연결된 <strong>생태계</strong>를 이루고 있으며, 그 중심에는 <strong>「하나」</strong>가 있습니다.
+                </p>
+              </section>
+
+              <!-- 3. 핵심 조직: 하나 -->
+              <section class="world-section">
+                <h4 class="section-title">⚖️ 핵심 조직 「하나」</h4>
+                <p class="world-text intro-desc">
+                  조직폭력배 '태성회'를 와해시키기 위해 설립된 조직이었으나, 목적을 달성한 후에도 어째선지 해체되지 않고 유지되고 있습니다.
+                </p>
+
+                <!-- 본가 / 분가 구도 그리드 -->
+                <div class="faction-grid">
+                  <div class="faction-card">
+                    <span class="badge badge-main">본가 (중앙본부)</span>
+                    <ul>
+                      <li>구성원 개개인의 자아와 판단력이 강함</li>
+                      <li>서로 간의 동료의식이 매우 두터움</li>
+                    </ul>
+                  </div>
+                  <div class="faction-card">
+                    <span class="badge badge-sub">분가 (독립 네트워크)</span>
+                    <ul>
+                      <li>하청 구조가 아닌, 하나를 중심으로 연결된 '독립된 집' 형태</li>
+                      <li>소속감과 가족의식은 제각각이나 이상할 정도로 원활히 운영됨</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- TMI 상자 -->
+                <div class="tmi-box">
+                  <div class="tmi-header">🔍 <strong>[하나] 비하인드 & 소문</strong></div>
+                  <ul class="tmi-list">
+                    <li><strong>별명 :</strong> '뒷골목의 청소부'</li>
+                    <li><strong>이름의 유래 :</strong> 정확히 아는 사람은 없음
+                      <div class="tmi-quote">
+                        "가족 같아서 '하나'라던데?"<br>
+                        "백날 원칙을 '하나!'부터 읊어대서 굳어진 거라던데?"
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </section>
+
+              <!-- 4. 주요 세력 및 부서 태그 -->
+              <section class="world-section">
+                <h4 class="section-title">👥 '정겨운 나의 집' 등장 세력 및 소속</h4>
+                
+                <div class="dept-container">
+                  <div class="dept-group">
+                    <span class="dept-label">🏛️ 본가</span>
+                    <div class="tag-group">
+                      <span class="tag tag-main">수뇌부</span>
+                      <span class="tag tag-main">실행부 가</span>
+                      <span class="tag tag-main">실행부 나</span>
+                      <span class="tag tag-main">정보부 가</span>
+                      <span class="tag tag-main">정보부 나</span>
+                    </div>
+                  </div>
+
+                  <div class="dept-group">
+                    <span class="dept-label">🏠 분가</span>
+                    <div class="tag-group">
+                      <span class="tag tag-branch">퍼스트 흥신소</span>
+                      <span class="tag tag-branch">온누리 부동산</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <!-- 5. 하단 캐치프레이즈 -->
+              <div class="world-hook">
+                <p class="hook-question">"나도 '하나'에서 <strong>귀소처</strong>를 찾을 수 있을까?"</p>
+                <p class="hook-question">"혹은 '하나'가 되지 않고도 <strong>가족</strong>이 될 수 있을까?"</p>
+                <p class="hook-footer"><strong>『정겨운 나의 집』</strong>에서 확인해보세요.</p>
+              </div>
+              
+              <!-- 6. 하단 바로가기 이미지 배너 -->
+              <div class="world-banner-wrapper" style="margin-top: 24px; text-align: center;">
+                <a href="https://share.crack.wrtn.ai/4r9k9rs" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="https://github.com/user-attachments/assets/699bc35e-8c86-4b28-888b-d287f08ad506" 
+                    alt="정겨운 나의 집 표지" 
+                    style="max-width: 100%; height: auto; border-radius: 6px;"
+                  >
+                </a>
+              </div>
+
+            </div> <!-- /.world-card -->
+          </div> <!-- /.world-body -->
+        </div> <!-- /#world-intro-section -->
+      </div> <!-- /.page-view -->
         
-        <!-- 6. 하단 바로가기 이미지 배너 -->
-        <div class="world-banner-wrapper" style="margin-top: 24px; text-align: center;">
-          <a href="https://share.crack.wrtn.ai/4r9k9rs" target="_blank" rel="noopener noreferrer">
-            <img 
-              src="https://github.com/user-attachments/assets/699bc35e-8c86-4b28-888b-d287f08ad506" 
-              alt="정겨운 나의 집 표지" 
-              style="max-width: 100%; height: auto; border-radius: 6px;"
-            >
-          </a>
-        </div>
+    </div> <!-- /.app-slider -->
+  </div> <!-- /#app-viewport -->
 
-      </div> <!-- /.world-card -->
-    </div> <!-- /.world-body -->
-  </div> <!-- /#world-intro-section -->
-</div> <!-- /.page-view -->
-      
   <!-- 게시글 상세 조회 모달 -->
-  <div id="post-view-modal" class="modal-overlay hidden">
+  <div id="post-view-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-content">
       <button type="button" class="btn-modal-close" onclick="closePost()">✕</button>
       <div id="modal-post-body"></div>
     </div>
   </div>
 
-  <!-- 사이드바 정보 모달 (새로 추가) -->
-  <div id="info-modal" class="modal-overlay hidden">
+  <!-- 사이드바 정보 모달 -->
+  <div id="info-modal" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="info-modal-content">
       <button type="button" class="btn-info-modal-close" onclick="closeInfoModal()">✕</button>
       <h2 id="info-modal-title"></h2>
