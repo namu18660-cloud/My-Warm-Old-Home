@@ -565,49 +565,113 @@ function openInfoModal(key) {
 
   let modal = document.getElementById("info-modal");
 
-  // 모달 동적 생성 (HTML에 없을 경우)
+  // 모달 생성
   if (!modal) {
     modal = document.createElement("div");
     modal.id = "info-modal";
+
     modal.style.cssText = `
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center;
-      align-items: center; z-index: 1000;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
     `;
+
     modal.innerHTML = `
-      <div style="background: var(--bg-card, #fff); color: var(--text-main, #333); padding: 20px 24px; border-radius: 8px; max-width: 400px; width: 85%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative;">
-        <h3 id="info-modal-title" style="margin-top:0; margin-bottom:12px;"></h3>
-        <p id="info-modal-content" style="white-space: pre-wrap; line-height: 1.5; margin-bottom: 20px;"></p>
-        <button type="button" onclick="closeInfoModal(false)" style="float: right; padding: 6px 16px; cursor: pointer;">확인</button>
+      <div class="info-modal-box" style="
+        background: var(--bg-card, #fff);
+        color: var(--text-main, #333);
+        padding: 20px 24px;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 100%;
+        max-height: 85vh;
+        overflow-y: auto;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        position: relative;
+      ">
+        
+        <button
+          type="button"
+          onclick="closeInfoModal(false)"
+          style="
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            font-size: 1.4rem;
+            cursor: pointer;
+          "
+        >✕</button>
+
+        <h3
+          id="info-modal-title"
+          style="
+            margin: 0 35px 16px 0;
+          "
+        ></h3>
+
+        <div
+          id="info-modal-content"
+          style="
+            white-space: pre-wrap;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            word-break: keep-all;
+          "
+        ></div>
+
       </div>
     `;
+
     document.body.appendChild(modal);
 
+    // 바깥 클릭 시 닫기
     modal.addEventListener("click", (e) => {
-      if (e.target === modal) closeInfoModal(false);
+      if (e.target === modal) {
+        closeInfoModal(false);
+      }
     });
   }
 
+  // 제목 출력
   document.getElementById("info-modal-title").textContent = info.title;
-  document.getElementById("info-modal-content").textContent = info.content;
+
+  // HTML 이미지 + 줄바꿈 정상 출력
+  const contentElement = document.getElementById("info-modal-content");
+
+  contentElement.innerHTML = info.content;
+
+  // 이미지 스타일 강제 적용
+  contentElement.querySelectorAll("img").forEach((img) => {
+    img.style.display = "block";
+    img.style.width = "100%";
+    img.style.maxWidth = "100%";
+    img.style.height = "auto";
+    img.style.margin = "16px 0 4px";
+    img.style.borderRadius = "6px";
+    img.style.objectFit = "contain";
+  });
 
   modal.classList.remove("hidden");
   modal.style.display = "flex";
 
   closeSidebar();
-  history.pushState({ infoModalOpen: true }, "", `#info-${key}`);
-}
 
-function closeInfoModal(isBackNav = false) {
-  const modal = document.getElementById("info-modal");
-  if (!modal || modal.classList.contains("hidden")) return;
-
-  modal.classList.add("hidden");
-  modal.style.display = "none";
-
-  if (!isBackNav && history.state && history.state.infoModalOpen) {
-    history.back();
-  }
+  history.pushState(
+    { infoModalOpen: true },
+    "",
+    `#info-${encodeURIComponent(key)}`
+  );
 }
 
 // ---------------------------------------------------------
