@@ -207,6 +207,10 @@ input:checked + .slider::before {
   top: 20px !important;
   max-height: calc(100vh - 40px) !important;
   overflow-y: auto !important;
+  
+  /* [핵심] 사이드바 스크롤이 끝났을 때 메인 페이지로 스크롤이 튕겨 고정이 풀리는 현상 방지 */
+  overscroll-behavior-y: contain !important;
+  
   z-index: 10 !important;
 }
 
