@@ -3,7 +3,7 @@
  */
 
 // =========================================================
-// 1. 게시글 및 댓글 데이터베이스 (기존 유지)
+// 1. 게시글 및 댓글 데이터베이스
 // =========================================================
 const boardData = {
   1: {
@@ -132,7 +132,7 @@ const boardData = {
       { writer: "김서현", date: "09.12 15:20", text: "서우야! 본가 사무실에도 멀티탭 3개 필요한데 혹시 같이 주문 가능할까? 경비로 올려줄게!" },
       { writer: "윤서우", date: "09.12 15:45", text: "@김서현 가능합니다. 모델명 메신저로 보내드릴게요." },
       { writer: "박상철", date: "09.12 16:10", text: "야 101호 안방 모니터 거치대도 들어가냐? 지아한테 물어보고 알려줌" },
-      { writer: "정지아", date: "09.12 16:25", text: "@정지아 필요 없습니다. 제 책상 규격에 안 맞습니다." }
+      { writer: "정지아", date: "09.12 16:25", text: "필요 없습니다. 제 책상 규격에 안 맞습니다." }
     ]
   },
   10: {
@@ -201,123 +201,57 @@ const boardData = {
 // 2. 사이드바 항목별 소개 정보 데이터
 // =========================================================
 const sidebarInfoData = {
+  "한빛빌라": {
+    title: "🏡 한빛빌라",
+    image: "https://github.com/user-attachments/assets/7d6b88c7-9b84-43ee-89ad-610f525b816c",
+    content: `🗺️ 미추홀구 인하로318번길 27-12\n\n한빛빌라에 대한 소개를 여기에 작성하세요.\n\n건물의 역사, 주변 환경, 위치적 특징 등을 자유롭게 적을 수 있습니다.\n\n<건물 구조>\n\n추가 설명도 줄바꿈 그대로 출력됩니다.`
+  },
   "101호": {
     title: "⭐ 101호 | 정지아·박상철",
-    content: `
-한빛빌라 공동명의자 부부 정지아, 박상철이 거주하는 공간입니다.
-
-<공간구조>
-
-<img 
-  src="https://github.com/user-attachments/assets/37552053-7739-403f-bd00-d6c55bb3ac04"
-  alt="101호 구조"
-  class="sidebar-info-image"
->
-`
+    content: `한빛빌라 공동명의자 부부 정지아, 박상철이 거주하는 공간입니다.\n\n<공간구조>\n\n<img src="https://github.com/user-attachments/assets/37552053-7739-403f-bd00-d6c55bb3ac04" alt="101호 구조" class="sidebar-info-image">`
   },
-
   "202호": {
     title: "★ 202호 | (입주예정)",
-    content: `
-말도 안 되게 싼 월세! 지금 당장 입주하세요!
-
-시작설정 '애착손님'
-
-<img 
-  src="https://github.com/user-attachments/assets/04241c86-1a06-4d51-9675-620919c8bfdf"
-  alt="202호 입주"
-  class="sidebar-info-image"
->
-`
+    content: `말도 안 되게 싼 월세! 지금 당장 입주하세요!\n\n시작설정 '애착손님'\n\n<img src="https://github.com/user-attachments/assets/04241c86-1a06-4d51-9675-620919c8bfdf" alt="202호 입주" class="sidebar-info-image">`
   },
-
   "정지아": {
     title: "🧊 정지아 (정나)",
-    content: `소속: 정보부 나
-34/ 女/ ISTJ/ 6w5
-체격: 168cm/ 탄탄하고 마른 체형
-색: 여름쿨톤/ 청회색 머리/ 흑갈색 눈
-얼굴: 얇은 쌍꺼풀/ 날카로운 눈매/ 곧고 정돈된 눈썹/ 선이 얇고 또렷함/ 냉미녀 인상
-중장발/ 직모에 가까운 결/ 일할 때 낮게 묶거나 올림
-
-한빛빌라의 전체적인 규칙과 질서를 관장함. 실전계 정보조사원. 흥신소와 협력중.
-당근과 샐러리를 편식한다나 뭐라나.`
+    content: `소속: 정보부 나\n34/ 女/ ISTJ/ 6w5\n체격: 168cm/ 탄탄하고 마른 체형\n색: 여름쿨톤/ 청회색 머리/ 흑갈색 눈\n얼굴: 얇은 쌍꺼풀/ 날카로운 눈매/ 곧고 정돈된 눈썹/ 선이 얇고 또렷함/ 냉미녀 인상\n중장발/ 직모에 가까운 결/ 일할 때 낮게 묶거나 올림\n\n한빛빌라의 전체적인 규칙과 질서를 관장함. 실전계 정보조사원. 흥신소와 협력중.\n당근과 샐러리를 편식한다나 뭐라나.`
   },
-
   "박상철": {
     title: "🐕 박상철 (퍼스트)",
-    content: `소속: 퍼스트 흥신소
-35/ 男/ ENTJ/ 8w7
-체격: 188cm/ 골격이 크고 단단함
-색: 가을웜톤/ 난갈색 머리/ 황갈색 눈
-얼굴: 쌍꺼풀/ 처진 눈매/ 진한 눈썹/ 턱선이 선명함/ 쾌남 인상/ 집중할 때 안경 씀
-귀를 살짝 덮는 중단발/ 대충 넘긴 자연곱슬/ 이마 드러냄
-
-한빛빌라 및 주안4동의 마당발. 흥신소의 운영 및 탐문담당.
-물건을 대충 두고, 잘 잃어버린다더라.`
+    content: `소속: 퍼스트 흥신소\n35/ 男/ ENTJ/ 8w7\n체격: 188cm/ 골격이 크고 단단함\n색: 가을웜톤/ 난갈색 머리/ 황갈색 눈\n얼굴: 쌍꺼풀/ 처진 눈매/ 진한 눈썹/ 턱선이 선명함/ 쾌남 인상/ 집중할 때 안경 씀\n귀를 살짝 덮는 중단발/ 대충 넘긴 자연곱슬/ 이마 드러냄\n\n한빛빌라 및 주안4동의 마당발. 흥신소의 운영 및 탐문담당.\n물건을 대충 두고, 잘 잃어버린다더라.`
   },
-
   "윤서우": {
     title: "🦉 윤서우 (정가)",
-    content: `소속: 정보부 가
-24/ 女/ INTJ / 5w6
-157cm/ 탈색금발/ 홍안
-
-데이터·온라인 조사 실무자. 어린 나이에 능력을 인정받은 유망주.
-최근 관심사는 생활력 갈고닦기라더라.`
+    content: `소속: 정보부 가\n24/ 女/ INTJ / 5w6\n157cm/ 탈색금발/ 홍안\n\n데이터·온라인 조사 실무자. 어린 나이에 능력을 인정받은 유망주.\n최근 관심사는 생활력 갈고닦기라더라.`
   },
-
   "이태규": {
     title: "🐈‍⬛ 이태규 (퍼스트)",
-    content: `소속: 퍼스트 흥신소
-35/ 男/ INTP/ 5w4
-179cm/ 흑발/ 흑안
-
-흥신소 조사·자료분석 담당 직원. 상철과는 고교동창.
-귀찮음과 흥미로움이 늘 충돌한다더라.`
+    content: `소속: 퍼스트 흥신소\n35/ 男/ INTP/ 5w4\n179cm/ 흑발/ 흑안\n\n흥신소 조사·자료분석 담당 직원. 상철과는 고교동창.\n귀찮음과 흥미로움이 늘 충돌한다더라.`
   },
-
   "윤도현": {
     title: "🔥 윤도현 (실가)",
-    content: `소속: 실행부 가
-28/ 男/ ESTP/ 7w8
-193cm/ 흑발/ 적안
-
-낮에는 기술직, 밤에는...?
-상철과는 친한 형동생 사이.
-방문 시 늘 선물을 들고 온다던가.`
+    content: `소속: 실행부 가\n28/ 男/ ESTP/ 7w8\n193cm/ 흑발/ 적안\n\n낮에는 기술직, 밤에는...?\n상철과는 친한 형동생 사이.\n방문 시 늘 선물을 들고 온다던가.`
   },
-
   "김서현": {
     title: "🧾 김서현 (수뇌)",
-    content: `소속: 수뇌부
-27/ 女/ ESFJ/ 3w2
-166cm/ 갈발/ 녹안
-
-생활, 문서, 행정 전반 담당.
-지아에게 은근 잔소리를 함.
-아래로 남동생이 있다던데?`
+    content: `소속: 수뇌부\n27/ 女/ ESFJ/ 3w2\n166cm/ 갈발/ 녹안\n\n생활, 문서, 행정 전반 담당.\n지아에게 은근 잔소리를 함.\n아래로 남동생이 있다던데?`
   },
-
   "오재현": {
     title: "🚪 오재현 (온누리)",
-    content: `소속: 온누리부동산
-41/ 男/ ISFJ/ 9w8
-184cm/ 밀발/ 밀안
-
-거처·임대·명의 관리 실무자.
-상철과는 술친구.
-사람을 외면하는 게 어렵다더라.`
+    content: `소속: 온누리부동산\n41/ 男/ ISFJ/ 9w8\n184cm/ 밀발/ 밀안\n\n거처·임대·명의 관리 실무자.\n상철과는 술친구.\n사람을 외면하는 게 어렵다더라.`
   }
 };
 
 let currentCategory = "all";
+let infoModalOpen = false;
 
 // =========================================================
-// 3. DOM 로드 후 초기화
+// 3. DOM 로드 후 초기화 및 통합 이벤트 관리
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
-  // 다크모드
+  // 1) 다크모드 설정
   const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("user-theme") || "dark";
 
@@ -341,7 +275,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 사이드바 버튼
+  // 2) 사이드바 제어 버튼
   const btnToggle = document.getElementById("btn-sidebar-toggle");
   const btnClose = document.getElementById("btn-sidebar-close");
   const overlay = document.getElementById("sidebar-overlay");
@@ -350,7 +284,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnClose) btnClose.addEventListener("click", () => closeSidebar());
   if (overlay) overlay.addEventListener("click", () => closeSidebar());
 
-  // 검색창 엔터키
+  // 3) 검색창 엔터키
   const sidebarSearchInput = document.querySelector(".sidebar-search input");
   if (sidebarSearchInput) {
     sidebarSearchInput.addEventListener("keydown", (e) => {
@@ -358,41 +292,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 뒤로가기 제어 (모달 & 페이지 슬라이드)
+  // 4) 단일 통합 popstate 제어 (뒤로가기)
   window.addEventListener("popstate", () => {
     const postModal = document.getElementById("post-view-modal");
     const infoModal = document.getElementById("info-modal");
 
-    // 1. 소개 모달 열려있으면 닫기
+    // 소개 모달이 열려있으면 닫기 (useHistory = false로 추가 history.back 방지)
     if (infoModal && !infoModal.classList.contains("hidden")) {
-      closeInfoModal(true);
+      closeInfoModal(false);
       return;
     }
 
-    // 2. 게시글 모달 열려있으면 닫기
+    // 게시글 모달이 열려있으면 닫기
     if (postModal && !postModal.classList.contains("hidden")) {
       closePost(true);
       return;
     }
 
-    // 3. 세계관 페이지 제어
+    // 세계관 페이지 제어
     const viewport = document.getElementById("app-viewport");
-    if (!viewport) return;
-
-    if (location.hash === "#world") {
-      viewport.classList.add("show-world");
-    } else {
-      viewport.classList.remove("show-world");
+    if (viewport) {
+      if (location.hash === "#world") {
+        viewport.classList.add("show-world");
+      } else {
+        viewport.classList.remove("show-world");
+      }
     }
   });
 
-  // ESC 키 제어
+  // 5) 단일 통합 ESC 키 제어
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      closeInfoModal(false);
+      closeInfoModal(true);
       closePost(false);
       closeSidebar();
-      closeWorldIntro();
+      closeWorldIntro(true);
     }
   });
 
@@ -498,9 +432,9 @@ function searchFromSidebar() {
   closeSidebar();
 }
 
-// ---------------------------------------------------------
+// =========================================================
 // 5. 게시글 모달 & 댓글 alert 처리
-// ---------------------------------------------------------
+// =========================================================
 function openPost(event, postId) {
   if (event && event.preventDefault) event.preventDefault();
 
@@ -551,132 +485,82 @@ function closePost(isBackNav = false) {
   }
 }
 
-// 댓글쓰기 버튼 제어 (요청사항: 경고 팝업만 출력)
 function addComment(postId) {
   alert("가입자만 작성 가능합니다");
 }
 
-// ---------------------------------------------------------
+// =========================================================
 // 6. 사이드바 항목 소개 모달 처리
-// ---------------------------------------------------------
+// =========================================================
 function openInfoModal(key) {
   const info = sidebarInfoData[key];
   if (!info) return;
 
   let modal = document.getElementById("info-modal");
 
-  // 모달 생성
+  // 모달 동적 생성
   if (!modal) {
     modal = document.createElement("div");
     modal.id = "info-modal";
-
-    modal.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 20px;
-    `;
+    modal.className = "modal-overlay hidden";
 
     modal.innerHTML = `
-      <div class="info-modal-box" style="
-        background: var(--bg-card, #fff);
-        color: var(--text-main, #333);
-        padding: 20px 24px;
-        border-radius: 8px;
-        max-width: 500px;
-        width: 100%;
-        max-height: 85vh;
-        overflow-y: auto;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        position: relative;
-      ">
-        
-        <button
-          type="button"
-          onclick="closeInfoModal(false)"
-          style="
-            position: absolute;
-            top: 12px;
-            right: 14px;
-            background: transparent;
-            border: none;
-            color: var(--text-sub);
-            font-size: 1.4rem;
-            cursor: pointer;
-          "
-        >✕</button>
-
-        <h3
-          id="info-modal-title"
-          style="
-            margin: 0 35px 16px 0;
-          "
-        ></h3>
-
-        <div
-          id="info-modal-content"
-          style="
-            white-space: pre-wrap;
-            line-height: 1.6;
-            margin-bottom: 10px;
-            word-break: keep-all;
-          "
-        ></div>
-
+      <div class="info-modal-content">
+        <button type="button" class="btn-info-modal-close" aria-label="닫기">✕</button>
+        <h2 id="info-modal-title"></h2>
+        <div id="info-modal-body" style="white-space: pre-line;"></div>
       </div>
     `;
 
     document.body.appendChild(modal);
 
-    // 바깥 클릭 시 닫기
+    modal.querySelector(".btn-info-modal-close").addEventListener("click", () => {
+      closeInfoModal(true);
+    });
+
     modal.addEventListener("click", (e) => {
       if (e.target === modal) {
-        closeInfoModal(false);
+        closeInfoModal(true);
       }
     });
   }
 
-  // 제목 출력
   document.getElementById("info-modal-title").textContent = info.title;
 
-  // HTML 이미지 + 줄바꿈 정상 출력
-  const contentElement = document.getElementById("info-modal-content");
+  const body = document.getElementById("info-modal-body");
+  body.innerHTML = info.content;
 
-  contentElement.innerHTML = info.content;
-
-  // 이미지 스타일 강제 적용
-  contentElement.querySelectorAll("img").forEach((img) => {
-    img.style.display = "block";
-    img.style.width = "100%";
-    img.style.maxWidth = "100%";
-    img.style.height = "auto";
-    img.style.margin = "16px 0 4px";
-    img.style.borderRadius = "6px";
-    img.style.objectFit = "contain";
+  body.querySelectorAll("img").forEach((img) => {
+    img.classList.add("sidebar-info-image");
   });
 
   modal.classList.remove("hidden");
-  modal.style.display = "flex";
+  infoModalOpen = true;
 
-  closeSidebar();
-
-  history.pushState(
-    { infoModalOpen: true },
-    "",
-    `#info-${encodeURIComponent(key)}`
-  );
+  history.pushState({ infoModal: true, infoKey: key }, "", `#info-${encodeURIComponent(key)}`);
 }
 
-// ---------------------------------------------------------
+function closeInfoModal(useHistory = true) {
+  const modal = document.getElementById("info-modal");
+  if (!modal || modal.classList.contains("hidden")) return;
+
+  modal.classList.add("hidden");
+  infoModalOpen = false;
+
+  if (useHistory) {
+    if (location.hash.startsWith("#info-")) {
+      history.back();
+    }
+  } else {
+    if (location.hash.startsWith("#info-")) {
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+  }
+}
+
+// =========================================================
 // 7. 유틸리티 함수
-// ---------------------------------------------------------
+// =========================================================
 function getCategoryName(cat) {
   const names = { notice: "공지", proposal: "제안", share: "나눔", etc: "기타" };
   return names[cat] || "일반";
