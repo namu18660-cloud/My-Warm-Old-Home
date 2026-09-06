@@ -45,7 +45,8 @@ body.light-theme {
 html, body {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden; /* 가로 스크롤 잘림 및 튕김 방지 */
+  /* overflow-x: hidden 대신 clip을 사용하여 sticky 고정 해제 현상 방지 */
+  overflow-x: clip;
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -76,7 +77,8 @@ button {
 .app-viewport {
   width: 100%;
   min-height: 100vh;
-  overflow-x: hidden;
+  /* overflow-x: hidden 대신 clip을 사용하여 sticky 고정 해제 현상 방지 */
+  overflow-x: clip;
   position: relative;
 }
 
@@ -184,12 +186,12 @@ input:checked + .slider::before {
 }
 
 /* =========================================================
-   5. 레이아웃 & 사이드바
+   5. 레이아웃 & 사이드바 (수정됨)
    ========================================================= */
 .cafe-layout {
   display: flex;
   gap: 20px;
-  align-items: flex-start;
+  align-items: flex-start; /* 필수: 사이드바 높이가 팽창하는 것 방지 */
 }
 
 .cafe-sidebar {
@@ -198,6 +200,21 @@ input:checked + .slider::before {
   display: flex;
   flex-direction: column;
   gap: 16px;
+
+  /* === [핵심 수정] 스티키 고정 및 내부 스크롤 설정 === */
+  position: sticky;
+  top: 20px;
+  max-height: calc(100vh - 40px); /* 화면보다 메뉴가 길 경우 대비 */
+  overflow-y: auto; /* 사이드바 자체 스크롤 가능 */
+}
+
+/* 사이드바 내부 스크롤바 미세 디자인 */
+.cafe-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.cafe-sidebar::-webkit-scrollbar-thumb {
+  background-color: var(--border-color);
+  border-radius: 4px;
 }
 
 .side-card {
@@ -903,12 +920,13 @@ input:checked + .slider::before {
     display: block;
   }
 
-  /* 모바일 오프캔버스 사이드바 */
+  /* 모바일 오프캔버스 사이드바 (모바일은 fixed 오버레이 형태) */
   .cafe-sidebar {
     position: fixed;
     top: 0; left: 0;
     width: 280px;
     height: 100vh;
+    max-height: 100vh; /* 모바일 초기화 */
     background-color: var(--bg-card);
     z-index: 999;
     padding: 16px 16px 80px 16px;
