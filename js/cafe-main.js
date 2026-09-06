@@ -198,7 +198,7 @@ const boardData = {
 };
 
 // =========================================================
-// 2. 사이드바 항목별 소개 정보 데이터 (태그 문구 수정)
+// 2. 사이드바 항목별 소개 정보 데이터
 // =========================================================
 const sidebarInfoData = {
   "한빛빌라": {
@@ -249,7 +249,40 @@ let currentSearchQuery = "";
 let infoModalOpen = false;
 
 // =========================================================
-// 3. DOM 로드 후 초기화 및 통합 이벤트 관리
+// 3. 모바일 배경 스크롤 잠금 (다중 모달 안전 카운터 방식)
+// =========================================================
+let lockedScrollY = 0;
+let modalScrollLockCount = 0;
+
+function lockBodyScroll() {
+  if (modalScrollLockCount === 0) {
+    lockedScrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${lockedScrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+  }
+  modalScrollLockCount++;
+}
+
+function unlockBodyScroll() {
+  modalScrollLockCount--;
+  if (modalScrollLockCount < 0) {
+    modalScrollLockCount = 0;
+  }
+  if (modalScrollLockCount === 0) {
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.left = "";
+    document.body.style.right = "";
+    document.body.style.width = "";
+    window.scrollTo(0, lockedScrollY);
+  }
+}
+
+// =========================================================
+// 4. DOM 로드 후 초기화 및 통합 이벤트 관리
 // =========================================================
 document.addEventListener("DOMContentLoaded", () => {
   // 1) 다크모드 설정
@@ -293,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // 4) 단일 통합 popstate 제어 (뒤로가기 안전 처리)
+  // 4) 단일 통합 popstate 제어 (뒤로가기 안전 처리 & 스크롤 복구 적용)
   window.addEventListener("popstate", () => {
     const postModal = document.getElementById("post-view-modal");
     const infoModal = document.getElementById("info-modal");
@@ -342,7 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // =========================================================
-// 4. UI 및 모달 제어 함수
+// 5. UI 및 모달 제어 함수
 // =========================================================
 function openSidebar() {
   const sidebar = document.getElementById("cafe-sidebar");
@@ -443,7 +476,7 @@ function searchFromSidebar() {
 }
 
 // =========================================================
-// 5. 게시글 모달 처리
+// 6. 게시글 모달 처리 (스크롤 잠금/복구 추가)
 // =========================================================
 function openPost(event, postId) {
   if (event && event.preventDefault) event.preventDefault();
@@ -481,6 +514,8 @@ function openPost(event, postId) {
   `;
 
   modal.classList.remove("hidden");
+  lockBodyScroll(); // 스크롤 잠금 적용
+
   history.pushState({ modalOpen: true, postId: postId }, "", `#post-${postId}`);
 }
 
@@ -489,6 +524,7 @@ function closePost(isBackNav = false) {
   if (!modal || modal.classList.contains("hidden")) return;
 
   modal.classList.add("hidden");
+  unlockBodyScroll(); // 스크롤 복구 적용
 
   if (!isBackNav && history.state && history.state.modalOpen) {
     history.back();
@@ -500,7 +536,7 @@ function addComment(postId) {
 }
 
 // =========================================================
-// 6. 사이드바 항목 소개 모달 처리
+// 7. 사이드바 항목 소개 모달 처리 (스크롤 잠금/복구 추가)
 // =========================================================
 function openInfoModal(key) {
   const info = sidebarInfoData[key];
@@ -545,6 +581,7 @@ function openInfoModal(key) {
 
   modal.classList.remove("hidden");
   infoModalOpen = true;
+  lockBodyScroll(); // 스크롤 잠금 적용
 
   history.pushState({ infoModal: true, infoKey: key }, "", `#info-${encodeURIComponent(key)}`);
 }
@@ -555,6 +592,7 @@ function closeInfoModal(useHistory = true) {
 
   modal.classList.add("hidden");
   infoModalOpen = false;
+  unlockBodyScroll(); // 스크롤 복구 적용
 
   if (useHistory) {
     if (location.hash.startsWith("#info-")) {
@@ -568,7 +606,7 @@ function closeInfoModal(useHistory = true) {
 }
 
 // =========================================================
-// 7. 유틸리티 함수
+// 8. 유틸리티 함수
 // =========================================================
 function getCategoryName(cat) {
   const names = { notice: "공지", proposal: "제안", share: "나눔", etc: "기타" };
